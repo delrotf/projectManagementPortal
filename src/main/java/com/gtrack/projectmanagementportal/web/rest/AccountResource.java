@@ -6,8 +6,10 @@ import com.gtrack.projectmanagementportal.domain.User;
 import com.gtrack.projectmanagementportal.repository.UserRepository;
 import com.gtrack.projectmanagementportal.security.SecurityUtils;
 import com.gtrack.projectmanagementportal.service.MailService;
+import com.gtrack.projectmanagementportal.service.UserInfoService;
 import com.gtrack.projectmanagementportal.service.UserService;
 import com.gtrack.projectmanagementportal.service.dto.UserDTO;
+import com.gtrack.projectmanagementportal.service.dto.UserInfoDTO;
 import com.gtrack.projectmanagementportal.web.rest.errors.*;
 import com.gtrack.projectmanagementportal.web.rest.vm.KeyAndPasswordVM;
 import com.gtrack.projectmanagementportal.web.rest.vm.ManagedUserVM;
@@ -36,12 +38,15 @@ public class AccountResource {
     private final UserService userService;
 
     private final MailService mailService;
+    
+    private final UserInfoService userInfoService;
 
-    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService) {
+    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService, UserInfoService userInfoService) {
 
         this.userRepository = userRepository;
         this.userService = userService;
         this.mailService = mailService;
+        this.userInfoService = userInfoService;
     }
 
     /**
@@ -62,6 +67,13 @@ public class AccountResource {
         userRepository.findOneByLogin(managedUserVM.getLogin().toLowerCase()).ifPresent(u -> {throw new LoginAlreadyUsedException();});
         userRepository.findOneByEmailIgnoreCase(managedUserVM.getEmail()).ifPresent(u -> {throw new EmailAlreadyUsedException();});
         User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
+
+        UserInfoDTO userInfoDTO = new UserInfoDTO();
+        userInfoDTO.setUserId(user.getId());
+        userInfoDTO.setFirstName(user.getFirstName());
+        userInfoDTO.setLastName(user.getLastName());
+        UserInfoDTO result = userInfoService.save(userInfoDTO);
+
         mailService.sendActivationEmail(user);
     }
 
@@ -126,8 +138,8 @@ public class AccountResource {
         if (!user.isPresent()) {
             throw new InternalServerErrorException("User could not be found");
         }
-        userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
-            userDTO.getLangKey(), userDTO.getImageUrl());
+        userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(),
+            userDTO.getEmail(), userDTO.getLangKey(), userDTO.getImageUrl());
    }
 
     /**

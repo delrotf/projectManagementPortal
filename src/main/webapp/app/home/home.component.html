@@ -2,19 +2,52 @@
     <div class="col-md-3">
         <span class="hipster img-fluid rounded"></span>
     </div>
-    <div class="col-md-9">
-        <h1 class="display-4">Welcome, Java Hipster!</h1>
-        <p class="lead">This is your homepage</p>
+    <div class="col-md-4">
+        <h1 class="display-4">Welcome, Teammate!</h1>
+        <!-- <p class="lead">This is your homepage</p> -->
 
         <div [ngSwitch]="isAuthenticated()">
             <div class="alert alert-success" *ngSwitchCase="true">
-                <span *ngIf="account"
-                   > You are logged in as user "{{account.login}}". </span>
+                <span *ngIf="account"> You are logged in as user "{{account.login}}". </span>
+            </div>
+
+            <div *ngSwitchCase="true">
+                <ul>
+                    <li>
+                        <a class="" routerLink="team" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
+                            <span><span *ngIf="!isAdmin">My </span>Teams</span>
+                        </a>
+                        <span> - the teams you created and managed. Here is where you add team members.</span>
+                    </li>
+                    <li>
+                        <a class="" routerLink="team-member" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
+                            <span>Teams I'm A Member Of</span>
+                        </a>
+                        <span> - the teams created and managed by others but you belong in these teams.</span>
+                    </li>
+                    <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
+                        <a class="" routerLink="designation" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
+                            <span>Designations</span>
+                        </a>
+                        <span> - manage Designations here.</span>
+                    </li>
+                    <li>
+                        <a class="" routerLink="user-info" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
+                            <span>Users</span>
+                        </a>
+                        <span> - the list of users is found here. You can add users to your teams.</span>
+                    </li>
+                    <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
+                </ul>
             </div>
 
             <div class="alert alert-warning" *ngSwitchCase="false">
-                <span>If you want to </span>
-                <a class="alert-link" (click)="login()">sign in</a><span>, you can try the default accounts:<br/>- Administrator (login="admin" and password="admin") <br/>- User (login="user" and password="user").</span>
+                <span>Please </span>
+                <a class="alert-link" (click)="login()">sign in</a>
             </div>
             <div class="alert alert-warning" *ngSwitchCase="false">
                 <span>You don't have an account yet?</span>
@@ -22,7 +55,7 @@
             </div>
         </div>
 
-        <p>
+        <!-- <p>
             If you have any question on JHipster:
         </p>
 
@@ -36,6 +69,6 @@
 
         <p>
             <span>If you like JHipster, don't forget to give us a star on</span> <a href="https://github.com/jhipster/generator-jhipster" target="_blank" rel="noopener">GitHub</a>!
-        </p>
+        </p> -->
     </div>
 </div>

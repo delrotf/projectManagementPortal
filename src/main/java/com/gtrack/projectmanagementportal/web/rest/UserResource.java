@@ -6,8 +6,10 @@ import com.gtrack.projectmanagementportal.domain.User;
 import com.gtrack.projectmanagementportal.repository.UserRepository;
 import com.gtrack.projectmanagementportal.security.AuthoritiesConstants;
 import com.gtrack.projectmanagementportal.service.MailService;
+import com.gtrack.projectmanagementportal.service.UserInfoService;
 import com.gtrack.projectmanagementportal.service.UserService;
 import com.gtrack.projectmanagementportal.service.dto.UserDTO;
+import com.gtrack.projectmanagementportal.service.dto.UserInfoDTO;
 import com.gtrack.projectmanagementportal.web.rest.errors.BadRequestAlertException;
 import com.gtrack.projectmanagementportal.web.rest.errors.EmailAlreadyUsedException;
 import com.gtrack.projectmanagementportal.web.rest.errors.LoginAlreadyUsedException;
@@ -66,11 +68,14 @@ public class UserResource {
 
     private final MailService mailService;
 
-    public UserResource(UserRepository userRepository, UserService userService, MailService mailService) {
+    private final UserInfoService userInfoService;
+    
+    public UserResource(UserRepository userRepository, UserService userService, MailService mailService, UserInfoService userInfoService) {
 
         this.userRepository = userRepository;
         this.userService = userService;
         this.mailService = mailService;
+        this.userInfoService = userInfoService;
     }
 
     /**
@@ -100,6 +105,11 @@ public class UserResource {
             throw new EmailAlreadyUsedException();
         } else {
             User newUser = userService.createUser(userDTO);
+
+            UserInfoDTO userInfoDTO = new UserInfoDTO();
+            userInfoDTO.setUserId(newUser.getId());
+            UserInfoDTO result = userInfoService.save(userInfoDTO);
+            
             mailService.sendCreationEmail(newUser);
             return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin()))
                 .headers(HeaderUtil.createAlert( "A user is created with identifier " + newUser.getLogin(), newUser.getLogin()))
@@ -143,7 +153,9 @@ public class UserResource {
     @GetMapping("/users")
     @Timed
     public ResponseEntity<List<UserDTO>> getAllUsers(Pageable pageable) {
-        final Page<UserDTO> page = userService.getAllManagedUsers(pageable);
+    	
+    	final Page<UserDTO> page = userService.getAllManagedUsers(pageable);
+    	
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/users");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }

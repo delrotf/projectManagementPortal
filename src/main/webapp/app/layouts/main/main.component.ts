@@ -1,3 +1,4 @@
+import { Principal } from './../../shared/auth/principal.service';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRouteSnapshot, NavigationEnd } from '@angular/router';
 
@@ -11,7 +12,8 @@ export class JhiMainComponent implements OnInit {
 
     constructor(
         private titleService: Title,
-        private router: Router
+        private router: Router,
+        private principal: Principal
     ) {}
 
     private getPageTitle(routeSnapshot: ActivatedRouteSnapshot) {
@@ -28,5 +30,8 @@ export class JhiMainComponent implements OnInit {
                 this.titleService.setTitle(this.getPageTitle(this.router.routerState.snapshot.root));
             }
         });
+    }
+    isAuthenticated() {
+        return this.principal.isAuthenticated();
     }
 }

@@ -25,8 +25,10 @@ public final class SecurityUtils {
             .map(authentication -> {
                 if (authentication.getPrincipal() instanceof UserDetails) {
                     UserDetails springSecurityUser = (UserDetails) authentication.getPrincipal();
+                    System.out.println("springSecurityUser: " + springSecurityUser);
                     return springSecurityUser.getUsername();
                 } else if (authentication.getPrincipal() instanceof String) {
+                	System.out.println("authentication.getPrincipal(): " + authentication.getPrincipal());
                     return (String) authentication.getPrincipal();
                 }
                 return null;

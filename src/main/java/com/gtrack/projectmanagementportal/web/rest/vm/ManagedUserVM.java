@@ -26,6 +26,30 @@ public class ManagedUserVM extends UserDTO {
     public void setPassword(String password) {
         this.password = password;
     }
+    
+    private String phone;
+    
+    public String getPhone() {
+        return phone;
+    }
+
+    private String callingName;
+    
+    public String getCallingName() {
+        return callingName;
+    }
+
+    private int designation;
+    
+    public int getDesignation() {
+        return designation;
+    }
+
+    private int supervisor;
+    
+    public int getSupervisor() {
+        return supervisor;
+    }
 
     @Override
     public String toString() {

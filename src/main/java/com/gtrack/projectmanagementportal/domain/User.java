@@ -28,9 +28,12 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+//    @Id
+//    @SequenceGenerator(sequenceName = "APP_USER_ID_SEQ", name = "AppUserIdSequence")
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AppUserIdSequence")
     @Id
-    @SequenceGenerator(sequenceName = "APP_USER_ID_SEQ", name = "AppUserIdSequence")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AppUserIdSequence")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
+    @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
     @NotNull

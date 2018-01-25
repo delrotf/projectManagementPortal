@@ -8,5 +8,6 @@ export const registerRoute: Route = {
     data: {
         authorities: [],
         pageTitle: 'Registration'
-    }
+    },
+    // outlet: 'register'
 };

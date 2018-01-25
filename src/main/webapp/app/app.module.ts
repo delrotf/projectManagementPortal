@@ -1,3 +1,8 @@
+import { PasswordResetFinishComponent } from './account/password-reset/finish/password-reset-finish.component';
+import { PasswordResetInitComponent } from './account/password-reset/init/password-reset-init.component';
+import { PasswordStrengthBarComponent } from './account/password/password-strength-bar.component';
+import { PasswordComponent } from './account/password/password.component';
+import { RegisterComponent } from './account/register/register.component';
 import './vendor.ts';
 
 import { NgModule } from '@angular/core';
@@ -38,6 +43,11 @@ import {
     ],
     declarations: [
         JhiMainComponent,
+        RegisterComponent,
+        PasswordComponent,
+        PasswordStrengthBarComponent,
+        PasswordResetInitComponent,
+        PasswordResetFinishComponent,
         NavbarComponent,
         ErrorComponent,
         PageRibbonComponent,

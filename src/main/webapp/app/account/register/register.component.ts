@@ -1,12 +1,17 @@
+import { Principal } from './../../shared/auth/principal.service';
 import { Component, OnInit, AfterViewInit, Renderer, ElementRef } from '@angular/core';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { Register } from './register.service';
 import { LoginModalService, EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from '../../shared';
+import { JhiEventManager } from 'ng-jhipster';
 
 @Component({
     selector: 'jhi-register',
-    templateUrl: './register.component.html'
+    templateUrl: './register.component.html',
+    styleUrls: [
+        'register.css'
+    ]
 })
 export class RegisterComponent implements OnInit, AfterViewInit {
 
@@ -19,20 +24,43 @@ export class RegisterComponent implements OnInit, AfterViewInit {
     success: boolean;
     modalRef: NgbModalRef;
 
+    account: Account;
+    isAdmin: boolean;
+
     constructor(
         private loginModalService: LoginModalService,
         private registerService: Register,
         private elementRef: ElementRef,
-        private renderer: Renderer
+        private principal: Principal,
+        private renderer: Renderer,
+        private eventManager: JhiEventManager
     ) {
     }
 
     ngOnInit() {
         this.success = false;
         this.registerAccount = {};
-    }
+        this.principal.identity().then((account) => {
+            this.account = account;
+        });
+        this.principal.hasAuthority('ROLE_ADMIN').then((value) => {
+            this.isAdmin = value;
+        });
+        this.registerAuthenticationSuccess();
+   }
 
-    ngAfterViewInit() {
+   registerAuthenticationSuccess() {
+    this.eventManager.subscribe('authenticationSuccess', (message) => {
+        this.principal.identity().then((account) => {
+            this.account = account;
+        });
+        this.principal.hasAuthority('ROLE_ADMIN').then((value) => {
+            this.isAdmin = value;
+        });
+    });
+}
+
+ngAfterViewInit() {
         this.renderer.invokeElementMethod(this.elementRef.nativeElement.querySelector('#login'), 'focus', []);
     }
 
@@ -64,5 +92,9 @@ export class RegisterComponent implements OnInit, AfterViewInit {
         } else {
             this.error = 'ERROR';
         }
+    }
+
+    isAuthenticated() {
+        return this.principal.isAuthenticated();
     }
 }

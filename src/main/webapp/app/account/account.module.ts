@@ -26,11 +26,11 @@ import {
     ],
     declarations: [
         ActivateComponent,
-        RegisterComponent,
-        PasswordComponent,
-        PasswordStrengthBarComponent,
-        PasswordResetInitComponent,
-        PasswordResetFinishComponent,
+        // RegisterComponent,
+        // PasswordComponent,
+        // PasswordStrengthBarComponent,
+        // PasswordResetInitComponent,
+        // PasswordResetFinishComponent,
         SettingsComponent
     ],
     providers: [

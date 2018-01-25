@@ -32,12 +32,12 @@ spring:
         serialization.indent_output: true
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
-#        url: jdbc:sqlserver://localhost:1433;database=projectManagementPortal
+        url: jdbc:sqlserver://localhost:1433;database=ProjectManager
 #        username: SA
 #        password: yourStrong(!)Password
-        url: jdbc:sqlserver://7gdbserver.database.windows.net:1433;database=ProjectManager;user=tanny;password=project@123;encrypt=true;hostNameInCertificate=*.database.windows.net;loginTimeout=30;
-        username: tanny
-        password: project@123
+#        url: jdbc:sqlserver://7gdbserver.database.windows.net:1433;database=ProjectManager;user=sa;password=sa;encrypt=true;hostNameInCertificate=*.database.windows.net;loginTimeout=30;
+        username: sa
+        password: sa
         hikari:
             data-source-properties:
                 cachePrepStmts: true
@@ -54,10 +54,16 @@ spring:
             hibernate.cache.use_query_cache: false
             hibernate.generate_statistics: true
     mail:
-        host: localhost
-        port: 25
-        username:
-        password:
+        host: smtp.gmail.com
+        port: 587
+        username: appmailerserv@gmail.com
+        password: appmailerserv123
+        protocol: smtp
+        tls: true
+        properties.mail.smtp:
+            auth: true
+            starttls.enable: true
+            ssl.trust: smtp.gmail.com
     messages:
         cache-seconds: 1
     thymeleaf:

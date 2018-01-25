@@ -11,6 +11,7 @@ export class SettingsComponent implements OnInit {
     success: string;
     settingsAccount: any;
     languages: any[];
+    isAdmin: boolean;
 
     constructor(
         private account: AccountService,
@@ -21,6 +22,10 @@ export class SettingsComponent implements OnInit {
     ngOnInit() {
         this.principal.identity().then((account) => {
             this.settingsAccount = this.copyAccount(account);
+        });
+
+        this.principal.hasAuthority('ROLE_ADMIN').then((value) => {
+            this.isAdmin = value;
         });
     }
 

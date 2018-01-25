@@ -19,9 +19,12 @@ import java.util.Map;
 @Table(name = "pmp_persistent_audit_event")
 public class PersistentAuditEvent implements Serializable {
 
+//    @Id
+//    @SequenceGenerator(sequenceName = "APP_EVENT_ID_SEQ", name = "AppEventIdSequence")
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AppEventIdSequence")
     @Id
-    @SequenceGenerator(sequenceName = "APP_EVENT_ID_SEQ", name = "AppEventIdSequence")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AppEventIdSequence")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
+    @SequenceGenerator(name = "sequenceGenerator")
     @Column(name = "event_id")
     private Long id;
 
