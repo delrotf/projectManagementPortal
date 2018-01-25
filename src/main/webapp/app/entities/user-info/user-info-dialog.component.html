@@ -1,0 +1,75 @@
+<form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+
+    <div class="modal-header">
+        <h4 class="modal-title" id="myUserInfoLabel">Edit Your User Info</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="clear()">&times;</button>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <!-- <div class="form-group" [hidden]="!userInfo.id">
+            <label for="id">ID</label>
+            <input type="text" class="form-control" id="id" name="id" [(ngModel)]="userInfo.id" readonly />
+        </div> -->
+        <div class="form-group">
+            <label class="form-control-label" for="field_firstName">First Name</label>
+            <input type="text" class="form-control" name="firstName" id="field_firstName" [(ngModel)]="userInfo.firstName" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_lastName">Last Name</label>
+            <input type="text" class="form-control" name="lastName" id="field_lastName" [(ngModel)]="userInfo.lastName" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_callingName">Calling Name</label>
+            <input type="text" class="form-control" name="callingName" id="field_callingName" [(ngModel)]="userInfo.callingName" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_phone">Phone</label>
+            <input type="text" class="form-control" name="phone" id="field_phone" [(ngModel)]="userInfo.phone" />
+        </div>
+
+        <!-- <div class="form-group">
+            <label class="form-control-label" for="field_user">User</label>
+            <select class="form-control" id="field_user" name="user" [(ngModel)]="userInfo.userId" required>
+                <option *ngIf="!editForm.value.user" [ngValue]="null" selected></option>
+                <option [ngValue]="userOption.id" *ngFor="let userOption of users; trackBy: trackUserById">{{userOption.login}}</option>
+            </select>
+        </div>
+        <div [hidden]="!(editForm.controls.user?.dirty && editForm.controls.user?.invalid)">
+            <small class="form-text text-danger" [hidden]="!editForm.controls.user?.errors?.required">
+                This field is required.
+            </small>
+        </div> -->
+        <div class="form-group">
+            <label class="form-control-label" for="field_designation">Designation</label>
+            <!-- <select class="form-control" id="field_designation" name="designation" [(ngModel)]="userInfo.designationId" required>
+                    <option *ngIf="!editForm.value.designation" [ngValue]="null" selected></option>
+                    <option [ngValue]="designationOption.id" *ngFor="let designationOption of designations; trackBy: trackDesignationById">{{designationOption.designation}}</option>
+                </select> -->
+            <input type="text" class="form-control" name="designation" list="designations" [(ngModel)]="userInfo.designationId" />
+            <datalist id="designations">
+                        <option *ngIf="!editForm.value.designation" [ngValue]="null" selected></option>
+                        <option [ngValue]="designationOption.id" *ngFor="let designationOption of designations; trackBy: trackDesignationById">{{designationOption.designation}}</option>
+                    </datalist>
+        </div>
+        <div [hidden]="!(editForm.controls.designation?.dirty && editForm.controls.designation?.invalid)">
+            <small class="form-text text-danger" [hidden]="!editForm.controls.designation?.errors?.required">
+                    This field is required.
+                </small>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_supervisor">Supervisor</label>
+            <select class="form-control" id="field_supervisor" name="supervisor" [(ngModel)]="userInfo.supervisorId">
+                <option [ngValue]="null"></option>
+                <option [ngValue]="userOption.userId" *ngFor="let userOption of usersForSupervisor; trackBy: trackUserById">{{userOption.userLogin}}/ {{userOption.callingName}}</option>
+            </select>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
+            <span class="fa fa-ban"></span>&nbsp;<span>Cancel</span>
+        </button>
+        <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+            <span class="fa fa-save"></span>&nbsp;<span>Save</span>
+        </button>
+    </div>
+</form>

@@ -1,0 +1,46 @@
+<div *ngIf="userInfo">
+    <h2><span>User Info</span> {{userInfo.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span>First Name</span></dt>
+        <dd>
+            <span>{{userInfo.firstName}}</span>
+        </dd>
+        <dt><span>Last Name</span></dt>
+        <dd>
+            <span>{{userInfo.lastName}}</span>
+        </dd>
+        <dt><span>Calling Name</span></dt>
+        <dd>
+            <span>{{userInfo.callingName}}</span>
+        </dd>
+        <dt><span>Phone</span></dt>
+        <dd>
+            <span>{{userInfo.phone}}</span>
+        </dd>
+        <dt><span>User</span></dt>
+        <dd>
+            {{userInfo.userLogin}}
+        </dd>
+        <dt><span>Supervisor</span></dt>
+        <dd>
+            {{userInfo.supervisorLogin}}
+        </dd>
+        <dt><span>Designation</span></dt>
+        <dd>
+            <!-- <div *ngIf="userInfo.designationId">
+                <a [routerLink]="['/designation', userInfo.designationId]">{{userInfo.designationDesignation}}</a>
+            </div> -->
+            {{userInfo.designationDesignation}}
+        </dd>
+    </dl>
+
+    <button type="submit" (click)="previousState()" class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <button *jhiHasAnyAuthority="'ROLE_ADMIN'" type="button" [routerLink]="['/', { outlets: { popup: 'user-info/'+ userInfo.id + '/edit'} }]" replaceUrl="true" queryParamsHandling="merge" class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span> Edit</span>
+    </button>
+</div>

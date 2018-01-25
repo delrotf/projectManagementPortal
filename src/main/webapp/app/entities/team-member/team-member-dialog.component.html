@@ -1,0 +1,73 @@
+<form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+
+    <div class="modal-header">
+        <h4 *ngIf="params.userLogin" class="modal-title" id="myTeamMemberLabel">Add <strong>{{params.userLogin}}</strong> to a Team</h4>
+        <h4 *ngIf="params.teamName" class="modal-title" id="myTeamMemberLabel">Add a User to <strong>{{params.teamName}}</strong></h4>
+        
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="clear()">&times;</button>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" [hidden]="!teamMember.id">
+            <label for="id">ID</label>
+            <input type="text" class="form-control" id="id" name="id" [(ngModel)]="teamMember.id" readonly />
+        </div>
+        <!-- <div class="form-group">
+            <label class="form-control-label" for="field_updatedTime">Updated Time</label>
+            <div class="d-flex">
+                <input id="field_updatedTime" type="datetime-local" class="form-control" name="updatedTime" [(ngModel)]="teamMember.updatedTime"
+                />
+            </div>
+        </div> -->
+
+        <div *ngIf="hasTeam && users && users.length; else usersElseBlock" class="form-group">
+            <label class="form-control-label" for="field_user">User</label>
+            <select class="form-control" id="field_user" name="user" [(ngModel)]="teamMember.userId" required>
+                <option *ngIf="!editForm.value.user" [ngValue]="null" selected></option>
+                <option [ngValue]="userOption.userId" *ngFor="let userOption of users; trackBy: trackUserById">{{userOption.userLogin}}</option>
+            </select>
+        </div>
+        <div [hidden]="!(editForm.controls.user?.dirty && editForm.controls.user?.invalid)">
+            <small class="form-text text-danger" [hidden]="!editForm.controls.user?.errors?.required">
+                This field is required.
+            </small>
+        </div>
+        <ng-template #usersElseBlock>
+            <div *ngIf="params.teamName">
+                <h2 class="form-control">No more Users to add to {{params.teamName}}.</h2>
+            </div>
+        </ng-template>
+        <div *ngIf="hasUser && teams && teams.length; else teamsElseBlock" class="form-group">
+            <label class="form-control-label" for="field_team">Team</label>
+            <select class="form-control" id="field_team" name="team" [(ngModel)]="teamMember.teamId" required>
+                <option *ngIf="!editForm.value.team" [ngValue]="null" selected></option>
+                <option [ngValue]="teamOption.id" *ngFor="let teamOption of teams; trackBy: trackTeamById">{{teamOption.name}}</option>
+            </select>
+        </div>
+        <div [hidden]="!(editForm.controls.team?.dirty && editForm.controls.team?.invalid)">
+            <small class="form-text text-danger" [hidden]="!editForm.controls.team?.errors?.required">
+                This field is required.
+            </small>
+        </div>
+        <ng-template #teamsElseBlock>
+            <div *ngIf="params.userLogin">
+                <h2 class="form-control">No more Teams to add {{params.userLogin}} to.</h2>
+            </div>
+        </ng-template>
+    </div>
+    <div *ngIf="!showOk; else okElseBlock" class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
+            <span class="fa fa-ban"></span>&nbsp;<span>Cancel</span>
+        </button>
+        <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+            <span class="fa fa-save"></span>&nbsp;<span>Save</span>
+        </button>
+    </div>
+    <ng-template #okElseBlock>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="clear()">
+                        <span class="fa fa-check"></span>&nbsp;<span>OK</span>
+                    </button>
+        </div>
+    </ng-template>
+</form>

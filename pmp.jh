@@ -1,0 +1,45 @@
+entity UserInfo {
+	firstName String,
+	lastName String,
+	callingName String,
+	phone String
+}
+
+entity Designation {
+	designation String
+}
+
+entity Team {
+	name String,
+    code String,
+    imageUrl String,
+    processOrder Boolean,
+    processExternalTask Boolean,
+    active Boolean,
+    createdDate Instant
+}
+
+entity TeamMember {
+	updatedTime Instant
+}
+
+relationship OneToOne {
+	UserInfo{user(login) required} to User
+}
+
+relationship ManyToOne {
+    Team{teamHead(login) required} to User,
+    TeamMember{user(login) required} to User,
+    TeamMember{team(name) required} to Team,
+	UserInfo{supervisor(login)} to User,
+	UserInfo{designation(designation)} to Designation
+}
+
+// Set pagination options
+paginate * with infinite-scroll
+
+dto * with mapstruct
+
+// Set service options to all except few
+service all with serviceImpl
+

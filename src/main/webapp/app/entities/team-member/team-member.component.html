@@ -1,0 +1,67 @@
+<div>
+    <h2 *ngIf="teamId; else elseBlock">
+        <span>Team Members Of {{teamName}}</span>
+        <button class="btn btn-primary float-right jh-create-entity create-team-member" [routerLink]="['/', { outlets: { popup: ['team-member-new'] } }]" [queryParams]="{ teamId: teamId, teamName: teamName }">
+            <span class="fa fa-plus"></span>
+            <span >
+            Add a Team Member
+            </span>
+        </button>
+    </h2>
+    <a *ngIf="teamId" class="" routerLink="../team" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <i class="fa fa-fw fa-arrow-circle-left" aria-hidden="true"></i>
+        <span>Back To Teams</span>
+    </a>
+    <ng-template #elseBlock>
+        <h2>
+            <span>Teams I'm A Member Of</span>
+        </h2>
+    </ng-template>
+    <jhi-alert></jhi-alert>
+    <div class="row">
+    </div>
+    <br/>
+    <div class="table-responsive" *ngIf="teamMembers">
+        <table class="table table-striped">
+            <thead>
+                <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="reset.bind(this)">
+                    <!-- <th jhiSortBy="id"><span>ID</span> <span class="fa fa-sort"></span></th> -->
+                    <!-- <th jhiSortBy="updatedTime"><span>Updated Time</span> <span class="fa fa-sort"></span></th> -->
+                    <th *ngIf="teamId" jhiSortBy="userLogin"><span>User</span> <span class="fa fa-sort"></span></th>
+                    <th *ngIf="!teamId" jhiSortBy="teamName"><span>Team</span> <span class="fa fa-sort"></span></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
+                <tr *ngFor="let teamMember of teamMembers ;trackBy: trackId">
+                    <!-- <td><a [routerLink]="['../team-member', teamMember.id ]">{{teamMember.id}}</a></td> -->
+                    <!-- <td>{{teamMember.updatedTime | date:'medium'}}</td> -->
+                    <td *ngIf="teamId">
+                        {{teamMember.userLogin}}
+                    </td>
+                    <td>
+                        <div *ngIf="!teamId">
+                            <a [routerLink]="['../team', teamMember.teamId  ]">{{teamMember.teamName}}</a>
+                        </div>
+                    </td>
+                    <td class="text-right">
+                        <div class="btn-group flex-btn-group-container">
+                            <!-- <button type="submit" [routerLink]="['../team-member', teamMember.id ]" class="btn btn-info btn-sm"> -->
+                            <!-- <span class="fa fa-eye"></span> -->
+                            <!-- <span class="d-none d-md-inline">View</span> -->
+                            <!-- </button> -->
+                            <!-- <button type="submit" [routerLink]="['/', { outlets: { popup: 'team-member/'+ teamMember.id + '/edit'} }]" replaceUrl="true" queryParamsHandling="merge" class="btn btn-primary btn-sm">
+                            <span class="fa fa-pencil"></span>
+                            <span class="d-none d-md-inline">Edit</span>
+                        </button> -->
+                            <button type="submit" [routerLink]="['/', { outlets: { popup: 'team-member/'+ teamMember.id + '/delete'} }]" replaceUrl="true" queryParamsHandling="merge" class="btn btn-danger btn-sm">
+                            <span class="fa fa-remove"></span>
+                            <span class="d-none d-md-inline">Delete</span>
+                        </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

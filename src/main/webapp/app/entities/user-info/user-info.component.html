@@ -1,0 +1,78 @@
+<div>
+    <h2>
+        <span>Users</span>
+        <!-- <button class="btn btn-primary float-right jh-create-entity create-user-info" [routerLink]="['/', { outlets: { popup: ['user-info-new'] } }]">
+            <span class="fa fa-plus"></span>
+            <span >
+            Create new User Info
+            </span>
+        </button> -->
+    </h2>
+    <jhi-alert></jhi-alert>
+    <div class="row">
+    </div>
+    <br/>
+    <div class="table-responsive" *ngIf="userInfos">
+        <table class="table table-striped">
+            <thead>
+                <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="reset.bind(this)">
+                    <!-- <th jhiSortBy="id"><span>ID</span> <span class="fa fa-sort"></span></th> -->
+                    <th jhiSortBy="userLogin"><span>User</span> <span class="fa fa-sort"></span></th>
+                    <th jhiSortBy="firstName"><span>First Name</span> <span class="fa fa-sort"></span></th>
+                    <th jhiSortBy="lastName"><span>Last Name</span> <span class="fa fa-sort"></span></th>
+                    <th jhiSortBy="callingName"><span>Calling Name</span> <span class="fa fa-sort"></span></th>
+                    <th jhiSortBy="designationDesignation"><span>Designation</span> <span class="fa fa-sort"></span></th>
+                    <th jhiSortBy="supervisorLogin"><span>Supervisor</span> <span class="fa fa-sort"></span></th>
+                    <th jhiSortBy="phone"><span>Phone</span> <span class="fa fa-sort"></span></th>
+                    <th></th>
+                    <th *jhiHasAnyAuthority="'ROLE_ADMIN'"></th>
+                </tr>
+            </thead>
+            <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
+                <tr *ngFor="let userInfo of userInfos ;trackBy: trackId">
+                    <!-- <td><a [routerLink]="['../user-info', userInfo.id ]">{{userInfo.id}}</a></td> -->
+                    <td><a [routerLink]="['../user-info', userInfo.id ]">
+                        {{userInfo.userLogin}}</a>
+                    </td>
+                    <td>{{userInfo.firstName}}</td>
+                    <td>{{userInfo.lastName}}</td>
+                    <td>{{userInfo.callingName}}</td>
+                    <td>
+                        <!-- <div *ngIf="userInfo.designationId">
+                            <a [routerLink]="['../designation', userInfo.designationId  ]">{{userInfo.designationDesignation}}</a>
+                        </div> -->
+                        {{userInfo.designationDesignation}}
+                    </td>
+                    <td>
+                        {{userInfo.supervisorLogin}}
+                    </td>
+                    <td>{{userInfo.phone}}</td>
+                    <td>
+                        <button class="btn btn-primary float-right jh-create-entity create-team-member" [routerLink]="['/', { outlets: { popup: ['team-member-new'] } }]" [queryParams]="{ userId: userInfo.userId, userLogin: userInfo.userLogin }">
+                            <span class="fa fa-plus"></span>
+                            <span >
+                            Add to a Team...
+                            </span>
+                        </button>
+                    </td>
+                    <td *jhiHasAnyAuthority="'ROLE_ADMIN'" class="text-right">
+                        <div class="btn-group flex-btn-group-container">
+                            <button type="submit" [routerLink]="['../user-info', userInfo.id ]" class="btn btn-info btn-sm">
+                            <span class="fa fa-eye"></span>
+                            <span class="d-none d-md-inline">View</span>
+                        </button>
+                            <button type="submit" [routerLink]="['/', { outlets: { popup: 'user-info/'+ userInfo.id + '/edit'} }]" replaceUrl="true" queryParamsHandling="merge" class="btn btn-primary btn-sm">
+                            <span class="fa fa-pencil"></span>
+                            <span class="d-none d-md-inline">Edit</span>
+                        </button>
+                            <button type="submit" [routerLink]="['/', { outlets: { popup: 'user-info/'+ userInfo.id + '/delete'} }]" replaceUrl="true" queryParamsHandling="merge" class="btn btn-danger btn-sm">
+                            <span class="fa fa-remove"></span>
+                            <span class="d-none d-md-inline">Delete</span>
+                        </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

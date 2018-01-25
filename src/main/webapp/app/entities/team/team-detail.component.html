@@ -1,0 +1,47 @@
+<div *ngIf="team">
+    <h2><span>Team</span> {{team.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span>Name</span></dt>
+        <dd>
+            <span>{{team.name}}</span>
+        </dd>
+        <dt><span>Code</span></dt>
+        <dd>
+            <span>{{team.code}}</span>
+        </dd>
+        <dt><span>Image</span></dt>
+        <dd>
+            <span><img src={{team.imageUrl}}></span>
+        </dd>
+        <dt><span>Process Order</span></dt>
+        <dd>
+            <span>{{team.processOrder}}</span>
+        </dd>
+        <dt><span>Process External Task</span></dt>
+        <dd>
+            <span>{{team.processExternalTask}}</span>
+        </dd>
+        <dt><span>Active</span></dt>
+        <dd>
+            <span>{{team.active}}</span>
+        </dd>
+        <dt><span>Created Date</span></dt>
+        <dd>
+            <span>{{team.createdDate | date:'medium'}}</span>
+        </dd>
+        <dt><span>Team Head</span></dt>
+        <dd>
+            {{team.teamHeadLogin}}
+        </dd>
+    </dl>
+
+    <button type="submit" (click)="previousState()" class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <button *jhiHasAnyAuthority="'ROLE_ADMIN'" type="button" [routerLink]="['/', { outlets: { popup: 'team/'+ team.id + '/edit'} }]" replaceUrl="true" queryParamsHandling="merge" class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span> Edit</span>
+    </button>
+</div>
