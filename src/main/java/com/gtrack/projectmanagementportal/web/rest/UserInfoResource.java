@@ -1,6 +1,8 @@
 package com.gtrack.projectmanagementportal.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.gtrack.projectmanagementportal.domain.Designation;
+import com.gtrack.projectmanagementportal.service.DesignationService;
 import com.gtrack.projectmanagementportal.service.UserInfoService;
 import com.gtrack.projectmanagementportal.web.rest.errors.BadRequestAlertException;
 import com.gtrack.projectmanagementportal.web.rest.util.HeaderUtil;
@@ -38,9 +40,11 @@ public class UserInfoResource {
     private static final String ENTITY_NAME = "userInfo";
 
     private final UserInfoService userInfoService;
+    private final DesignationService designationService;
 
-    public UserInfoResource(UserInfoService userInfoService) {
+    public UserInfoResource(UserInfoService userInfoService, DesignationService designationService) {
         this.userInfoService = userInfoService;
+        this.designationService = designationService;
     }
 
     /**
@@ -79,6 +83,26 @@ public class UserInfoResource {
         log.debug("REST request to update UserInfo : {}", userInfoDTO);
         if (userInfoDTO.getId() == null) {
             return createUserInfo(userInfoDTO);
+        }
+        
+        String designationDesignation = userInfoDTO.getDesignationDesignation();
+        
+        if (designationDesignation != null) {
+	        Designation designation = designationService.findOneByDesignation(designationDesignation);
+	        
+	        Long designationId = null;
+	        // if designation is null, save a new one.
+	        if (designation == null) {
+	        	designation = new Designation();
+	            designation.setDesignation(userInfoDTO.getDesignationDesignation());
+	            Designation persistedDesignation = designationService.save(designation);
+	            log.debug("persistedDesignation : {}", persistedDesignation);
+	            designationId = persistedDesignation.getId();
+	        } else {
+	        	designationId = designation.getId();
+	        }
+	        
+	        userInfoDTO.setDesignationId(designationId);
         }
         UserInfoDTO result = userInfoService.save(userInfoDTO);
         return ResponseEntity.ok()
@@ -122,38 +146,47 @@ public class UserInfoResource {
         if (query != null) {
             try {
             	json = new JSONObject(query);
-            	teamId = json.getString("teamId");
             } catch (JSONException e) {
             	// do nothing.
             }
-        	try {
-				teamName = json.getString("teamName");
-			} catch (JSONException e) {
-            	// do nothing.
-			}
-        	try {
-				userId = json.getString("userId");
-			} catch (JSONException e) {
-            	// do nothing.
-			}
-        	try {
-				userLogin = json.getString("userLogin");
-			} catch (JSONException e) {
-            	// do nothing.
-			}
+            if (json != null) {
+	        	try {
+					teamId = json.getString("teamId");
+				} catch (JSONException e1) {
+	            	// do nothing.
+				}
+	        	try {
+					teamName = json.getString("teamName");
+				} catch (JSONException e) {
+	            	// do nothing.
+				}
+	        	try {
+					userId = json.getString("userId");
+				} catch (JSONException e) {
+	            	// do nothing.
+				}
+	        	try {
+					userLogin = json.getString("userLogin");
+				} catch (JSONException e) {
+	            	// do nothing.
+				}
+            }
         }
+        HttpHeaders headers = null;
         if (teamId != null) {
         	// drop-down items.
             page = userInfoService.findByUserIdNotIn(Long.valueOf(teamId), pageable);
+            headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/user-infos?teamId=" + teamId + "&teamName=" + teamName);
         } else if (userLogin != null) {
         	// for updating user's info in settings.
         	page = userInfoService.findByUserLogin(userLogin, pageable);
+            headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/user-infos?userLogin=" + userLogin);
         } else {
         	// listing all users in table.
             page = userInfoService.findAll(pageable);
+            headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/user-infos");
         }
         
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/user-infos");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 

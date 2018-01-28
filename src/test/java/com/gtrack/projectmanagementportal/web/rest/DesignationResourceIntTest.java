@@ -5,8 +5,6 @@ import com.gtrack.projectmanagementportal.ProjectManagementPortalApp;
 import com.gtrack.projectmanagementportal.domain.Designation;
 import com.gtrack.projectmanagementportal.repository.DesignationRepository;
 import com.gtrack.projectmanagementportal.service.DesignationService;
-import com.gtrack.projectmanagementportal.service.dto.DesignationDTO;
-import com.gtrack.projectmanagementportal.service.mapper.DesignationMapper;
 import com.gtrack.projectmanagementportal.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
@@ -46,9 +44,6 @@ public class DesignationResourceIntTest {
 
     @Autowired
     private DesignationRepository designationRepository;
-
-    @Autowired
-    private DesignationMapper designationMapper;
 
     @Autowired
     private DesignationService designationService;
@@ -103,10 +98,9 @@ public class DesignationResourceIntTest {
         int databaseSizeBeforeCreate = designationRepository.findAll().size();
 
         // Create the Designation
-        DesignationDTO designationDTO = designationMapper.toDto(designation);
         restDesignationMockMvc.perform(post("/api/designations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(designationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(designation)))
             .andExpect(status().isCreated());
 
         // Validate the Designation in the database
@@ -123,17 +117,34 @@ public class DesignationResourceIntTest {
 
         // Create the Designation with an existing ID
         designation.setId(1L);
-        DesignationDTO designationDTO = designationMapper.toDto(designation);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restDesignationMockMvc.perform(post("/api/designations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(designationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(designation)))
             .andExpect(status().isBadRequest());
 
         // Validate the Designation in the database
         List<Designation> designationList = designationRepository.findAll();
         assertThat(designationList).hasSize(databaseSizeBeforeCreate);
+    }
+
+    @Test
+    @Transactional
+    public void checkDesignationIsRequired() throws Exception {
+        int databaseSizeBeforeTest = designationRepository.findAll().size();
+        // set the field null
+        designation.setDesignation(null);
+
+        // Create the Designation, which fails.
+
+        restDesignationMockMvc.perform(post("/api/designations")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(designation)))
+            .andExpect(status().isBadRequest());
+
+        List<Designation> designationList = designationRepository.findAll();
+        assertThat(designationList).hasSize(databaseSizeBeforeTest);
     }
 
     @Test
@@ -176,7 +187,8 @@ public class DesignationResourceIntTest {
     @Transactional
     public void updateDesignation() throws Exception {
         // Initialize the database
-        designationRepository.saveAndFlush(designation);
+        designationService.save(designation);
+
         int databaseSizeBeforeUpdate = designationRepository.findAll().size();
 
         // Update the designation
@@ -185,11 +197,10 @@ public class DesignationResourceIntTest {
         em.detach(updatedDesignation);
         updatedDesignation
             .designation(UPDATED_DESIGNATION);
-        DesignationDTO designationDTO = designationMapper.toDto(updatedDesignation);
 
         restDesignationMockMvc.perform(put("/api/designations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(designationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedDesignation)))
             .andExpect(status().isOk());
 
         // Validate the Designation in the database
@@ -205,12 +216,11 @@ public class DesignationResourceIntTest {
         int databaseSizeBeforeUpdate = designationRepository.findAll().size();
 
         // Create the Designation
-        DesignationDTO designationDTO = designationMapper.toDto(designation);
 
         // If the entity doesn't have an ID, it will be created instead of just being updated
         restDesignationMockMvc.perform(put("/api/designations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(designationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(designation)))
             .andExpect(status().isCreated());
 
         // Validate the Designation in the database
@@ -222,7 +232,8 @@ public class DesignationResourceIntTest {
     @Transactional
     public void deleteDesignation() throws Exception {
         // Initialize the database
-        designationRepository.saveAndFlush(designation);
+        designationService.save(designation);
+
         int databaseSizeBeforeDelete = designationRepository.findAll().size();
 
         // Get the designation
@@ -248,28 +259,5 @@ public class DesignationResourceIntTest {
         assertThat(designation1).isNotEqualTo(designation2);
         designation1.setId(null);
         assertThat(designation1).isNotEqualTo(designation2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(DesignationDTO.class);
-        DesignationDTO designationDTO1 = new DesignationDTO();
-        designationDTO1.setId(1L);
-        DesignationDTO designationDTO2 = new DesignationDTO();
-        assertThat(designationDTO1).isNotEqualTo(designationDTO2);
-        designationDTO2.setId(designationDTO1.getId());
-        assertThat(designationDTO1).isEqualTo(designationDTO2);
-        designationDTO2.setId(2L);
-        assertThat(designationDTO1).isNotEqualTo(designationDTO2);
-        designationDTO1.setId(null);
-        assertThat(designationDTO1).isNotEqualTo(designationDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(designationMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(designationMapper.fromId(null)).isNull();
     }
 }

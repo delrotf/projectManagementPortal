@@ -50,8 +50,8 @@ Navbar
 .jh-navbar .jh-navbar-toggler:hover {
     color: #fff;
 }
-
 @media screen and (min-width: 768px) {
+/* @media screen and (min-width: 992px) { */
     .jh-navbar-toggler {
         display: none;
     }

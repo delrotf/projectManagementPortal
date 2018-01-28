@@ -1,6 +1,7 @@
 package com.gtrack.projectmanagementportal.service.dto;
 
 
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -11,6 +12,7 @@ public class DesignationDTO implements Serializable {
 
     private Long id;
 
+    @NotNull
     private String designation;
 
     public Long getId() {

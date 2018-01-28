@@ -31,7 +31,7 @@
             <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
                 <tr *ngFor="let userInfo of userInfos ;trackBy: trackId">
                     <!-- <td><a [routerLink]="['../user-info', userInfo.id ]">{{userInfo.id}}</a></td> -->
-                    <td><a [routerLink]="['../user-info', userInfo.id ]">
+                    <td><a [routerLink]="['../user-info', userInfo.id ]" [queryParams]="{ userId: userInfo.userId, userLogin: userInfo.userLogin }">
                         {{userInfo.userLogin}}</a>
                     </td>
                     <td>{{userInfo.firstName}}</td>

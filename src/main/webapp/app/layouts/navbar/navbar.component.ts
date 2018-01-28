@@ -35,6 +35,9 @@ export class NavbarComponent implements OnInit {
     ) {
         this.version = VERSION ? 'v' + VERSION : '';
         this.isNavbarCollapsed = true;
+        this.principal.identity().then((account) => {
+            this.account = account;
+        });
     }
 
     ngOnInit() {

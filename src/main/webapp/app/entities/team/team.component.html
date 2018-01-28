@@ -1,7 +1,6 @@
 <div>
     <h2>
-        <span *ngIf="isAdmin">Teams</span>
-        <span *ngIf="!isAdmin">My Teams</span>
+        <span *ngIf="!isAdmin">My </span>Teams</span>
 
         <button class="btn btn-primary float-right jh-create-entity create-team" [routerLink]="['/', { outlets: { popup: ['team-new'] } }]">
             <span class="fa fa-plus"></span>
@@ -10,6 +9,15 @@
             </span>
         </button>
     </h2>
+    <ul class="nav nav-pills">
+        <li class="nav-item">
+            <a class="nav-link" routerLink="../team" routerLinkActive="active" [queryParams]="{ active: true }" [routerLinkActiveOptions]="{ exact: true }">Active</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" routerLink="../team" routerLinkActive="active" [queryParams]="{ active: false }" [routerLinkActiveOptions]="{ exact: true }">InActive</a>
+        </li>
+    </ul>
+
     <jhi-alert></jhi-alert>
     <div class="row">
     </div>
@@ -22,10 +30,10 @@
                     <th jhiSortBy="name"><span>Name</span> <span class="fa fa-sort"></span></th>
                     <th jhiSortBy="code"><span>Code</span> <span class="fa fa-sort"></span></th>
                     <!-- <th jhiSortBy="imageUrl"><span>Image Url</span> <span class="fa fa-sort"></span></th> -->
-                    <th><span>Image</span> <span class="fa"></span></th>
-                    <th jhiSortBy="processOrder"><span>Process Order</span> <span class="fa fa-sort"></span></th>
-                    <th jhiSortBy="processExternalTask"><span>Process External Task</span> <span class="fa fa-sort"></span></th>
-                    <th jhiSortBy="active"><span>Active</span> <span class="fa fa-sort"></span></th>
+                    <!-- <th><span>Image</span> <span class="fa"></span></th> -->
+                    <!-- <th jhiSortBy="processOrder"><span>Process Order</span> <span class="fa fa-sort"></span></th> -->
+                    <!-- <th jhiSortBy="processExternalTask"><span>Process External Task</span> <span class="fa fa-sort"></span></th> -->
+                    <!-- <th jhiSortBy="active"><span>Active</span> <span class="fa fa-sort"></span></th> -->
                     <th jhiSortBy="createdDate"><span>Created Date</span> <span class="fa fa-sort"></span></th>
                     <th *jhiHasAnyAuthority="'ROLE_ADMIN'" jhiSortBy="teamHeadLogin"><span>Team Head</span> <span class="fa fa-sort"></span></th>
                     <th></th>
@@ -35,13 +43,15 @@
                 <tr *ngFor="let team of teams ;trackBy: trackId">
                     <!-- <td><a [routerLink]="['../team', team.id ]">{{team.id}}</a></td> -->
                     <!-- <td>{{team.name}}</td> -->
-                    <td><a [routerLink]="['../team', team.id ]">{{team.name}}</a></td>
+                    <td>
+                        <a [routerLink]="['../team', team.id ]"><img src={{team.imageUrl}} style="max-width: 100px"><br>{{team.name}}</a>
+                    </td>
                     <td>{{team.code}}</td>
-                    <td><img src={{team.imageUrl}} ></td>
-                    <td>{{team.processOrder}}</td>
-                    <td>{{team.processExternalTask}}</td>
-                    <td>{{team.active}}</td>
-                    <td>{{team.createdDate | date:'medium'}}</td>
+                    <!-- <td><img src={{team.imageUrl}} style="max-width: 40px"></td> -->
+                    <!-- <td>{{team.processOrder}}</td> -->
+                    <!-- <td>{{team.processExternalTask}}</td> -->
+                    <!-- <td>{{team.active}}</td> -->
+                    <td>{{team.createdDate | date:'yyyy-MM-dd'}}</td>
                     <td *jhiHasAnyAuthority="'ROLE_ADMIN'">
                         {{team.teamHeadLogin}}
                     </td>

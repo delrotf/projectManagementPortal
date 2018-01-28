@@ -117,23 +117,47 @@ public class TeamMemberResource {
         JSONObject json = null;
         String teamId = null;
         String teamName = null;
+		String userId = null;
+		String userLogin = null;
         
         if (query != null) {
             try {
     			json = new JSONObject(query);
-            	teamId = json.getString("teamId");
-            	teamName = json.getString("teamName");
     		} catch (JSONException e) {
     			// do nothing.
     		}
+            if (json != null) {
+            	try {
+    				teamId = json.getString("teamId");
+    			} catch (JSONException e1) {
+                	// do nothing.
+    			}
+            	try {
+    				teamName = json.getString("teamName");
+    			} catch (JSONException e) {
+                	// do nothing.
+    			}
+            	try {
+    				userId = json.getString("userId");
+    			} catch (JSONException e) {
+                	// do nothing.
+    			}
+            	try {
+    				userLogin = json.getString("userLogin");
+    			} catch (JSONException e) {
+                	// do nothing.
+    			}
+            }
         }
+        
+        userLogin = userLogin != null ? userLogin : SecurityUtils.getCurrentUserLogin().get();
         
         if(teamId != null) {
         	page = teamMemberService.findByTeamId(Long.valueOf(teamId), pageable);
             headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/team-members?teamId=" + teamId + "&teamName=" + teamName);
         } else {
-        	page = teamMemberService.findByUserLogin(SecurityUtils.getCurrentUserLogin().get(), pageable);
-            headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/team-members");
+        	page = teamMemberService.findByUserLogin(userLogin, pageable);
+            headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/team-members?userLogin=" + userLogin);
         }
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }

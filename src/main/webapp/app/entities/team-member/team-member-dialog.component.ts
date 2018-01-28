@@ -89,6 +89,8 @@ export class TeamMemberDialogComponent implements OnInit {
 
     save() {
         this.isSaving = true;
+        this.teamMember.updatedTime = new Date().toISOString();
+
         if (this.teamMember.id !== undefined) {
             this.subscribeToSaveResponse(
                 this.teamMemberService.update(this.teamMember));

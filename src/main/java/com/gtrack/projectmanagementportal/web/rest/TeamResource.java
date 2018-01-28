@@ -106,25 +106,39 @@ public class TeamResource {
     	Page<TeamDTO> page = null;
         JSONObject json = null;
         String userLogin = null;
+        String active = null;
         
         if (query != null) {
             try {
     			json = new JSONObject(query);
-	            userLogin = json.getString("userLogin");
     		} catch (JSONException e) {
     			// do nothing.
     		}
+            if (json != null) {
+                try {
+                    userLogin = json.getString("userLogin");
+        		} catch (JSONException e) {
+        			// do nothing.
+        		}
+                try {
+                	active = json.getString("active");
+        		} catch (JSONException e) {
+        			// do nothing.
+        		}
+            }
         }
+        
+        boolean isActive = active != null ? Boolean.parseBoolean(active) : true;
         
         if (userLogin != null) {
         	// drop-down items.
-        	page = teamService.findByIdNotIn(userLogin, pageable);
+        	page = teamService.findByActiveAndIdNotIn(isActive, userLogin, pageable);
         } else if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ADMIN)) {
         	// all access for admin
         	page = teamService.findAll(pageable);
         } else {
         	// headed teams.
-        	page = teamService.findByTeamHeadLogin(SecurityUtils.getCurrentUserLogin().get(), pageable);
+        	page = teamService.findByActiveAndTeamHeadLogin(isActive, SecurityUtils.getCurrentUserLogin().get(), pageable);
         }
         
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/teams");

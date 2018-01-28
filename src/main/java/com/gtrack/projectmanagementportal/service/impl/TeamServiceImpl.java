@@ -75,7 +75,7 @@ public class TeamServiceImpl implements TeamService{
      */
     @Override
     @Transactional(readOnly = true)
-    public Page<TeamDTO> findByIdNotIn(String userLogin, Pageable pageable) {
+    public Page<TeamDTO> findByActiveAndIdNotIn(boolean isAdmin, String userLogin, Pageable pageable) {
         log.debug("Request to get Teams by Id not in");
         
         Set<TeamMember> teamMembersOfUser = teamMemberService.findByUserLogin(userLogin);
@@ -85,7 +85,7 @@ public class TeamServiceImpl implements TeamService{
             for (TeamMember teamMember : teamMembersOfUser) {
     			ids.add(teamMember.getTeam().getId());
     		}
-            return teamRepository.findByIdNotIn(ids, pageable)
+            return teamRepository.findByActiveAndIdNotIn(true, ids, pageable)
                 .map(teamMapper::toDto);
         } else {
         	return findAll(pageable);
@@ -100,9 +100,9 @@ public class TeamServiceImpl implements TeamService{
      */
     @Override
     @Transactional(readOnly = true)
-    public Page<TeamDTO> findByTeamHeadLogin(String teamHeadLogin, Pageable pageable) {
+    public Page<TeamDTO> findByActiveAndTeamHeadLogin(boolean isActive, String teamHeadLogin, Pageable pageable) {
         log.debug("Request to get Teams by teamhead");
-        return teamRepository.findByTeamHeadLogin(teamHeadLogin, pageable)
+        return teamRepository.findByActiveAndTeamHeadLogin(isActive, teamHeadLogin, pageable)
             .map(teamMapper::toDto);
     }
 

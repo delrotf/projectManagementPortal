@@ -1,5 +1,5 @@
 <div *ngIf="userInfo">
-    <h2><span>User Info</span> {{userInfo.id}}</h2>
+    <h2><span>User </span> {{userInfo.userLogin}}</h2>
     <hr>
     <jhi-alert-error></jhi-alert-error>
     <dl class="row-md jh-entity-details">
@@ -19,10 +19,10 @@
         <dd>
             <span>{{userInfo.phone}}</span>
         </dd>
-        <dt><span>User</span></dt>
+        <!-- <dt><span>User</span></dt>
         <dd>
             {{userInfo.userLogin}}
-        </dd>
+        </dd> -->
         <dt><span>Supervisor</span></dt>
         <dd>
             {{userInfo.supervisorLogin}}
@@ -39,7 +39,6 @@
     <button type="submit" (click)="previousState()" class="btn btn-info">
         <span class="fa fa-arrow-left"></span>&nbsp;<span> Back</span>
     </button>
-
     <button *jhiHasAnyAuthority="'ROLE_ADMIN'" type="button" [routerLink]="['/', { outlets: { popup: 'user-info/'+ userInfo.id + '/edit'} }]" replaceUrl="true" queryParamsHandling="merge" class="btn btn-primary">
         <span class="fa fa-pencil"></span>&nbsp;<span> Edit</span>
     </button>

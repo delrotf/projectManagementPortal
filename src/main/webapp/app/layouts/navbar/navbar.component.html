@@ -5,7 +5,7 @@
         </a>
         <a class="navbar-brand logo float-left" routerLink="/" (click)="collapseNavbar()">
             <span class="logo-img"></span>
-            <span class="navbar-title">ProjectManagementPortal</span> <span class="navbar-version">{{version}}</span>
+            <span class="navbar-title">Project Management Portal</span> <span class="navbar-version">{{version}}</span>
         </a>
     </div>
     <div class="navbar-collapse collapse" id="navbarResponsive" [ngbCollapse]="isNavbarCollapsed" [ngSwitch]="isAuthenticated()">
@@ -30,7 +30,7 @@
                 </a>
                 <ul class="dropdown-menu" ngbDropdownMenu>
                     <li>
-                        <a class="dropdown-item" routerLink="team" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                        <a class="dropdown-item" routerLink="team" [queryParams]="{ active: true }" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
                             <span><span *ngIf="!isAdmin">My </span>Teams</span>
                         </a>
@@ -117,13 +117,11 @@
                       Account
                     </span>
                     <span *ngSwitchCase="true">
-                        {{account.login}}
-                      </span>
+                        <span *ngIf="getImageUrl()">
+                            <img [src]="getImageUrl()" class="profile-image img-circle" alt="Avatar">
+                        </span> {{account.login}}
                     </span>
-                    <span *ngIf="getImageUrl()">
-                      <img [src]="getImageUrl()" class="profile-image img-circle" alt="Avatar">
-                      {{account.login}}
-                  </span>
+                    </span>
                 </a>
                 <ul class="dropdown-menu" ngbDropdownMenu>
                     <li *ngSwitchCase="true">

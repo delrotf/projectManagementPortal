@@ -13,9 +13,9 @@ import java.util.Objects;
 public class UserInfoDTO implements Serializable {
 
     private Long id;
-
+    @NotNull
     private String firstName;
-
+    @NotNull
     private String lastName;
 
     private String callingName;
@@ -149,6 +149,9 @@ public class UserInfoDTO implements Serializable {
             "id=" + getId() +
             ", firstName='" + getFirstName() + "'" +
             ", lastName='" + getLastName() + "'" +
+            ", callingName='" + getCallingName() + "'" +
+            ", designationId='" + getDesignationId() + "'" +
+            ", designationDesignation='" + getDesignationDesignation() + "'" +
             ", callingName='" + getCallingName() + "'" +
             ", phone='" + getPhone() + "'" +
             "}";

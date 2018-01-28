@@ -1,3 +1,4 @@
+import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
@@ -14,39 +15,47 @@ export class TeamComponent implements OnInit, OnDestroy {
 
     teams: Team[];
     currentAccount: any;
+    error: any;
+    success: any;
     eventSubscriber: Subscription;
-    itemsPerPage: number;
+    routeData: any;
     links: any;
+    totalItems: any;
+    queryCount: any;
+    itemsPerPage: any;
     page: any;
     predicate: any;
-    queryCount: any;
+    previousPage: any;
     reverse: any;
-    totalItems: number;
 
     isAdmin: boolean;
+
+    params: {[key: string]: any};
 
     constructor(
         private teamService: TeamService,
         private jhiAlertService: JhiAlertService,
         private eventManager: JhiEventManager,
         private parseLinks: JhiParseLinks,
-        private principal: Principal
+        private principal: Principal,
+        private activatedRoute: ActivatedRoute,
+        private router: Router,
     ) {
         this.teams = [];
         this.itemsPerPage = ITEMS_PER_PAGE;
-        this.page = 0;
-        this.links = {
-            last: 0
-        };
-        this.predicate = 'id';
-        this.reverse = true;
-    }
+        this.routeData = this.activatedRoute.data.subscribe((data) => {
+            this.page = data.pagingParams.page;
+            this.previousPage = data.pagingParams.page;
+            this.reverse = data.pagingParams.ascending;
+            this.predicate = data.pagingParams.predicate;
+        });   }
 
     loadAll() {
         this.teamService.query({
-            page: this.page,
+            page: this.page - 1,
             size: this.itemsPerPage,
-            sort: this.sort()
+            sort: this.sort(),
+            query: JSON.stringify(this.params)
         }).subscribe(
             (res: ResponseWrapper) => this.onSuccess(res.json, res.headers),
             (res: ResponseWrapper) => this.onError(res.json)
@@ -64,9 +73,15 @@ export class TeamComponent implements OnInit, OnDestroy {
         this.loadAll();
     }
     ngOnInit() {
-        this.loadAll();
+        this.route.queryParams
+        // .filter((params) => params.team)
+        .subscribe((params) => {
+          this.params = params;
+              this.reset();
+            // this.loadAll();
+        });
         this.principal.identity().then((account) => {
-            this.currentAccount = account;
+                this.currentAccount = account;
         });
 
         this.principal.hasAuthority('ROLE_ADMIN').then((value) => {
@@ -93,6 +108,16 @@ export class TeamComponent implements OnInit, OnDestroy {
             result.push('id');
         }
         return result;
+    }
+
+    transition() {
+        this.router.navigate(['/user-management'], {
+            queryParams: {
+                page: this.page,
+                sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
+            }
+        });
+        this.loadAll();
     }
 
     private onSuccess(data, headers) {

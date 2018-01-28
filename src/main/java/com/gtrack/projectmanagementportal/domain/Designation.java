@@ -2,6 +2,7 @@ package com.gtrack.projectmanagementportal.domain;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -20,7 +21,8 @@ public class Designation implements Serializable {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @Column(name = "designation")
+    @NotNull
+    @Column(name = "designation", nullable = false, unique = true)
     private String designation;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

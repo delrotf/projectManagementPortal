@@ -45,6 +45,6 @@ public interface TeamService {
     void delete(Long id);
 
 	Page<TeamDTO> findByTeamHeadIsCurrentUser(Pageable pageable);
-	Page<TeamDTO> findByTeamHeadLogin(String teamHeadLogin, Pageable pageable);
-	Page<TeamDTO> findByIdNotIn(String userLogin, Pageable pageable);
+	Page<TeamDTO> findByActiveAndTeamHeadLogin(boolean isActive, String teamHeadLogin, Pageable pageable);
+	Page<TeamDTO> findByActiveAndIdNotIn(boolean isActive, String userLogin, Pageable pageable);
 }

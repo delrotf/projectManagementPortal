@@ -1,26 +1,26 @@
 entity UserInfo {
-	firstName String,
-	lastName String,
+	firstName String required,
+	lastName String required,
 	callingName String,
 	phone String
 }
 
 entity Designation {
-	designation String
+	designation String required
 }
 
 entity Team {
-	name String,
+	name String required,
     code String,
     imageUrl String,
     processOrder Boolean,
     processExternalTask Boolean,
-    active Boolean,
-    createdDate Instant
+    active Boolean required,
+    createdDate Instant required
 }
 
 entity TeamMember {
-	updatedTime Instant
+	updatedTime Instant required
 }
 
 relationship OneToOne {
@@ -36,9 +36,10 @@ relationship ManyToOne {
 }
 
 // Set pagination options
-paginate * with infinite-scroll
+//paginate * with infinite-scroll
+paginate * with pagination
 
-dto * with mapstruct
+dto * with mapstruct except Designation
 
 // Set service options to all except few
 service all with serviceImpl

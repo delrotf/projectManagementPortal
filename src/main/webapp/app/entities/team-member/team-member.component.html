@@ -1,5 +1,5 @@
-<div>
-    <h2 *ngIf="teamId; else elseBlock">
+<div [ngSwitch]="teamId != null">
+    <h2 *ngSwitchCase="true">
         <span>Team Members Of {{teamName}}</span>
         <button class="btn btn-primary float-right jh-create-entity create-team-member" [routerLink]="['/', { outlets: { popup: ['team-member-new'] } }]" [queryParams]="{ teamId: teamId, teamName: teamName }">
             <span class="fa fa-plus"></span>
@@ -8,15 +8,13 @@
             </span>
         </button>
     </h2>
-    <a *ngIf="teamId" class="" routerLink="../team" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+    <a *ngSwitchCase="true" class="" routerLink="../team" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
         <i class="fa fa-fw fa-arrow-circle-left" aria-hidden="true"></i>
         <span>Back To Teams</span>
     </a>
-    <ng-template #elseBlock>
-        <h2>
-            <span>Teams I'm A Member Of</span>
-        </h2>
-    </ng-template>
+    <h2 *ngSwitchCase="false">
+        <span>Teams I'm A Member Of</span>
+    </h2>
     <jhi-alert></jhi-alert>
     <div class="row">
     </div>
@@ -27,8 +25,8 @@
                 <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="reset.bind(this)">
                     <!-- <th jhiSortBy="id"><span>ID</span> <span class="fa fa-sort"></span></th> -->
                     <!-- <th jhiSortBy="updatedTime"><span>Updated Time</span> <span class="fa fa-sort"></span></th> -->
-                    <th *ngIf="teamId" jhiSortBy="userLogin"><span>User</span> <span class="fa fa-sort"></span></th>
-                    <th *ngIf="!teamId" jhiSortBy="teamName"><span>Team</span> <span class="fa fa-sort"></span></th>
+                    <th *ngSwitchCase="true" jhiSortBy="userLogin"><span>User</span> <span class="fa fa-sort"></span></th>
+                    <th *ngSwitchCase="false" jhiSortBy="teamName"><span>Team</span> <span class="fa fa-sort"></span></th>
                     <th></th>
                 </tr>
             </thead>
@@ -36,11 +34,11 @@
                 <tr *ngFor="let teamMember of teamMembers ;trackBy: trackId">
                     <!-- <td><a [routerLink]="['../team-member', teamMember.id ]">{{teamMember.id}}</a></td> -->
                     <!-- <td>{{teamMember.updatedTime | date:'medium'}}</td> -->
-                    <td *ngIf="teamId">
+                    <td *ngSwitchCase="true">
                         {{teamMember.userLogin}}
                     </td>
                     <td>
-                        <div *ngIf="!teamId">
+                        <div *ngSwitchCase="false">
                             <a [routerLink]="['../team', teamMember.teamId  ]">{{teamMember.teamName}}</a>
                         </div>
                     </td>
@@ -56,7 +54,7 @@
                         </button> -->
                             <button type="submit" [routerLink]="['/', { outlets: { popup: 'team-member/'+ teamMember.id + '/delete'} }]" replaceUrl="true" queryParamsHandling="merge" class="btn btn-danger btn-sm">
                             <span class="fa fa-remove"></span>
-                            <span class="d-none d-md-inline">Delete</span>
+                            <span class="d-none d-md-inline">Remove Me...</span>
                         </button>
                         </div>
                     </td>

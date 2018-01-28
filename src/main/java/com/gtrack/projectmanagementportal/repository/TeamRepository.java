@@ -19,8 +19,12 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
 
     @Query("select team from Team team where team.teamHead.login = ?#{principal.username}")
     Page<Team> findByTeamHeadIsCurrentUser(Pageable pageable);
+    // for My Teams
+    Page<Team> findByActiveAndTeamHeadLogin(boolean active, String teamHeadLogin, Pageable pageable);
     
-    Page<Team> findByTeamHeadLogin(String teamHeadLogin, Pageable pageable);
-    
-    Page<Team> findByIdNotIn(Set<Long> ids, Pageable pageable);
+    // for drop-down list
+    Page<Team> findByActiveAndIdNotIn(boolean active, Set<Long> ids, Pageable pageable);
+
+    @Query("select team from Team team where team.teamHead.login = ?#{principal.username}")
+    List<Team> findByTeamHeadIsCurrentUser();    
 }

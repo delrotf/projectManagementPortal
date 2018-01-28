@@ -49,19 +49,21 @@ export class RegisterComponent implements OnInit, AfterViewInit {
         this.registerAuthenticationSuccess();
    }
 
-   registerAuthenticationSuccess() {
-    this.eventManager.subscribe('authenticationSuccess', (message) => {
-        this.principal.identity().then((account) => {
-            this.account = account;
+    registerAuthenticationSuccess() {
+        this.eventManager.subscribe('authenticationSuccess', (message) => {
+            this.principal.identity().then((account) => {
+                this.account = account;
+            });
+            this.principal.hasAuthority('ROLE_ADMIN').then((value) => {
+                this.isAdmin = value;
+            });
         });
-        this.principal.hasAuthority('ROLE_ADMIN').then((value) => {
-            this.isAdmin = value;
-        });
-    });
-}
+    }
 
-ngAfterViewInit() {
-        this.renderer.invokeElementMethod(this.elementRef.nativeElement.querySelector('#login'), 'focus', []);
+    ngAfterViewInit() {
+        if (!this.isAuthenticated()) {
+            this.renderer.invokeElementMethod(this.elementRef.nativeElement.querySelector('#login'), 'focus', []);
+        }
     }
 
     register() {

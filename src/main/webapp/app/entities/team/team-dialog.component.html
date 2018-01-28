@@ -12,7 +12,12 @@
         </div>
         <div class="form-group">
             <label class="form-control-label" for="field_name">Name</label>
-            <input type="text" class="form-control" name="name" id="field_name" [(ngModel)]="team.name" />
+            <input type="text" class="form-control" name="name" id="field_name" [(ngModel)]="team.name" required/>
+            <div [hidden]="!(editForm.controls.name?.dirty && editForm.controls.name?.invalid)">
+                <small class="form-text text-danger" [hidden]="!editForm.controls.name?.errors?.required">
+               This field is required.
+            </small>
+            </div>
         </div>
         <div class="form-group">
             <label class="form-control-label" for="field_code">Code</label>
@@ -21,6 +26,7 @@
         <div class="form-group">
             <label class="form-control-label" for="field_imageUrl">Image Url</label>
             <input type="text" class="form-control" name="imageUrl" id="field_imageUrl" [(ngModel)]="team.imageUrl" />
+            <img *ngIf="team.imageUrl" src="{{team.imageUrl}}" style="max-width:200px;">
         </div>
         <div class="form-group">
             <label class="form-control-label" for="field_processOrder">Process Order</label>
@@ -30,16 +36,16 @@
             <label class="form-control-label" for="field_processExternalTask">Process External Task</label>
             <input type="checkbox" class="form-control" name="processExternalTask" id="field_processExternalTask" [(ngModel)]="team.processExternalTask" />
         </div>
-        <div class="form-group">
+        <div class="form-group" [hidden]="!team.id">
             <label class="form-control-label" for="field_active">Active</label>
             <input type="checkbox" class="form-control" name="active" id="field_active" [(ngModel)]="team.active" />
         </div>
-        <div class="form-group">
+        <!-- <div class="form-group">
             <label class="form-control-label" for="field_createdDate">Created Date</label>
             <div class="d-flex">
                 <input id="field_createdDate" type="datetime-local" class="form-control" name="createdDate" [(ngModel)]="team.createdDate" />
             </div>
-        </div>
+        </div> -->
 
         <div *jhiHasAnyAuthority="'ROLE_ADMIN'" class="form-group">
             <label class="form-control-label" for="field_teamHead">Team Head</label>

@@ -82,7 +82,7 @@ public class UserInfoResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final UserInfoResource userInfoResource = new UserInfoResource(userInfoService);
+        final UserInfoResource userInfoResource = new UserInfoResource(userInfoService, null);
         this.restUserInfoMockMvc = MockMvcBuilders.standaloneSetup(userInfoResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -155,6 +155,44 @@ public class UserInfoResourceIntTest {
         // Validate the UserInfo in the database
         List<UserInfo> userInfoList = userInfoRepository.findAll();
         assertThat(userInfoList).hasSize(databaseSizeBeforeCreate);
+    }
+
+    @Test
+    @Transactional
+    public void checkFirstNameIsRequired() throws Exception {
+        int databaseSizeBeforeTest = userInfoRepository.findAll().size();
+        // set the field null
+        userInfo.setFirstName(null);
+
+        // Create the UserInfo, which fails.
+        UserInfoDTO userInfoDTO = userInfoMapper.toDto(userInfo);
+
+        restUserInfoMockMvc.perform(post("/api/user-infos")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(userInfoDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<UserInfo> userInfoList = userInfoRepository.findAll();
+        assertThat(userInfoList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkLastNameIsRequired() throws Exception {
+        int databaseSizeBeforeTest = userInfoRepository.findAll().size();
+        // set the field null
+        userInfo.setLastName(null);
+
+        // Create the UserInfo, which fails.
+        UserInfoDTO userInfoDTO = userInfoMapper.toDto(userInfo);
+
+        restUserInfoMockMvc.perform(post("/api/user-infos")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(userInfoDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<UserInfo> userInfoList = userInfoRepository.findAll();
+        assertThat(userInfoList).hasSize(databaseSizeBeforeTest);
     }
 
     @Test

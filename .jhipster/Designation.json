@@ -4,13 +4,16 @@
     "fields": [
         {
             "fieldName": "designation",
-            "fieldType": "String"
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
         }
     ],
     "changelogDate": "20180114063427",
     "entityTableName": "designation",
-    "dto": "mapstruct",
-    "pagination": "infinite-scroll",
+    "dto": "no",
+    "pagination": "pagination",
     "service": "serviceImpl",
     "jpaMetamodelFiltering": false
 }

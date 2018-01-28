@@ -22,7 +22,8 @@ public class Team implements Serializable {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @Column(name = "name")
+    @NotNull
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Column(name = "code")
@@ -37,10 +38,12 @@ public class Team implements Serializable {
     @Column(name = "process_external_task")
     private Boolean processExternalTask;
 
-    @Column(name = "active")
+    @NotNull
+    @Column(name = "active", nullable = false)
     private Boolean active;
 
-    @Column(name = "created_date")
+    @NotNull
+    @Column(name = "created_date", nullable = false)
     private Instant createdDate;
 
     @ManyToOne(optional = false)

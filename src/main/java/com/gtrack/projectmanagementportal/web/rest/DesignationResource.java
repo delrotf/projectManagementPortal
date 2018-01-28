@@ -1,11 +1,11 @@
 package com.gtrack.projectmanagementportal.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.gtrack.projectmanagementportal.domain.Designation;
 import com.gtrack.projectmanagementportal.service.DesignationService;
 import com.gtrack.projectmanagementportal.web.rest.errors.BadRequestAlertException;
 import com.gtrack.projectmanagementportal.web.rest.util.HeaderUtil;
 import com.gtrack.projectmanagementportal.web.rest.util.PaginationUtil;
-import com.gtrack.projectmanagementportal.service.dto.DesignationDTO;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -42,18 +43,18 @@ public class DesignationResource {
     /**
      * POST  /designations : Create a new designation.
      *
-     * @param designationDTO the designationDTO to create
-     * @return the ResponseEntity with status 201 (Created) and with body the new designationDTO, or with status 400 (Bad Request) if the designation has already an ID
+     * @param designation the designation to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new designation, or with status 400 (Bad Request) if the designation has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/designations")
     @Timed
-    public ResponseEntity<DesignationDTO> createDesignation(@RequestBody DesignationDTO designationDTO) throws URISyntaxException {
-        log.debug("REST request to save Designation : {}", designationDTO);
-        if (designationDTO.getId() != null) {
+    public ResponseEntity<Designation> createDesignation(@Valid @RequestBody Designation designation) throws URISyntaxException {
+        log.debug("REST request to save Designation : {}", designation);
+        if (designation.getId() != null) {
             throw new BadRequestAlertException("A new designation cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        DesignationDTO result = designationService.save(designationDTO);
+        Designation result = designationService.save(designation);
         return ResponseEntity.created(new URI("/api/designations/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -62,22 +63,22 @@ public class DesignationResource {
     /**
      * PUT  /designations : Updates an existing designation.
      *
-     * @param designationDTO the designationDTO to update
-     * @return the ResponseEntity with status 200 (OK) and with body the updated designationDTO,
-     * or with status 400 (Bad Request) if the designationDTO is not valid,
-     * or with status 500 (Internal Server Error) if the designationDTO couldn't be updated
+     * @param designation the designation to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated designation,
+     * or with status 400 (Bad Request) if the designation is not valid,
+     * or with status 500 (Internal Server Error) if the designation couldn't be updated
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PutMapping("/designations")
     @Timed
-    public ResponseEntity<DesignationDTO> updateDesignation(@RequestBody DesignationDTO designationDTO) throws URISyntaxException {
-        log.debug("REST request to update Designation : {}", designationDTO);
-        if (designationDTO.getId() == null) {
-            return createDesignation(designationDTO);
+    public ResponseEntity<Designation> updateDesignation(@Valid @RequestBody Designation designation) throws URISyntaxException {
+        log.debug("REST request to update Designation : {}", designation);
+        if (designation.getId() == null) {
+            return createDesignation(designation);
         }
-        DesignationDTO result = designationService.save(designationDTO);
+        Designation result = designationService.save(designation);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, designationDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, designation.getId().toString()))
             .body(result);
     }
 
@@ -89,9 +90,9 @@ public class DesignationResource {
      */
     @GetMapping("/designations")
     @Timed
-    public ResponseEntity<List<DesignationDTO>> getAllDesignations(Pageable pageable) {
+    public ResponseEntity<List<Designation>> getAllDesignations(Pageable pageable) {
         log.debug("REST request to get a page of Designations");
-        Page<DesignationDTO> page = designationService.findAll(pageable);
+        Page<Designation> page = designationService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/designations");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
@@ -99,21 +100,21 @@ public class DesignationResource {
     /**
      * GET  /designations/:id : get the "id" designation.
      *
-     * @param id the id of the designationDTO to retrieve
-     * @return the ResponseEntity with status 200 (OK) and with body the designationDTO, or with status 404 (Not Found)
+     * @param id the id of the designation to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the designation, or with status 404 (Not Found)
      */
     @GetMapping("/designations/{id}")
     @Timed
-    public ResponseEntity<DesignationDTO> getDesignation(@PathVariable Long id) {
+    public ResponseEntity<Designation> getDesignation(@PathVariable Long id) {
         log.debug("REST request to get Designation : {}", id);
-        DesignationDTO designationDTO = designationService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(designationDTO));
+        Designation designation = designationService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(designation));
     }
 
     /**
      * DELETE  /designations/:id : delete the "id" designation.
      *
-     * @param id the id of the designationDTO to delete
+     * @param id the id of the designation to delete
      * @return the ResponseEntity with status 200 (OK)
      */
     @DeleteMapping("/designations/{id}")

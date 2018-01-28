@@ -14,5 +14,6 @@
                                  referencedColumnNames="id"
                                  referencedTableName="pmp_user"/>
 
+		<addUniqueConstraint tableName="team" columnNames="name"/>
     </changeSet>
 </databaseChangeLog>

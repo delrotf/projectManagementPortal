@@ -46,9 +46,10 @@ export class TeamDialogComponent implements OnInit {
                 );
             } else {
                 this.principal.identity().then((account) => {
-                    this.userInfoService.query({query: account.login}).subscribe(
+                    this.userInfoService.query({query: JSON.stringify({userLogin: account.login})}).subscribe(
                         (res: ResponseWrapper) => {
                             this.users = res.json;
+                            console.log('this.users: ' + JSON.stringify(this.users));
                             this.team.teamHeadId = this.users[0].userId;
                         },
                         (res: ResponseWrapper) => this.onError(res.json)
@@ -64,9 +65,11 @@ export class TeamDialogComponent implements OnInit {
 
     save() {
         this.isSaving = true;
+        this.team.createdDate = new Date().toISOString();
         if (this.team.id !== undefined) {
             this.subscribeToSaveResponse(this.teamService.update(this.team));
         } else {
+            this.team.active = true;
             this.subscribeToSaveResponse(this.teamService.create(this.team));
         }
     }

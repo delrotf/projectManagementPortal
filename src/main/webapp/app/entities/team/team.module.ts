@@ -14,6 +14,7 @@ import {
     TeamDeleteDialogComponent,
     teamRoute,
     teamPopupRoute,
+    TeamResolvePagingParams,
 } from './';
 
 const ENTITY_STATES = [
@@ -45,6 +46,7 @@ const ENTITY_STATES = [
     providers: [
         TeamService,
         TeamPopupService,
+        TeamResolvePagingParams,
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

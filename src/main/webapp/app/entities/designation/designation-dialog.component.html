@@ -15,7 +15,13 @@
         <div class="form-group">
             <label class="form-control-label" for="field_designation">Designation</label>
             <input type="text" class="form-control" name="designation" id="field_designation"
-                [(ngModel)]="designation.designation" />
+                [(ngModel)]="designation.designation" required/>
+            <div [hidden]="!(editForm.controls.designation?.dirty && editForm.controls.designation?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.designation?.errors?.required">
+                   This field is required.
+                </small>
+            </div>
         </div>
 
     </div>

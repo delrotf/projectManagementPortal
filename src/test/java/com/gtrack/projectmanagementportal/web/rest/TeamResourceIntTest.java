@@ -176,6 +176,63 @@ public class TeamResourceIntTest {
 
     @Test
     @Transactional
+    public void checkNameIsRequired() throws Exception {
+        int databaseSizeBeforeTest = teamRepository.findAll().size();
+        // set the field null
+        team.setName(null);
+
+        // Create the Team, which fails.
+        TeamDTO teamDTO = teamMapper.toDto(team);
+
+        restTeamMockMvc.perform(post("/api/teams")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(teamDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<Team> teamList = teamRepository.findAll();
+        assertThat(teamList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkActiveIsRequired() throws Exception {
+        int databaseSizeBeforeTest = teamRepository.findAll().size();
+        // set the field null
+        team.setActive(null);
+
+        // Create the Team, which fails.
+        TeamDTO teamDTO = teamMapper.toDto(team);
+
+        restTeamMockMvc.perform(post("/api/teams")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(teamDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<Team> teamList = teamRepository.findAll();
+        assertThat(teamList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkCreatedDateIsRequired() throws Exception {
+        int databaseSizeBeforeTest = teamRepository.findAll().size();
+        // set the field null
+        team.setCreatedDate(null);
+
+        // Create the Team, which fails.
+        TeamDTO teamDTO = teamMapper.toDto(team);
+
+        restTeamMockMvc.perform(post("/api/teams")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(teamDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<Team> teamList = teamRepository.findAll();
+        assertThat(teamList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void getAllTeams() throws Exception {
         // Initialize the database
         teamRepository.saveAndFlush(team);

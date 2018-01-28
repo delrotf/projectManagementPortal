@@ -106,9 +106,8 @@ public class UserResource {
         } else {
             User newUser = userService.createUser(userDTO);
 
-            UserInfoDTO userInfoDTO = new UserInfoDTO();
-            userInfoDTO.setUserId(newUser.getId());
-            UserInfoDTO result = userInfoService.save(userInfoDTO);
+            userDTO.setId(newUser.getId());
+            createUserInfo(userDTO);
             
             mailService.sendCreationEmail(newUser);
             return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin()))
@@ -116,6 +115,18 @@ public class UserResource {
                 .body(newUser);
         }
     }
+
+	private void createUserInfo(UserDTO newUser) {
+		UserInfoDTO userInfoDTO = new UserInfoDTO();
+		userInfoDTO.setUserId(newUser.getId());
+		userInfoDTO.setFirstName(newUser.getFirstName());
+		userInfoDTO.setLastName(newUser.getLastName());
+		try {
+			UserInfoDTO result = userInfoService.save(userInfoDTO);
+		} catch(Exception e) {
+			// do nothing.
+		}
+	}
 
     /**
      * PUT /users : Updates an existing User.
@@ -139,6 +150,7 @@ public class UserResource {
             throw new LoginAlreadyUsedException();
         }
         Optional<UserDTO> updatedUser = userService.updateUser(userDTO);
+        createUserInfo(userDTO);
 
         return ResponseUtil.wrapOrNotFound(updatedUser,
             HeaderUtil.createAlert("A user is updated with identifier " + userDTO.getLogin(), userDTO.getLogin()));

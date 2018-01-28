@@ -15,6 +15,7 @@ public class TeamDTO implements Serializable {
 
     private Long id;
 
+    @NotNull
     private String name;
 
     private String code;
@@ -25,8 +26,10 @@ public class TeamDTO implements Serializable {
 
     private Boolean processExternalTask;
 
+    @NotNull
     private Boolean active;
 
+    @NotNull
     private Instant createdDate;
 
     private Long teamHeadId;
