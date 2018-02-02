@@ -1,3 +1,4 @@
+// import { My_ACTIVE_TEAMS } from './../../shared/constants/screen.constants';
 import { Principal } from './../../shared/auth/principal.service';
 import { Component, OnInit, AfterViewInit, Renderer, ElementRef } from '@angular/core';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -27,6 +28,8 @@ export class RegisterComponent implements OnInit, AfterViewInit {
     account: Account;
     isAdmin: boolean;
 
+    myActiveTeams: any;
+
     constructor(
         private loginModalService: LoginModalService,
         private registerService: Register,
@@ -35,9 +38,13 @@ export class RegisterComponent implements OnInit, AfterViewInit {
         private renderer: Renderer,
         private eventManager: JhiEventManager
     ) {
+        this.principal.identity().then((account) => {
+            this.account = account;
+        });
     }
 
     ngOnInit() {
+        // this.myActiveTeams = My_ACTIVE_TEAMS;
         this.success = false;
         this.registerAccount = {};
         this.principal.identity().then((account) => {

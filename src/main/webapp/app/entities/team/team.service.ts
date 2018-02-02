@@ -38,9 +38,10 @@ export class TeamService {
         });
     }
 
-    query(req?: any): Observable<ResponseWrapper> {
+    query(req?: any, resourceUrl?: string): Observable<ResponseWrapper> {
         const options = createRequestOption(req);
-        return this.http.get(this.resourceUrl, options)
+        resourceUrl = resourceUrl != null ? resourceUrl : this.resourceUrl;
+        return this.http.get(resourceUrl, options)
             .map((res: Response) => this.convertResponse(res));
     }
 
