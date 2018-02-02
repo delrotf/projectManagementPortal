@@ -5,8 +5,8 @@
             "relationshipType": "many-to-one",
             "relationshipValidateRules": "required",
             "relationshipName": "teamHead",
-            "otherEntityName": "user",
-            "otherEntityField": "login"
+            "otherEntityName": "userInfo",
+            "otherEntityField": "userLogin"
         }
     ],
     "fields": [

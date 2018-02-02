@@ -51,6 +51,9 @@ public class UserInfoResourceIntTest {
     private static final String DEFAULT_CALLING_NAME = "AAAAAAAAAA";
     private static final String UPDATED_CALLING_NAME = "BBBBBBBBBB";
 
+    private static final String DEFAULT_IMAGE_URL = "AAAAAAAAAA";
+    private static final String UPDATED_IMAGE_URL = "BBBBBBBBBB";
+
     private static final String DEFAULT_PHONE = "AAAAAAAAAA";
     private static final String UPDATED_PHONE = "BBBBBBBBBB";
 
@@ -101,6 +104,7 @@ public class UserInfoResourceIntTest {
             .firstName(DEFAULT_FIRST_NAME)
             .lastName(DEFAULT_LAST_NAME)
             .callingName(DEFAULT_CALLING_NAME)
+            .imageUrl(DEFAULT_IMAGE_URL)
             .phone(DEFAULT_PHONE);
         // Add required entity
         User user = UserResourceIntTest.createEntity(em);
@@ -134,6 +138,7 @@ public class UserInfoResourceIntTest {
         assertThat(testUserInfo.getFirstName()).isEqualTo(DEFAULT_FIRST_NAME);
         assertThat(testUserInfo.getLastName()).isEqualTo(DEFAULT_LAST_NAME);
         assertThat(testUserInfo.getCallingName()).isEqualTo(DEFAULT_CALLING_NAME);
+        assertThat(testUserInfo.getImageUrl()).isEqualTo(DEFAULT_IMAGE_URL);
         assertThat(testUserInfo.getPhone()).isEqualTo(DEFAULT_PHONE);
     }
 
@@ -209,6 +214,7 @@ public class UserInfoResourceIntTest {
             .andExpect(jsonPath("$.[*].firstName").value(hasItem(DEFAULT_FIRST_NAME.toString())))
             .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_LAST_NAME.toString())))
             .andExpect(jsonPath("$.[*].callingName").value(hasItem(DEFAULT_CALLING_NAME.toString())))
+            .andExpect(jsonPath("$.[*].imageUrl").value(hasItem(DEFAULT_IMAGE_URL.toString())))
             .andExpect(jsonPath("$.[*].phone").value(hasItem(DEFAULT_PHONE.toString())));
     }
 
@@ -226,6 +232,7 @@ public class UserInfoResourceIntTest {
             .andExpect(jsonPath("$.firstName").value(DEFAULT_FIRST_NAME.toString()))
             .andExpect(jsonPath("$.lastName").value(DEFAULT_LAST_NAME.toString()))
             .andExpect(jsonPath("$.callingName").value(DEFAULT_CALLING_NAME.toString()))
+            .andExpect(jsonPath("$.imageUrl").value(DEFAULT_IMAGE_URL.toString()))
             .andExpect(jsonPath("$.phone").value(DEFAULT_PHONE.toString()));
     }
 
@@ -252,6 +259,7 @@ public class UserInfoResourceIntTest {
             .firstName(UPDATED_FIRST_NAME)
             .lastName(UPDATED_LAST_NAME)
             .callingName(UPDATED_CALLING_NAME)
+            .imageUrl(UPDATED_IMAGE_URL)
             .phone(UPDATED_PHONE);
         UserInfoDTO userInfoDTO = userInfoMapper.toDto(updatedUserInfo);
 
@@ -267,6 +275,7 @@ public class UserInfoResourceIntTest {
         assertThat(testUserInfo.getFirstName()).isEqualTo(UPDATED_FIRST_NAME);
         assertThat(testUserInfo.getLastName()).isEqualTo(UPDATED_LAST_NAME);
         assertThat(testUserInfo.getCallingName()).isEqualTo(UPDATED_CALLING_NAME);
+        assertThat(testUserInfo.getImageUrl()).isEqualTo(UPDATED_IMAGE_URL);
         assertThat(testUserInfo.getPhone()).isEqualTo(UPDATED_PHONE);
     }
 

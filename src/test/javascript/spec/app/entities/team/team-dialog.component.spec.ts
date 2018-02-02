@@ -8,7 +8,7 @@ import { ProjectManagementPortalTestModule } from '../../../test.module';
 import { TeamDialogComponent } from '../../../../../../main/webapp/app/entities/team/team-dialog.component';
 import { TeamService } from '../../../../../../main/webapp/app/entities/team/team.service';
 import { Team } from '../../../../../../main/webapp/app/entities/team/team.model';
-import { UserService } from '../../../../../../main/webapp/app/shared';
+import { UserInfoService } from '../../../../../../main/webapp/app/entities/user-info';
 
 describe('Component Tests', () => {
 
@@ -24,7 +24,7 @@ describe('Component Tests', () => {
                 imports: [ProjectManagementPortalTestModule],
                 declarations: [TeamDialogComponent],
                 providers: [
-                    UserService,
+                    UserInfoService,
                     TeamService
                 ]
             })

@@ -48,7 +48,7 @@ public class Team implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    private User teamHead;
+    private UserInfo teamHead;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -150,17 +150,17 @@ public class Team implements Serializable {
         this.createdDate = createdDate;
     }
 
-    public User getTeamHead() {
+    public UserInfo getTeamHead() {
         return teamHead;
     }
 
-    public Team teamHead(User user) {
-        this.teamHead = user;
+    public Team teamHead(UserInfo userInfo) {
+        this.teamHead = userInfo;
         return this;
     }
 
-    public void setTeamHead(User user) {
-        this.teamHead = user;
+    public void setTeamHead(UserInfo userInfo) {
+        this.teamHead = userInfo;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

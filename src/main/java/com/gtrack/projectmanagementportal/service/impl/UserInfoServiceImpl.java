@@ -92,9 +92,36 @@ public class UserInfoServiceImpl implements UserInfoService{
             userIds.add(4L);
             
             for (TeamMember teamMember : teamMembersOfTeam) {
-            	userIds.add(teamMember.getUser().getId());
+            	userIds.add(teamMember.getUserInfo().getUser().getId());
     		}
             return userInfoRepository.findByUserIdNotIn(userIds, pageable)
+                .map(userInfoMapper::toDto);
+        } else {
+        	return findAll(pageable);
+        }
+    }
+
+    /**
+     * Get all the teams.
+     *
+     * @param pageable the pagination information
+     * @return the list of entities
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Page<UserInfoDTO> findByIdNotIn(Long teamId, Pageable pageable) {
+        log.debug("Request to get UserInfo by Id not in");
+        
+        Set<TeamMember> teamMembersOfTeam = teamMemberService.findByTeamId(teamId);
+        
+        if (teamMembersOfTeam != null && !teamMembersOfTeam.isEmpty()) {
+            
+            Set<Long> userInfoIds = new HashSet<>();
+            
+            for (TeamMember teamMember : teamMembersOfTeam) {
+            	userInfoIds.add(teamMember.getUserInfo().getId());
+    		}
+            return userInfoRepository.findByIdNotIn(userInfoIds, pageable)
                 .map(userInfoMapper::toDto);
         } else {
         	return findAll(pageable);
@@ -110,9 +137,23 @@ public class UserInfoServiceImpl implements UserInfoService{
     @Override
     @Transactional(readOnly = true)
     public Page<UserInfoDTO> findByUserLogin(String userLogin, Pageable pageable) {
-        log.debug("Request to get all UserInfos by User Login");
+        log.debug("Request to get all UserInfos by User Login: {}", userLogin);
         return userInfoRepository.findByUserLogin(userLogin, pageable)
             .map(userInfoMapper::toDto);
+    }
+
+    /**
+     * Get all the userInfos.
+     *
+     * @param pageable the pagination information
+     * @return the list of entities
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public UserInfoDTO findOneByUserLogin(String userLogin) {
+        log.debug("Request to get all UserInfos By User Login: {}", userLogin);
+        UserInfo userInfo = userInfoRepository.findOneByUserLogin(userLogin);
+        return userInfoMapper.toDto(userInfo);
     }
 
     /**

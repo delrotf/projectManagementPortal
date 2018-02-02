@@ -33,7 +33,9 @@
         </dd>
         <dt><span>Team Head</span></dt>
         <dd>
-            {{team.teamHeadLogin}}
+            <div *ngIf="team.teamHeadId">
+                <a [routerLink]="['/user-info', team.teamHeadId]">{{team.teamHeadUserLogin}}</a>
+            </div>
         </dd>
     </dl>
 

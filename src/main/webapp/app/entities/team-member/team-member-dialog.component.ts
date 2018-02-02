@@ -1,7 +1,7 @@
 import { UserInfo } from './../user-info/user-info.model';
 import { UserInfoService } from './../user-info/user-info.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Response } from '@angular/http';
 
 import { Observable } from 'rxjs/Observable';
@@ -25,11 +25,12 @@ export class TeamMemberDialogComponent implements OnInit {
     isSaving: boolean;
 
     hasTeam: boolean;
-    hasUser: boolean;
+    hasUserInfo: boolean;
+    hasUserLogin: boolean;
 
     showOk: boolean;
 
-    users: UserInfo[];
+    userInfos: UserInfo[];
 
     teams: Team[];
 
@@ -42,7 +43,8 @@ export class TeamMemberDialogComponent implements OnInit {
         private userInfoService: UserInfoService,
         private teamService: TeamService,
         private eventManager: JhiEventManager,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private router: Router,
     ) {
     }
 
@@ -51,31 +53,38 @@ export class TeamMemberDialogComponent implements OnInit {
         this.route.queryParams
         // .filter((params) => params.team)
         .subscribe((params) => {
+            console.log('JSON.stringify(this.params): ' + JSON.stringify(this.params));
             this.params = params;
             this.hasTeam = params.teamId ? true : false;
-            this.hasUser = params.userId ? true : false;
+            this.hasUserInfo = params.userInfoId ? true : false;
+            this.hasUserLogin = params.userLogin ? true : false;
 
-            if (this.hasTeam) {
-                console.log('params.teamId: ' + params.teamId);
-                this.teamMember.teamId = Number(params.teamId);
+            // adding self to a team.
+            if (this.hasUserLogin && !this.hasUserInfo) {
+                this.showOk = false;
+                this.teamMember.teamId = params.teamId;
+                this.userInfoService.query({
+                    query: JSON.stringify({userLogin: this.params.userLogin})
+                })
+                    .subscribe((res: ResponseWrapper) => {
+                        this.teamMember.userInfoId = res.json[0].id;
+                        console.log('this.teamMember.userInfoId: ' + this.teamMember.userInfoId);
+                    }, (res: ResponseWrapper) => this.onError(res.json));
+            } else if (this.hasTeam) { // if has team, we need its userInfos
+                this.teamMember.teamId = params.teamId;
                 this.userInfoService.query({
                     query: JSON.stringify(params)
                 })
                     .subscribe((res: ResponseWrapper) => {
-                        this.users = res.json;
-                        this.showOk = this.users && this.users.length ? false : true;
+                        this.userInfos = res.json;
+                        this.showOk = this.userInfos && this.userInfos.length ? false : true;
                     }, (res: ResponseWrapper) => this.onError(res.json));
-            }
-
-            if (this.hasUser) {
-                this.teamMember.userId = params.userId;
+            } else if (this.hasUserInfo) { // If has userInfo, we need its team
+                this.teamMember.userInfoId = params.userInfoId;
                 this.teamService.query({query: JSON.stringify(params)})
                     .subscribe((res: ResponseWrapper) => {
-                         this.teams = res.json;
-                        //  if (this.teams == null || this.teams.length === 0) {
-                        //     this.showOk = true;
-                        // }
-                    this.showOk = this.teams && this.teams.length ? false : true;
+                        this.teams = res.json;
+                        this.showOk = this.teams && this.teams.length ? false : true;
                 }, (res: ResponseWrapper) => this.onError(res.json));
             }
         });
@@ -98,6 +107,12 @@ export class TeamMemberDialogComponent implements OnInit {
             this.subscribeToSaveResponse(
                 this.teamMemberService.create(this.teamMember));
         }
+        this.router.navigate(['/team'], {
+            queryParams: {
+                active: this.params.active,
+                allOthers: this.params.allOthers,
+            }
+        });
     }
 
     private subscribeToSaveResponse(result: Observable<TeamMember>) {
@@ -119,7 +134,7 @@ export class TeamMemberDialogComponent implements OnInit {
         this.jhiAlertService.error(error.message, null, null);
     }
 
-    trackUserById(index: number, item: User) {
+    trackUserInfoById(index: number, item: UserInfo) {
         return item.id;
     }
 

@@ -1,6 +1,7 @@
 package com.gtrack.projectmanagementportal.service;
 
 import com.gtrack.projectmanagementportal.domain.TeamMember;
+import com.gtrack.projectmanagementportal.domain.UserInfo;
 import com.gtrack.projectmanagementportal.service.dto.TeamDTO;
 import com.gtrack.projectmanagementportal.service.dto.UserInfoDTO;
 import org.springframework.data.domain.Page;
@@ -43,5 +44,7 @@ public interface UserInfoService {
     void delete(Long id);
     
 	Page<UserInfoDTO> findByUserLogin(String userLogin, Pageable pageable);
+	UserInfoDTO findOneByUserLogin(String userLogin);
 	Page<UserInfoDTO> findByUserIdNotIn(Long teamId, Pageable pageable);
+	Page<UserInfoDTO> findByIdNotIn(Long teamId, Pageable pageable);
 }

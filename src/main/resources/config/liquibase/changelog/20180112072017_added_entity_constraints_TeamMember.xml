@@ -8,17 +8,17 @@
     -->
     <changeSet id="20180112072017-2" author="jhipster">
         
-        <addForeignKeyConstraint baseColumnNames="user_id"
+        <addForeignKeyConstraint baseColumnNames="user_info_id"
                                  baseTableName="team_member"
-                                 constraintName="fk_team_member_user_id"
+                                 constraintName="fk_team_member_user_info_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="pmp_user"/>
+                                 referencedTableName="user_info"/>
 
         <addForeignKeyConstraint baseColumnNames="team_id"
                                  baseTableName="team_member"
                                  constraintName="fk_team_member_team_id"
                                  referencedColumnNames="id"
                                  referencedTableName="team"/>
-		<addUniqueConstraint tableName="team_member" columnNames="user_id, team_id"/>
+		<addUniqueConstraint tableName="team_member" columnNames="user_info_id, team_id"/>
     </changeSet>
 </databaseChangeLog>

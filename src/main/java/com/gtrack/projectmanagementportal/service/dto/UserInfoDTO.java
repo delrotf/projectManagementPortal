@@ -13,12 +13,16 @@ import java.util.Objects;
 public class UserInfoDTO implements Serializable {
 
     private Long id;
+
     @NotNull
     private String firstName;
+
     @NotNull
     private String lastName;
 
     private String callingName;
+
+    private String imageUrl;
 
     private String phone;
 
@@ -28,7 +32,7 @@ public class UserInfoDTO implements Serializable {
 
     private Long supervisorId;
 
-    private String supervisorLogin;
+    private String supervisorUserLogin;
 
     private Long designationId;
 
@@ -66,6 +70,14 @@ public class UserInfoDTO implements Serializable {
         this.callingName = callingName;
     }
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
     public String getPhone() {
         return phone;
     }
@@ -94,16 +106,16 @@ public class UserInfoDTO implements Serializable {
         return supervisorId;
     }
 
-    public void setSupervisorId(Long userId) {
-        this.supervisorId = userId;
+    public void setSupervisorId(Long userInfoId) {
+        this.supervisorId = userInfoId;
     }
 
-    public String getSupervisorLogin() {
-        return supervisorLogin;
+    public String getSupervisorUserLogin() {
+        return supervisorUserLogin;
     }
 
-    public void setSupervisorLogin(String userLogin) {
-        this.supervisorLogin = userLogin;
+    public void setSupervisorUserLogin(String userInfoUserLogin) {
+        this.supervisorUserLogin = userInfoUserLogin;
     }
 
     public Long getDesignationId() {
@@ -150,9 +162,7 @@ public class UserInfoDTO implements Serializable {
             ", firstName='" + getFirstName() + "'" +
             ", lastName='" + getLastName() + "'" +
             ", callingName='" + getCallingName() + "'" +
-            ", designationId='" + getDesignationId() + "'" +
-            ", designationDesignation='" + getDesignationDesignation() + "'" +
-            ", callingName='" + getCallingName() + "'" +
+            ", imageUrl='" + getImageUrl() + "'" +
             ", phone='" + getPhone() + "'" +
             "}";
     }

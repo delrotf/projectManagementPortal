@@ -9,7 +9,9 @@
         </dd>
         <dt><span>User</span></dt>
         <dd>
-            {{teamMember.userLogin}}
+            <div *ngIf="teamMember.userInfoId">
+                <a [routerLink]="['/user-info', teamMember.userInfoId]">{{teamMember.userInfoUserLogin}}</a>
+            </div>
         </dd>
         <dt><span>Team</span></dt>
         <dd>

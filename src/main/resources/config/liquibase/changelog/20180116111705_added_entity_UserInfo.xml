@@ -33,6 +33,10 @@
                 <constraints nullable="true" />
             </column>
 
+            <column name="image_url" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
             <column name="phone" type="varchar(255)">
                 <constraints nullable="true" />
             </column>

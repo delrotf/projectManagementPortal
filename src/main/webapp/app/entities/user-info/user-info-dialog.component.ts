@@ -24,7 +24,7 @@ export class UserInfoDialogComponent implements OnInit {
 
     isSaving: boolean;
 
-    usersForSupervisor: UserInfo[]; // supervisors
+    userInfosForSupervisor: UserInfo[]; // supervisors
 
     user: User
 
@@ -46,14 +46,14 @@ export class UserInfoDialogComponent implements OnInit {
         // this.userService.query()
         //     .subscribe((res: ResponseWrapper) => { this.users = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
 
-        // find the user id
+        // find the user id of current login.
         this.principal.identity().then((account) => {
             console.log('account.login: ' + JSON.stringify(account.login));
             this.userService.find(account.login)
             .subscribe((user) => {
                 this.user = user;
             });
-                // find the id of the userInfo
+                // find the userInfo of current login.
                 this.userInfoService.query({query: JSON.stringify({userLogin: account.login})})
                     .subscribe((res: ResponseWrapper) => {
                         this.userInfo = res.json[0];
@@ -61,10 +61,10 @@ export class UserInfoDialogComponent implements OnInit {
                     }, (res: ResponseWrapper) => this.onError(res.json));
         });
 
-        // drop-down list for supervisor
+        // for drop-down list of supervisor
         this.userInfoService.query()
             .subscribe((res: ResponseWrapper) => {
-                this.usersForSupervisor = res.json;
+                this.userInfosForSupervisor = res.json;
             }, (res: ResponseWrapper) => this.onError(res.json));
 
         this.designationService.query()
@@ -76,7 +76,6 @@ export class UserInfoDialogComponent implements OnInit {
     }
 
     save() {
-        console.log('SAVE this.userInfo: ' + JSON.stringify(this.userInfo));
         this.isSaving = true;
         if (this.userInfo.id !== undefined) {
             this.subscribeToSaveResponse(
@@ -106,10 +105,13 @@ export class UserInfoDialogComponent implements OnInit {
         this.jhiAlertService.error(error.message, null, null);
     }
 
-    trackUserById(index: number, item: User) {
+    // trackUserById(index: number, item: User) {
+    //     return item.id;
+    // }
+
+    trackUserInfoById(index: number, item: UserInfo) {
         return item.id;
     }
-
     trackDesignationById(index: number, item: Designation) {
         return item.id;
     }

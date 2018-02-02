@@ -4,9 +4,9 @@
         {
             "relationshipType": "many-to-one",
             "relationshipValidateRules": "required",
-            "relationshipName": "user",
-            "otherEntityName": "user",
-            "otherEntityField": "login"
+            "relationshipName": "userInfo",
+            "otherEntityName": "userInfo",
+            "otherEntityField": "userLogin"
         },
         {
             "relationshipType": "many-to-one",

@@ -106,7 +106,10 @@ public class TeamResource {
     	Page<TeamDTO> page = null;
         JSONObject json = null;
         String userLogin = null;
+        String teamHeadUserLogin = null;
         String active = null;
+        String allOthers = null;
+        String headed = null;
         
         if (query != null) {
             try {
@@ -121,24 +124,44 @@ public class TeamResource {
         			// do nothing.
         		}
                 try {
+                    teamHeadUserLogin = json.getString("teamHeadUserLogin");
+        		} catch (JSONException e) {
+        			// do nothing.
+        		}
+                try {
                 	active = json.getString("active");
+        		} catch (JSONException e) {
+        			// do nothing.
+        		}
+                try {
+                	allOthers = json.getString("allOthers");
+        		} catch (JSONException e) {
+        			// do nothing.
+        		}
+                try {
+                	headed = json.getString("headed");
         		} catch (JSONException e) {
         			// do nothing.
         		}
             }
         }
-        
         boolean isActive = active != null ? Boolean.parseBoolean(active) : true;
+        boolean isAllOthers = allOthers != null ? Boolean.parseBoolean(allOthers) : false;
+        boolean isHeaded = headed != null ? Boolean.parseBoolean(headed) : false;
         
-        if (userLogin != null) {
+        if (userLogin != null && !isAllOthers && !isHeaded) {
         	// drop-down items.
-        	page = teamService.findByActiveAndIdNotIn(isActive, userLogin, pageable);
+        	page = teamService.findByActiveAndIdNotInAndTeamHeadUserLogin(isActive, teamHeadUserLogin, pageable);
+//        	page = teamService.findByActiveAndIdNotIn(isActive, userLogin, pageable);
         } else if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ADMIN)) {
         	// all access for admin
         	page = teamService.findAll(pageable);
-        } else {
+        } else if (isAllOthers) {
+        	// browse all other teams.
+        	page = teamService.findByActiveAndIdNotInAndTeamHeadUserLoginNot(isActive, SecurityUtils.getCurrentUserLogin().get(), pageable);
+        } else if (isHeaded) {
         	// headed teams.
-        	page = teamService.findByActiveAndTeamHeadLogin(isActive, SecurityUtils.getCurrentUserLogin().get(), pageable);
+        	page = teamService.findByActiveAndTeamHeadUserLogin(isActive, teamHeadUserLogin, pageable);
         }
         
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/teams");

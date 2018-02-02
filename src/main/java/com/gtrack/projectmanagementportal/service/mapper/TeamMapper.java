@@ -8,11 +8,11 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity Team and its DTO TeamDTO.
  */
-@Mapper(componentModel = "spring", uses = {UserMapper.class})
+@Mapper(componentModel = "spring", uses = {UserInfoMapper.class})
 public interface TeamMapper extends EntityMapper<TeamDTO, Team> {
 
     @Mapping(source = "teamHead.id", target = "teamHeadId")
-    @Mapping(source = "teamHead.login", target = "teamHeadLogin")
+    @Mapping(source = "teamHead.user.login", target = "teamHeadUserLogin")
     TeamDTO toDto(Team team); 
 
     @Mapping(source = "teamHeadId", target = "teamHead")

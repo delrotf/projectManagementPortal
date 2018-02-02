@@ -3,7 +3,7 @@ package com.gtrack.projectmanagementportal.web.rest;
 import com.gtrack.projectmanagementportal.ProjectManagementPortalApp;
 
 import com.gtrack.projectmanagementportal.domain.Team;
-import com.gtrack.projectmanagementportal.domain.User;
+import com.gtrack.projectmanagementportal.domain.UserInfo;
 import com.gtrack.projectmanagementportal.repository.TeamRepository;
 import com.gtrack.projectmanagementportal.service.TeamService;
 import com.gtrack.projectmanagementportal.service.dto.TeamDTO;
@@ -117,7 +117,7 @@ public class TeamResourceIntTest {
             .active(DEFAULT_ACTIVE)
             .createdDate(DEFAULT_CREATED_DATE);
         // Add required entity
-        User teamHead = UserResourceIntTest.createEntity(em);
+        UserInfo teamHead = UserInfoResourceIntTest.createEntity(em);
         em.persist(teamHead);
         em.flush();
         team.setTeamHead(teamHead);

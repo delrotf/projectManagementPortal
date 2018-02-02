@@ -2,6 +2,7 @@ entity UserInfo {
 	firstName String required,
 	lastName String required,
 	callingName String,
+	imageUrl String,
 	phone String
 }
 
@@ -28,10 +29,10 @@ relationship OneToOne {
 }
 
 relationship ManyToOne {
-    Team{teamHead(login) required} to User,
-    TeamMember{user(login) required} to User,
+    Team{teamHead(userLogin) required} to UserInfo,
+    TeamMember{userInfo(userLogin) required} to UserInfo,
     TeamMember{team(name) required} to Team,
-	UserInfo{supervisor(login)} to User,
+	UserInfo{supervisor(userLogin)} to UserInfo,
 	UserInfo{designation(designation)} to Designation
 }
 

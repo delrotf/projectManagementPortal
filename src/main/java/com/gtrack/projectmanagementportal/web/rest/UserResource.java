@@ -107,7 +107,7 @@ public class UserResource {
             User newUser = userService.createUser(userDTO);
 
             userDTO.setId(newUser.getId());
-            createUserInfo(userDTO);
+            upsertUserInfo(userDTO);
             
             mailService.sendCreationEmail(newUser);
             return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin()))
@@ -116,11 +116,14 @@ public class UserResource {
         }
     }
 
-	private void createUserInfo(UserDTO newUser) {
-		UserInfoDTO userInfoDTO = new UserInfoDTO();
-		userInfoDTO.setUserId(newUser.getId());
-		userInfoDTO.setFirstName(newUser.getFirstName());
-		userInfoDTO.setLastName(newUser.getLastName());
+	private void upsertUserInfo(UserDTO userDTO) {
+        UserInfoDTO userInfoDTO = userInfoService.findOneByUserLogin(userDTO.getLogin());
+        userInfoDTO = userInfoDTO != null ? userInfoDTO : new UserInfoDTO();
+        
+		userInfoDTO.setUserId(userDTO.getId());
+		userInfoDTO.setFirstName(userDTO.getFirstName());
+		userInfoDTO.setLastName(userDTO.getLastName());
+		userInfoDTO.setImageUrl(userDTO.getImageUrl());
 		try {
 			UserInfoDTO result = userInfoService.save(userInfoDTO);
 		} catch(Exception e) {
@@ -150,7 +153,7 @@ public class UserResource {
             throw new LoginAlreadyUsedException();
         }
         Optional<UserDTO> updatedUser = userService.updateUser(userDTO);
-        createUserInfo(userDTO);
+        upsertUserInfo(userDTO);
 
         return ResponseUtil.wrapOrNotFound(updatedUser,
             HeaderUtil.createAlert("A user is updated with identifier " + userDTO.getLogin(), userDTO.getLogin()));

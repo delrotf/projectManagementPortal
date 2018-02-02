@@ -3,7 +3,7 @@ package com.gtrack.projectmanagementportal.web.rest;
 import com.gtrack.projectmanagementportal.ProjectManagementPortalApp;
 
 import com.gtrack.projectmanagementportal.domain.TeamMember;
-import com.gtrack.projectmanagementportal.domain.User;
+import com.gtrack.projectmanagementportal.domain.UserInfo;
 import com.gtrack.projectmanagementportal.domain.Team;
 import com.gtrack.projectmanagementportal.repository.TeamMemberRepository;
 import com.gtrack.projectmanagementportal.service.TeamMemberService;
@@ -94,10 +94,10 @@ public class TeamMemberResourceIntTest {
         TeamMember teamMember = new TeamMember()
             .updatedTime(DEFAULT_UPDATED_TIME);
         // Add required entity
-        User user = UserResourceIntTest.createEntity(em);
-        em.persist(user);
+        UserInfo userInfo = UserInfoResourceIntTest.createEntity(em);
+        em.persist(userInfo);
         em.flush();
-        teamMember.setUser(user);
+        teamMember.setUserInfo(userInfo);
         // Add required entity
         Team team = TeamResourceIntTest.createEntity(em);
         em.persist(team);
@@ -148,6 +148,25 @@ public class TeamMemberResourceIntTest {
         // Validate the TeamMember in the database
         List<TeamMember> teamMemberList = teamMemberRepository.findAll();
         assertThat(teamMemberList).hasSize(databaseSizeBeforeCreate);
+    }
+
+    @Test
+    @Transactional
+    public void checkUpdatedTimeIsRequired() throws Exception {
+        int databaseSizeBeforeTest = teamMemberRepository.findAll().size();
+        // set the field null
+        teamMember.setUpdatedTime(null);
+
+        // Create the TeamMember, which fails.
+        TeamMemberDTO teamMemberDTO = teamMemberMapper.toDto(teamMember);
+
+        restTeamMemberMockMvc.perform(post("/api/team-members")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(teamMemberDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<TeamMember> teamMemberList = teamMemberRepository.findAll();
+        assertThat(teamMemberList).hasSize(databaseSizeBeforeTest);
     }
 
     @Test

@@ -133,13 +133,14 @@ public class UserInfoResource {
      */
     @GetMapping("/user-infos")
     @Timed
-    public ResponseEntity<List<UserInfoDTO>> getAllUserInfosByUserLogin(@RequestParam(value="query", required=false) String query, Pageable pageable) {
+    public ResponseEntity<List<UserInfoDTO>> getAllUserInfosByQuery(@RequestParam(value="query", required=false) String query, Pageable pageable) {
         log.debug("REST request to get a page of UserInfos; query: " + query);
         
         Page<UserInfoDTO> page = null;
         JSONObject json = null;
 		String teamId = null;
 		String teamName = null;
+		String userInfoId = null;
 		String userId = null;
 		String userLogin = null;
       
@@ -161,6 +162,11 @@ public class UserInfoResource {
 	            	// do nothing.
 				}
 	        	try {
+					userInfoId = json.getString("userInfoId");
+				} catch (JSONException e) {
+	            	// do nothing.
+				}
+	        	try {
 					userId = json.getString("userId");
 				} catch (JSONException e) {
 	            	// do nothing.
@@ -175,7 +181,8 @@ public class UserInfoResource {
         HttpHeaders headers = null;
         if (teamId != null) {
         	// drop-down items.
-            page = userInfoService.findByUserIdNotIn(Long.valueOf(teamId), pageable);
+//            page = userInfoService.findByUserIdNotIn(Long.valueOf(teamId), pageable);
+            page = userInfoService.findByIdNotIn(Long.valueOf(teamId), pageable);
             headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/user-infos?teamId=" + teamId + "&teamName=" + teamName);
         } else if (userLogin != null) {
         	// for updating user's info in settings.

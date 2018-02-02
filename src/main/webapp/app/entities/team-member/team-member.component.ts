@@ -1,4 +1,4 @@
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
@@ -15,14 +15,18 @@ export class TeamMemberComponent implements OnInit, OnDestroy {
 
     teamMembers: TeamMember[];
     currentAccount: any;
+    error: any;
+    success: any;
     eventSubscriber: Subscription;
-    itemsPerPage: number;
+    routeData: any;
     links: any;
+    totalItems: any;
+    queryCount: any;
+    itemsPerPage: any;
     page: any;
     predicate: any;
-    queryCount: any;
     reverse: any;
-    totalItems: number;
+    previousPage: any;
 
     teamId: string;
     teamName: string;
@@ -35,21 +39,22 @@ export class TeamMemberComponent implements OnInit, OnDestroy {
         private eventManager: JhiEventManager,
         private parseLinks: JhiParseLinks,
         private principal: Principal,
-        private route: ActivatedRoute
+        private activatedRoute: ActivatedRoute,
+        private router: Router,
     ) {
-        this.teamMembers = [];
         this.itemsPerPage = ITEMS_PER_PAGE;
-        this.page = 0;
-        this.links = {
-            last: 0
-        };
-        this.predicate = 'id';
-        this.reverse = true;
+
+        this.routeData = this.activatedRoute.data.subscribe((data) => {
+            this.page = data.pagingParams.page;
+            this.previousPage = data.pagingParams.page;
+            this.reverse = data.pagingParams.ascending;
+            this.predicate = data.pagingParams.predicate;
+        });
     }
 
     loadAll() {
         this.teamMemberService.query({
-            page: this.page,
+            page: this.page - 1,
             size: this.itemsPerPage,
             sort: this.sort(),
             query: JSON.stringify(this.params)
@@ -59,21 +64,40 @@ export class TeamMemberComponent implements OnInit, OnDestroy {
         );
     }
 
-    reset() {
-        this.page = 0;
-        this.teamMembers = [];
+    loadPage(page: number) {
+        if (page !== this.previousPage) {
+            this.previousPage = page;
+            this.transition();
+        }
+    }
+    transition() {
+        this.router.navigate(['/team-member'], {queryParams:
+            {
+                teamId: this.teamId,
+                teamName: this.teamName,
+                page: this.page,
+                size: this.itemsPerPage,
+                sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
+            }
+        });
         this.loadAll();
     }
 
-    loadPage(page) {
-        this.page = page;
+    clear() {
+        this.page = 0;
+        this.router.navigate(['/team-member', {
+            page: this.page,
+            sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
+        }]);
         this.loadAll();
     }
 
     ngOnInit() {
-        this.route.queryParams
+        this.activatedRoute.queryParams
         // .filter((params) => params.team)
         .subscribe((params) => {
+            console.log('JSON.stringify(this.params): ' + JSON.stringify(this.params));
+
           this.teamId = params.teamId;
           this.teamName = params.teamName;
           this.params = params;
@@ -94,7 +118,7 @@ export class TeamMemberComponent implements OnInit, OnDestroy {
         return item.id;
     }
     registerChangeInTeamMembers() {
-        this.eventSubscriber = this.eventManager.subscribe('teamMemberListModification', (response) => this.reset());
+        this.eventSubscriber = this.eventManager.subscribe('teamMemberListModification', (response) => this.loadAll());
     }
 
     sort() {
@@ -108,9 +132,10 @@ export class TeamMemberComponent implements OnInit, OnDestroy {
     private onSuccess(data, headers) {
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = headers.get('X-Total-Count');
-        for (let i = 0; i < data.length; i++) {
-            this.teamMembers.push(data[i]);
-        }
+        this.queryCount = this.totalItems;
+        // this.page = pagingParams.page;
+        console.log('this.teamMembers: ' + JSON.stringify(this.teamMembers));
+        this.teamMembers = data;
     }
 
     private onError(error) {

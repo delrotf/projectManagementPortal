@@ -5,6 +5,7 @@ import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
 import { UserInfo } from './user-info.model';
 import { UserInfoService } from './user-info.service';
 import { ITEMS_PER_PAGE, Principal, ResponseWrapper } from '../../shared';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     selector: 'jhi-user-info',
@@ -14,35 +15,41 @@ export class UserInfoComponent implements OnInit, OnDestroy {
 
     userInfos: UserInfo[];
     currentAccount: any;
+    error: any;
+    success: any;
     eventSubscriber: Subscription;
-    itemsPerPage: number;
+    routeData: any;
+    totalItems: any;
+    queryCount: any;
+    itemsPerPage: any;
     links: any;
     page: any;
     predicate: any;
-    queryCount: any;
+    previousPage: any;
     reverse: any;
-    totalItems: number;
 
     constructor(
         private userInfoService: UserInfoService,
         private jhiAlertService: JhiAlertService,
         private eventManager: JhiEventManager,
         private parseLinks: JhiParseLinks,
-        private principal: Principal
+        private principal: Principal,
+        private activatedRoute: ActivatedRoute,
+        private router: Router,
     ) {
-        this.userInfos = [];
+        // this.userInfos = [];
         this.itemsPerPage = ITEMS_PER_PAGE;
-        this.page = 0;
-        this.links = {
-            last: 0
-        };
-        this.predicate = 'id';
-        this.reverse = true;
+        this.routeData = this.activatedRoute.data.subscribe((data) => {
+            this.page = data.pagingParams.page;
+            this.previousPage = data.pagingParams.page;
+            this.reverse = data.pagingParams.ascending;
+            this.predicate = data.pagingParams.predicate;
+        });
     }
 
     loadAll() {
         this.userInfoService.query({
-            page: this.page,
+            page: this.page - 1,
             size: this.itemsPerPage,
             sort: this.sort()
         }).subscribe(
@@ -51,14 +58,29 @@ export class UserInfoComponent implements OnInit, OnDestroy {
         );
     }
 
-    reset() {
-        this.page = 0;
-        this.userInfos = [];
+    loadPage(page: number) {
+        if (page !== this.previousPage) {
+            this.previousPage = page;
+            this.transition();
+        }
+    }
+    transition() {
+        this.router.navigate(['/user-info'], {queryParams:
+            {
+                page: this.page,
+                size: this.itemsPerPage,
+                sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
+            }
+        });
         this.loadAll();
     }
 
-    loadPage(page) {
-        this.page = page;
+    clear() {
+        this.page = 0;
+        this.router.navigate(['/user-info', {
+            page: this.page,
+            sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
+        }]);
         this.loadAll();
     }
     ngOnInit() {
@@ -77,7 +99,7 @@ export class UserInfoComponent implements OnInit, OnDestroy {
         return item.id;
     }
     registerChangeInUserInfos() {
-        this.eventSubscriber = this.eventManager.subscribe('userInfoListModification', (response) => this.reset());
+        this.eventSubscriber = this.eventManager.subscribe('userInfoListModification', (response) => this.loadAll());
     }
 
     sort() {
@@ -91,9 +113,9 @@ export class UserInfoComponent implements OnInit, OnDestroy {
     private onSuccess(data, headers) {
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = headers.get('X-Total-Count');
-        for (let i = 0; i < data.length; i++) {
-            this.userInfos.push(data[i]);
-        }
+        this.queryCount = this.totalItems;
+        // this.page = pagingParams.page;
+        this.userInfos = data;
     }
 
     private onError(error) {

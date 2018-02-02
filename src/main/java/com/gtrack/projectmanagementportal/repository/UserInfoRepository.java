@@ -17,10 +17,12 @@ import java.util.Set;
 @Repository
 public interface UserInfoRepository extends JpaRepository<UserInfo, Long> {
 
-    @Query("select user_info from UserInfo user_info where user_info.supervisor.login = ?#{principal.username}")
-    List<UserInfo> findBySupervisorIsCurrentUser();
+    @Query("select user_info from UserInfo user_info where user_info.supervisor.user.login = ?#{principal.username}")
+    List<UserInfo> findBySupervisorUserLoginIsCurrentUser();
 
 	Page<UserInfo> findByUserLogin(String userLogin, Pageable pageable);
+	UserInfo findOneByUserLogin(String userLogin);
 	
     Page<UserInfo> findByUserIdNotIn(Set<Long> userIds, Pageable pageable);
+    Page<UserInfo> findByIdNotIn(Set<Long> ids, Pageable pageable);
 }

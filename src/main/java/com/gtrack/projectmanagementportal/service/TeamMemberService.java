@@ -45,9 +45,11 @@ public interface TeamMemberService {
      */
     void delete(Long id);
 
-	Page<TeamMemberDTO> findByTeamId(Long id, Pageable pageable);
-	Page<TeamMemberDTO> findByUserIsCurrentUser(Pageable pageable);
-	Page<TeamMemberDTO> findByUserLogin(String userLogin, Pageable pageable);
-	Set<TeamMember> findByUserLogin(String userLogin);
+	Page<TeamMemberDTO> findByTeamId(Long teamId, Pageable pageable);
+	Page<TeamMemberDTO> findByUserInfoId(Long userInfoId, Pageable pageable);
+	Page<TeamMemberDTO> findByUserInfoUserLoginIsCurrentUser(Pageable pageable);
+	Page<TeamMemberDTO> findByUserInfoUserLogin(String userLogin, Pageable pageable);
+	Set<TeamMember> findByUserInfoUserLogin(String userLogin);
+	Set<TeamMember> findByUserInfoId(Long userInfoId);
 	Set<TeamMember> findByTeamId(Long teamId);
 }

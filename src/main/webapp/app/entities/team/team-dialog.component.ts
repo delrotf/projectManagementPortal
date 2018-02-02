@@ -23,7 +23,7 @@ export class TeamDialogComponent implements OnInit {
     team: Team;
     isSaving: boolean;
 
-    users: UserInfo[];
+    userInfos: UserInfo[];
 
     constructor(
         public activeModal: NgbActiveModal,
@@ -40,7 +40,7 @@ export class TeamDialogComponent implements OnInit {
             if (hasAuthority) {
                 this.userInfoService.query().subscribe(
                     (res: ResponseWrapper) => {
-                        this.users = res.json;
+                        this.userInfos = res.json;
                     },
                     (res: ResponseWrapper) => this.onError(res.json)
                 );
@@ -48,9 +48,7 @@ export class TeamDialogComponent implements OnInit {
                 this.principal.identity().then((account) => {
                     this.userInfoService.query({query: JSON.stringify({userLogin: account.login})}).subscribe(
                         (res: ResponseWrapper) => {
-                            this.users = res.json;
-                            console.log('this.users: ' + JSON.stringify(this.users));
-                            this.team.teamHeadId = this.users[0].userId;
+                            this.team.teamHeadId = res.json[0].id;
                         },
                         (res: ResponseWrapper) => this.onError(res.json)
                     );
@@ -98,7 +96,7 @@ export class TeamDialogComponent implements OnInit {
         this.jhiAlertService.error(error.message, null, null);
     }
 
-    trackUserById(index: number, item: User) {
+    trackUserInfoById(index: number, item: UserInfo) {
         return item.id;
     }
 }

@@ -110,7 +110,7 @@ public class TeamMemberResource {
      */
     @GetMapping("/team-members")
     @Timed
-    public ResponseEntity<List<TeamMemberDTO>> getTeamMembersByTeamName(@RequestParam(value="query", required=false) String query, Pageable pageable) {
+    public ResponseEntity<List<TeamMemberDTO>> getTeamMembersByQuery(@RequestParam(value="query", required=false) String query, Pageable pageable) {
         log.debug("REST request to get a page of TeamMembers; query: " + query);
         Page<TeamMemberDTO> page = null;
         HttpHeaders headers = null;
@@ -118,6 +118,7 @@ public class TeamMemberResource {
         String teamId = null;
         String teamName = null;
 		String userId = null;
+		String userInfoId = null;
 		String userLogin = null;
         
         if (query != null) {
@@ -143,6 +144,11 @@ public class TeamMemberResource {
                 	// do nothing.
     			}
             	try {
+    				userInfoId = json.getString("userInfoId");
+    			} catch (JSONException e) {
+                	// do nothing.
+    			}
+            	try {
     				userLogin = json.getString("userLogin");
     			} catch (JSONException e) {
                 	// do nothing.
@@ -155,8 +161,11 @@ public class TeamMemberResource {
         if(teamId != null) {
         	page = teamMemberService.findByTeamId(Long.valueOf(teamId), pageable);
             headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/team-members?teamId=" + teamId + "&teamName=" + teamName);
+        } else if(userInfoId != null) {
+        	page = teamMemberService.findByUserInfoId(Long.valueOf(userInfoId), pageable);
+            headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/team-members?userInfoId=" + userInfoId);
         } else {
-        	page = teamMemberService.findByUserLogin(userLogin, pageable);
+        	page = teamMemberService.findByUserInfoUserLogin(userLogin, pageable);
             headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/team-members?userLogin=" + userLogin);
         }
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);

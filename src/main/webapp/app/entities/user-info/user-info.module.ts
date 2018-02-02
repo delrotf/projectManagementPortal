@@ -14,6 +14,7 @@ import {
     UserInfoDeleteDialogComponent,
     userInfoRoute,
     userInfoPopupRoute,
+    UserInfoResolvePagingParams,
 } from './';
 
 const ENTITY_STATES = [
@@ -45,6 +46,7 @@ const ENTITY_STATES = [
     providers: [
         UserInfoService,
         UserInfoPopupService,
+        UserInfoResolvePagingParams,
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

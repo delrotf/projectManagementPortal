@@ -32,6 +32,9 @@ public class UserInfo implements Serializable {
     @Column(name = "calling_name")
     private String callingName;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+    
     @Column(name = "phone")
     private String phone;
 
@@ -41,7 +44,7 @@ public class UserInfo implements Serializable {
     private User user;
 
     @ManyToOne
-    private User supervisor;
+    private UserInfo supervisor;
 
     @ManyToOne
     private Designation designation;
@@ -94,6 +97,19 @@ public class UserInfo implements Serializable {
         this.callingName = callingName;
     }
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public UserInfo imageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+        return this;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+    
     public String getPhone() {
         return phone;
     }
@@ -120,17 +136,17 @@ public class UserInfo implements Serializable {
         this.user = user;
     }
 
-    public User getSupervisor() {
+    public UserInfo getSupervisor() {
         return supervisor;
     }
 
-    public UserInfo supervisor(User user) {
-        this.supervisor = user;
+    public UserInfo supervisor(UserInfo userInfo) {
+        this.supervisor = userInfo;
         return this;
     }
 
-    public void setSupervisor(User user) {
-        this.supervisor = user;
+    public void setSupervisor(UserInfo userInfo) {
+        this.supervisor = userInfo;
     }
 
     public Designation getDesignation() {
@@ -174,7 +190,9 @@ public class UserInfo implements Serializable {
             ", firstName='" + getFirstName() + "'" +
             ", lastName='" + getLastName() + "'" +
             ", callingName='" + getCallingName() + "'" +
+            ", imageUrl='" + getImageUrl() + "'" +
             ", phone='" + getPhone() + "'" +
+            ", user='" + getUser() + "'" +
             "}";
     }
 }

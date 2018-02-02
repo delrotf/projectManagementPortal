@@ -71,9 +71,9 @@ public class TeamMemberServiceImpl implements TeamMemberService{
      */
     @Override
     @Transactional(readOnly = true)
-    public Page<TeamMemberDTO> findByTeamId(Long id, Pageable pageable) {
-        log.debug("Request to get all TeamMembers By Team Id: " + id);
-        return teamMemberRepository.findByTeamId(id, pageable)
+    public Page<TeamMemberDTO> findByTeamId(Long teamId, Pageable pageable) {
+        log.debug("Request to get all TeamMembers By Team Id: " + teamId);
+        return teamMemberRepository.findByTeamId(teamId, pageable)
             .map(teamMemberMapper::toDto);
     }
 
@@ -85,9 +85,23 @@ public class TeamMemberServiceImpl implements TeamMemberService{
      */
     @Override
     @Transactional(readOnly = true)
-    public Page<TeamMemberDTO> findByUserIsCurrentUser(Pageable pageable) {
+    public Page<TeamMemberDTO> findByUserInfoId(Long userInfoId, Pageable pageable) {
+        log.debug("Request to get all TeamMembers By UserInfo Id: " + userInfoId);
+        return teamMemberRepository.findByUserInfoId(userInfoId, pageable)
+            .map(teamMemberMapper::toDto);
+    }
+
+    /**
+     * Get all the teamMembers.
+     *
+     * @param pageable the pagination information
+     * @return the list of entities
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Page<TeamMemberDTO> findByUserInfoUserLoginIsCurrentUser(Pageable pageable) {
         log.debug("Request to get all TeamMembers By Current User");
-        return teamMemberRepository.findByUserIsCurrentUser(pageable)
+        return teamMemberRepository.findByUserInfoUserLoginIsCurrentUser(pageable)
             .map(teamMemberMapper::toDto);
     }
 
@@ -99,9 +113,9 @@ public class TeamMemberServiceImpl implements TeamMemberService{
      */
     @Override
     @Transactional(readOnly = true)
-    public Page<TeamMemberDTO> findByUserLogin(String userLogin, Pageable pageable) {
+    public Page<TeamMemberDTO> findByUserInfoUserLogin(String userLogin, Pageable pageable) {
         log.debug("Request to get all TeamMembers By User Login");
-        return teamMemberRepository.findByUserLogin(userLogin, pageable)
+        return teamMemberRepository.findByUserInfoUserLogin(userLogin, pageable)
             .map(teamMemberMapper::toDto);
     }
 
@@ -113,9 +127,9 @@ public class TeamMemberServiceImpl implements TeamMemberService{
      */
     @Override
     @Transactional(readOnly = true)
-    public Set<TeamMember> findByUserLogin(String userLogin) {
+    public Set<TeamMember> findByUserInfoUserLogin(String userLogin) {
         log.debug("Request to get all Teams By User Login: {}", userLogin);
-        return teamMemberRepository.findByUserLogin(userLogin);
+        return teamMemberRepository.findByUserInfoUserLogin(userLogin);
     }
 
     /**
@@ -129,6 +143,19 @@ public class TeamMemberServiceImpl implements TeamMemberService{
     public Set<TeamMember> findByTeamId(Long teamId) {
         log.debug("Request to get all Teams By Team Id: {}", teamId);
         return teamMemberRepository.findByTeamId(teamId);
+    }
+
+    /**
+     * Get all the teamMembers.
+     *
+     * @param pageable the pagination information
+     * @return the list of entities
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Set<TeamMember> findByUserInfoId(Long userInfoId) {
+        log.debug("Request to get all Teams By UserInfo Id: {}", userInfoId);
+        return teamMemberRepository.findByTeamId(userInfoId);
     }
 
     /**

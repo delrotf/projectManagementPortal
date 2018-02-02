@@ -1,20 +1,31 @@
 <div>
     <h2>
-        <span *ngIf="!isAdmin">My </span>Teams</span>
-
-        <button class="btn btn-primary float-right jh-create-entity create-team" [routerLink]="['/', { outlets: { popup: ['team-new'] } }]">
+        <span *ngIf="!isAdmin && !allOthers && currentAccount.login === params.teamHeadUserLogin">My </span><span *ngIf="!isAdmin && allOthers">Browse More </span>Teams</span><span *ngIf="!isAdmin && !allOthers && currentAccount.login !== params.teamHeadUserLogin"> of {{params.teamHeadUserLogin}}</span>
+        <button *ngIf="isAdmin || !allOthers && currentAccount.login === params.teamHeadUserLogin" class="btn btn-primary float-right jh-create-entity create-team" [routerLink]="['/', { outlets: { popup: ['team-new'] } }]" replaceUrl="true" queryParamsHandling="merge">
             <span class="fa fa-plus"></span>
             <span >
             Create new Team
             </span>
         </button>
     </h2>
-    <ul class="nav nav-pills">
+    <a *ngIf="!allOthers && currentAccount.login !== params.teamHeadUserLogin" class="" routerLink="../user-info">
+        <i class="fa fa-fw fa-arrow-circle-left" aria-hidden="true"></i>
+        <span>Back To Users</span>
+    </a>
+    <!-- <ul *ngIf="allOthers" class="nav nav-pills">
         <li class="nav-item">
-            <a class="nav-link" routerLink="../team" routerLinkActive="active" [queryParams]="{ active: true }" [routerLinkActiveOptions]="{ exact: true }">Active</a>
+            <a class="nav-link" routerLink="../team" routerLinkActive="active" [queryParams]="{ active: true, allOthers: allOthers }" [routerLinkActiveOptions]="{ exact: false }" replaceUrl="true" queryParamsHandling="merge">Active</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" routerLink="../team" routerLinkActive="active" [queryParams]="{ active: false }" [routerLinkActiveOptions]="{ exact: true }">InActive</a>
+            <a class="nav-link" routerLink="../team" routerLinkActive="active" [queryParams]="{ active: false, allOthers: allOthers }" [routerLinkActiveOptions]="{ exact: false }" replaceUrl="true" queryParamsHandling="merge">InActive</a>
+        </li>
+    </ul> -->
+    <ul *ngIf="!allOthers && currentAccount.login === params.teamHeadUserLogin" class="nav nav-pills">
+        <li class="nav-item">
+            <a class="nav-link" routerLink="../team" routerLinkActive="active" [queryParams]="{ active: true }" [routerLinkActiveOptions]="{ exact: false }" replaceUrl="true" queryParamsHandling="merge">Active</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" routerLink="../team" routerLinkActive="active" [queryParams]="{ active: false }" [routerLinkActiveOptions]="{ exact: false }" replaceUrl="true" queryParamsHandling="merge">InActive</a>
         </li>
     </ul>
 
@@ -25,8 +36,9 @@
     <div class="table-responsive" *ngIf="teams">
         <table class="table table-striped">
             <thead>
-                <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="reset.bind(this)">
+                <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
                     <!-- <th jhiSortBy="id"><span>ID</span> <span class="fa fa-sort"></span></th> -->
+                    <th></th>
                     <th jhiSortBy="name"><span>Name</span> <span class="fa fa-sort"></span></th>
                     <th jhiSortBy="code"><span>Code</span> <span class="fa fa-sort"></span></th>
                     <!-- <th jhiSortBy="imageUrl"><span>Image Url</span> <span class="fa fa-sort"></span></th> -->
@@ -34,30 +46,41 @@
                     <!-- <th jhiSortBy="processOrder"><span>Process Order</span> <span class="fa fa-sort"></span></th> -->
                     <!-- <th jhiSortBy="processExternalTask"><span>Process External Task</span> <span class="fa fa-sort"></span></th> -->
                     <!-- <th jhiSortBy="active"><span>Active</span> <span class="fa fa-sort"></span></th> -->
+                    <th *ngIf="allOthers" jhiSortBy="teamHeadUserLogin"><span>Team Head</span> <span class="fa fa-sort"></span></th>
                     <th jhiSortBy="createdDate"><span>Created Date</span> <span class="fa fa-sort"></span></th>
-                    <th *jhiHasAnyAuthority="'ROLE_ADMIN'" jhiSortBy="teamHeadLogin"><span>Team Head</span> <span class="fa fa-sort"></span></th>
                     <th></th>
                 </tr>
             </thead>
-            <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
-                <tr *ngFor="let team of teams ;trackBy: trackId">
+            <tbody>
+                <tr *ngFor="let team of teams; trackBy: trackId">
                     <!-- <td><a [routerLink]="['../team', team.id ]">{{team.id}}</a></td> -->
                     <!-- <td>{{team.name}}</td> -->
                     <td>
-                        <a [routerLink]="['../team', team.id ]"><img src={{team.imageUrl}} style="max-width: 100px"><br>{{team.name}}</a>
+                        <a [routerLink]="['../team', team.id ]">
+                            <img *ngIf="team.imageUrl" src={{team.imageUrl}} style="max-width: 100px">
+                            <img *ngIf="!team.imageUrl" src="../../../content/images/user_group-512.png" style="max-width: 100px">
+                        </a>
+                    </td>
+                    <td>
+                        <a [routerLink]="['../team', team.id ]">{{team.name}}</a>
                     </td>
                     <td>{{team.code}}</td>
                     <!-- <td><img src={{team.imageUrl}} style="max-width: 40px"></td> -->
                     <!-- <td>{{team.processOrder}}</td> -->
                     <!-- <td>{{team.processExternalTask}}</td> -->
                     <!-- <td>{{team.active}}</td> -->
-                    <td>{{team.createdDate | date:'yyyy-MM-dd'}}</td>
-                    <td *jhiHasAnyAuthority="'ROLE_ADMIN'">
-                        {{team.teamHeadLogin}}
+                    <td *ngIf="allOthers">
+                        {{team.teamHeadUserLogin}}
                     </td>
+                    <td>{{team.createdDate | date:'yyyy-MM-dd'}}</td>
                     <td class="text-right">
                         <div class="btn-group flex-btn-group-container">
-                            <button type="submit" [routerLink]="['../team-member']" [queryParams]="{ teamId: team.id, teamName: team.name }" class="btn btn-info btn-sm">
+                            <button *ngIf="team.active && team.teamHeadUserLogin !== currentAccount.login && !isAdmin" type="submit" [routerLink]="['/', { outlets: { popup: ['team-member-new'] } }]" [queryParams]="{ teamHeadUserLogin: team.teamHeadUserLogin, userLogin: currentAccount.login, teamId: team.id, teamName: team.name }"
+                                class="btn btn-info btn-sm" replaceUrl="true" queryParamsHandling="merge">
+                                <span class="fa fa-list"></span>
+                                <span class="d-none d-md-inline">Join Team</span>
+                            </button>
+                            <button *ngIf="team.active && team.teamHeadUserLogin === currentAccount.login || isAdmin" type="submit" [routerLink]="['../team-member']" [queryParams]="{ teamId: team.id, teamName: team.name }" class="btn btn-info btn-sm" replaceUrl="true" queryParamsHandling="merge">
                                 <span class="fa fa-list"></span>
                                 <span class="d-none d-md-inline">Manage Team Members</span>
                             </button>
@@ -65,11 +88,11 @@
                             <span class="fa fa-eye"></span>
                             <span class="d-none d-md-inline">View</span>
                         </button> -->
-                            <button type="submit" [routerLink]="['/', { outlets: { popup: 'team/'+ team.id + '/edit'} }]" replaceUrl="true" queryParamsHandling="merge" class="btn btn-primary btn-sm">
+                            <button *ngIf="team.teamHeadUserLogin === currentAccount.login || isAdmin" type="submit" [routerLink]="['/', { outlets: { popup: 'team/'+ team.id + '/edit'} }]" replaceUrl="true" queryParamsHandling="merge" class="btn btn-primary btn-sm">
                             <span class="fa fa-pencil"></span>
                             <span class="d-none d-md-inline">Edit</span>
                         </button>
-                            <button type="submit" [routerLink]="['/', { outlets: { popup: 'team/'+ team.id + '/delete'} }]" replaceUrl="true" queryParamsHandling="merge" class="btn btn-danger btn-sm">
+                            <button *ngIf="team.teamHeadUserLogin === currentAccount.login || isAdmin" type="submit" [routerLink]="['/', { outlets: { popup: 'team/'+ team.id + '/delete'} }]" replaceUrl="true" queryParamsHandling="merge" class="btn btn-danger btn-sm">
                             <span class="fa fa-remove"></span>
                             <span class="d-none d-md-inline">Delete</span>
                         </button>
@@ -78,5 +101,13 @@
                 </tr>
             </tbody>
         </table>
+    </div>
+    <div *ngIf="teams && teams.length">
+        <div class="row justify-content-center">
+            <jhi-item-count [page]="page" [total]="queryCount" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+        </div>
+        <div class="row justify-content-center">
+            <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage(page)"></ngb-pagination>
+        </div>
     </div>
 </div>

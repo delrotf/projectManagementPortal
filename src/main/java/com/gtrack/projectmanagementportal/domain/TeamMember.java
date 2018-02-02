@@ -22,12 +22,13 @@ public class TeamMember implements Serializable {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @Column(name = "updated_time")
+    @NotNull
+    @Column(name = "updated_time", nullable = false)
     private Instant updatedTime;
 
     @ManyToOne(optional = false)
     @NotNull
-    private User user;
+    private UserInfo userInfo;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -55,17 +56,17 @@ public class TeamMember implements Serializable {
         this.updatedTime = updatedTime;
     }
 
-    public User getUser() {
-        return user;
+    public UserInfo getUserInfo() {
+        return userInfo;
     }
 
-    public TeamMember user(User user) {
-        this.user = user;
+    public TeamMember userInfo(UserInfo userInfo) {
+        this.userInfo = userInfo;
         return this;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserInfo(UserInfo userInfo) {
+        this.userInfo = userInfo;
     }
 
     public Team getTeam() {

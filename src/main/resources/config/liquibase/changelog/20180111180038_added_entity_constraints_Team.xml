@@ -12,7 +12,7 @@
                                  baseTableName="team"
                                  constraintName="fk_team_team_head_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="pmp_user"/>
+                                 referencedTableName="user_info"/>
 
 		<addUniqueConstraint tableName="team" columnNames="name"/>
     </changeSet>

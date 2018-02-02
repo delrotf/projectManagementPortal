@@ -18,19 +18,27 @@
                     Here are the options available for you:
                 </p>
                 <ul>
-                    <li>
-                        <a class="" routerLink="team" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                    <li *ngIf="!isAdmin">
+                        <a class="" routerLink="team" routerLinkActive="active" [queryParams]="{ active: true, headed: true, teamHeadUserLogin: account.login}" [routerLinkActiveOptions]="{ exact: true }">
                             <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                            <span><span *ngIf="!isAdmin">My </span>Teams</span>
+                            <span>My Teams</span>
                         </a>
                         <span> - the teams you created and managed. Here is where you add team members.</span>
                     </li>
-                    <li>
+                    <li *ngIf="!isAdmin">
                         <a class="" routerLink="team-member" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
                             <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
                             <span>Teams I'm A Member Of</span>
                         </a>
                         <span> - the teams created and managed by others but you belong in these teams.</span>
+                    </li>
+                    <li>
+                        <a class="" routerLink="team" routerLinkActive="active" [queryParams]="{ active: true, allOthers: true }" [routerLinkActiveOptions]="{ exact: true }">
+                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
+                            <span><span *ngIf="!isAdmin">Browse More </span>Teams</span>
+                        </a>
+                        <span *ngIf="!isAdmin"> - Browse more teams you can join.</span>
+                        <span *ngIf="isAdmin"> - Browse teams.</span>
                     </li>
                     <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
                         <a class="" routerLink="designation" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
@@ -141,7 +149,7 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label class="form-control-label" for="field_lastName">Last Name</label>
-                            <input type="text" class="form-control" name="lastName" id="field_lastName" [(ngModel)]="registerAccount.lastName" #lastName="ngModel"placeholder="Your lastname"  maxlength="50" required/>
+                            <input type="text" class="form-control" name="lastName" id="field_lastName" [(ngModel)]="registerAccount.lastName" #lastName="ngModel" placeholder="Your lastname" maxlength="50" required/>
                             <div *ngIf="lastName.dirty && lastName.invalid">
                                 <small class="form-text text-danger" *ngIf="lastName.errors.required">
                                             Your lastname is required.

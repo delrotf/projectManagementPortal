@@ -15,11 +15,12 @@ public class TeamMemberDTO implements Serializable {
 
     private Long id;
 
+    @NotNull
     private Instant updatedTime;
 
-    private Long userId;
+    private Long userInfoId;
 
-    private String userLogin;
+    private String userInfoUserLogin;
 
     private Long teamId;
 
@@ -41,20 +42,20 @@ public class TeamMemberDTO implements Serializable {
         this.updatedTime = updatedTime;
     }
 
-    public Long getUserId() {
-        return userId;
+    public Long getUserInfoId() {
+        return userInfoId;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUserInfoId(Long userInfoId) {
+        this.userInfoId = userInfoId;
     }
 
-    public String getUserLogin() {
-        return userLogin;
+    public String getUserInfoUserLogin() {
+        return userInfoUserLogin;
     }
 
-    public void setUserLogin(String userLogin) {
-        this.userLogin = userLogin;
+    public void setUserInfoUserLogin(String userInfoUserLogin) {
+        this.userInfoUserLogin = userInfoUserLogin;
     }
 
     public Long getTeamId() {

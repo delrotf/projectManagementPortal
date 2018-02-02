@@ -34,7 +34,7 @@ public class TeamDTO implements Serializable {
 
     private Long teamHeadId;
 
-    private String teamHeadLogin;
+    private String teamHeadUserLogin;
 
     public Long getId() {
         return id;
@@ -104,16 +104,16 @@ public class TeamDTO implements Serializable {
         return teamHeadId;
     }
 
-    public void setTeamHeadId(Long userId) {
-        this.teamHeadId = userId;
+    public void setTeamHeadId(Long userInfoId) {
+        this.teamHeadId = userInfoId;
     }
 
-    public String getTeamHeadLogin() {
-        return teamHeadLogin;
+    public String getTeamHeadUserLogin() {
+        return teamHeadUserLogin;
     }
 
-    public void setTeamHeadLogin(String userLogin) {
-        this.teamHeadLogin = userLogin;
+    public void setTeamHeadUserLogin(String userInfoUserLogin) {
+        this.teamHeadUserLogin = userInfoUserLogin;
     }
 
     @Override

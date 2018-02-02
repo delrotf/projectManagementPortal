@@ -61,9 +61,9 @@ public class TeamServiceImpl implements TeamService{
      */
     @Override
     @Transactional(readOnly = true)
-    public Page<TeamDTO> findByTeamHeadIsCurrentUser(Pageable pageable) {
+    public Page<TeamDTO> findByTeamHeadUserLoginIsCurrentUser(Pageable pageable) {
         log.debug("Request to get Teams by teamhead");
-        return teamRepository.findByTeamHeadIsCurrentUser(pageable)
+        return teamRepository.findByTeamHeadUserLoginIsCurrentUser(pageable)
             .map(teamMapper::toDto);
     }
 
@@ -75,20 +75,22 @@ public class TeamServiceImpl implements TeamService{
      */
     @Override
     @Transactional(readOnly = true)
-    public Page<TeamDTO> findByActiveAndIdNotIn(boolean isAdmin, String userLogin, Pageable pageable) {
+    public Page<TeamDTO> findByActiveAndIdNotIn(boolean isActive, String userLogin, Pageable pageable) {
         log.debug("Request to get Teams by Id not in");
         
-        Set<TeamMember> teamMembersOfUser = teamMemberService.findByUserLogin(userLogin);
+        Set<TeamMember> teamMembersOfUser = teamMemberService.findByUserInfoUserLogin(userLogin);
         
         if (teamMembersOfUser != null && !teamMembersOfUser.isEmpty()) {
             Set<Long> ids = new HashSet<>();
             for (TeamMember teamMember : teamMembersOfUser) {
     			ids.add(teamMember.getTeam().getId());
     		}
-            return teamRepository.findByActiveAndIdNotIn(true, ids, pageable)
+            return teamRepository.findByActiveAndIdNotIn(isActive, ids, pageable)
                 .map(teamMapper::toDto);
         } else {
-        	return findAll(pageable);
+            return teamRepository.findByActive(isActive, pageable)
+                    .map(teamMapper::toDto);
+//        	return findAll(pageable);
         }
     }
 
@@ -100,9 +102,78 @@ public class TeamServiceImpl implements TeamService{
      */
     @Override
     @Transactional(readOnly = true)
-    public Page<TeamDTO> findByActiveAndTeamHeadLogin(boolean isActive, String teamHeadLogin, Pageable pageable) {
+    public Page<TeamDTO> findByActiveAndIdNotInAndTeamHeadUserLoginNot(boolean isActive, String userLogin, Pageable pageable) {
+        log.debug("Request to get Teams by Id not in");
+        
+        Set<TeamMember> teamMembersOfUser = teamMemberService.findByUserInfoUserLogin(userLogin);
+        
+        if (teamMembersOfUser != null && !teamMembersOfUser.isEmpty()) {
+            Set<Long> ids = new HashSet<>();
+            for (TeamMember teamMember : teamMembersOfUser) {
+    			ids.add(teamMember.getTeam().getId());
+    		}
+            
+            return teamRepository.findByActiveAndIdNotInAndTeamHeadUserLoginNot(isActive, ids, userLogin, pageable)
+                    .map(teamMapper::toDto);
+        } else {
+            return teamRepository.findByActiveAndTeamHeadUserLoginNot(isActive, userLogin, pageable)
+                    .map(teamMapper::toDto);
+        }
+        
+    }
+
+    /**
+     * Get all the teams.
+     *
+     * @param pageable the pagination information
+     * @return the list of entities
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Page<TeamDTO> findByActiveAndIdNotInAndTeamHeadUserLogin(boolean isActive, String userLogin, Pageable pageable) {
+        log.debug("Request to get Teams by Id not in");
+        
+        Set<TeamMember> teamMembersOfUser = teamMemberService.findByUserInfoUserLogin(userLogin);
+        
+        if (teamMembersOfUser != null && !teamMembersOfUser.isEmpty()) {
+            Set<Long> ids = new HashSet<>();
+            for (TeamMember teamMember : teamMembersOfUser) {
+    			ids.add(teamMember.getTeam().getId());
+    		}
+            
+            return teamRepository.findByActiveAndIdNotInAndTeamHeadUserLogin(isActive, ids, SecurityUtils.getCurrentUserLogin().get(), pageable)
+                    .map(teamMapper::toDto);
+        } else {
+            return teamRepository.findByActiveAndTeamHeadUserLogin(isActive, SecurityUtils.getCurrentUserLogin().get(), pageable)
+                    .map(teamMapper::toDto);
+        }
+    }
+
+    /**
+     * Get all the teams.
+     *
+     * @param pageable the pagination information
+     * @return the list of entities
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Page<TeamDTO> findByActiveAndTeamHeadUserLogin(boolean isActive, String teamHeadLogin, Pageable pageable) {
         log.debug("Request to get Teams by teamhead");
-        return teamRepository.findByActiveAndTeamHeadLogin(isActive, teamHeadLogin, pageable)
+        return teamRepository.findByActiveAndTeamHeadUserLogin(isActive, teamHeadLogin, pageable)
+            .map(teamMapper::toDto);
+    }
+
+    /**
+     * Get all the teams by active.
+     *
+     * @param pageable the pagination information
+     * @return the list of entities
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Page<TeamDTO> findByActive(boolean active, Pageable pageable) {
+        log.debug("Request to get all Teams by active: {}", active);
+        return teamRepository.findByActive(active, pageable)
             .map(teamMapper::toDto);
     }
 

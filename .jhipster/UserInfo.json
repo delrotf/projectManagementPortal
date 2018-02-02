@@ -13,8 +13,8 @@
         {
             "relationshipType": "many-to-one",
             "relationshipName": "supervisor",
-            "otherEntityName": "user",
-            "otherEntityField": "login"
+            "otherEntityName": "userInfo",
+            "otherEntityField": "userLogin"
         },
         {
             "relationshipType": "many-to-one",
@@ -40,6 +40,10 @@
         },
         {
             "fieldName": "callingName",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "imageUrl",
             "fieldType": "String"
         },
         {

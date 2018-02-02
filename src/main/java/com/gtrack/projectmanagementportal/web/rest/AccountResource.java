@@ -140,6 +140,14 @@ public class AccountResource {
         }
         userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(),
             userDTO.getEmail(), userDTO.getLangKey(), userDTO.getImageUrl());
+        
+        // upsert UserInfo
+        UserInfoDTO userInfoDTO = userInfoService.findOneByUserLogin(userLogin);
+        userInfoDTO = userInfoDTO != null ? userInfoDTO : new UserInfoDTO();
+        userInfoDTO.setFirstName(userDTO.getFirstName());
+        userInfoDTO.setLastName(userDTO.getLastName());
+        userInfoDTO.setImageUrl(userDTO.getImageUrl());
+        UserInfoDTO result = userInfoService.save(userInfoDTO);
    }
 
     /**

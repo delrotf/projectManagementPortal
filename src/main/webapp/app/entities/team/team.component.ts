@@ -1,5 +1,6 @@
-import { ActivatedRoute, Router } from '@angular/router';
+// import { ADD_SELF_TO_TEAM, MANAGE_TEAM_MEMBERS, My_ACTIVE_TEAMS, My_INACTIVE_TEAMS, BROWSE_MORE_TEAMS } from './../../shared/constants/screen.constants';
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
 
@@ -13,8 +14,8 @@ import { ITEMS_PER_PAGE, Principal, ResponseWrapper } from '../../shared';
 })
 export class TeamComponent implements OnInit, OnDestroy {
 
+currentAccount: any;
     teams: Team[];
-    currentAccount: any;
     error: any;
     success: any;
     eventSubscriber: Subscription;
@@ -29,26 +30,50 @@ export class TeamComponent implements OnInit, OnDestroy {
     reverse: any;
 
     isAdmin: boolean;
+    userInfoId: string;
 
     params: {[key: string]: any};
+    active: boolean;
+    allOthers: boolean;
+
+    // addSelfToTeam: any;
+    // manageTeamMembers: any;
+    // myActiveTeams: any;
+    // myInactiveTeams: any;
+    // browseMoreTeams: any;
 
     constructor(
         private teamService: TeamService,
-        private jhiAlertService: JhiAlertService,
-        private eventManager: JhiEventManager,
         private parseLinks: JhiParseLinks,
+        private jhiAlertService: JhiAlertService,
         private principal: Principal,
         private activatedRoute: ActivatedRoute,
         private router: Router,
+        private eventManager: JhiEventManager
     ) {
-        this.teams = [];
-        this.itemsPerPage = ITEMS_PER_PAGE;
-        this.routeData = this.activatedRoute.data.subscribe((data) => {
+        this.principal.identity().then((account) => {
+            this.currentAccount = account;
+        });
+
+            this.itemsPerPage = ITEMS_PER_PAGE;
+            // this.addSelfToTeam = ADD_SELF_TO_TEAM;
+            // this.manageTeamMembers = MANAGE_TEAM_MEMBERS;
+
+            this.routeData = this.activatedRoute.data.subscribe((data) => {
             this.page = data.pagingParams.page;
             this.previousPage = data.pagingParams.page;
             this.reverse = data.pagingParams.ascending;
             this.predicate = data.pagingParams.predicate;
-        });   }
+        });
+        this.activatedRoute.queryParams
+        // .filter((params) => params.team)
+        .subscribe((params) => {
+            this.params = params;
+            this.active = params.active;
+            this.allOthers = params.allOthers;
+            this.loadAll();
+        });
+    }
 
     loadAll() {
         this.teamService.query({
@@ -61,27 +86,42 @@ export class TeamComponent implements OnInit, OnDestroy {
             (res: ResponseWrapper) => this.onError(res.json)
         );
     }
-
-    reset() {
-        this.page = 0;
-        this.teams = [];
+    loadPage(page: number) {
+        if (page !== this.previousPage) {
+            this.previousPage = page;
+            this.transition();
+        }
+    }
+    transition() {
+        this.router.navigate(['/team'], {queryParams:
+            {
+                active: this.params.active,
+                allOthers: this.params.allOthers,
+                page: this.page,
+                size: this.itemsPerPage,
+                sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
+            }
+        });
         this.loadAll();
     }
 
-    loadPage(page) {
-        this.page = page;
+    clear() {
+        this.page = 0;
+        this.router.navigate(['/team', {
+            page: this.page,
+            sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
+        }]);
         this.loadAll();
     }
     ngOnInit() {
-        this.route.queryParams
-        // .filter((params) => params.team)
-        .subscribe((params) => {
-          this.params = params;
-              this.reset();
-            // this.loadAll();
-        });
+        // this.addSelfToTeam = ADD_SELF_TO_TEAM;
+        // this.manageTeamMembers = MANAGE_TEAM_MEMBERS;
+        // this.myActiveTeams = My_ACTIVE_TEAMS;
+        // this.myInactiveTeams = My_INACTIVE_TEAMS;
+        // this.browseMoreTeams = BROWSE_MORE_TEAMS;
+
         this.principal.identity().then((account) => {
-                this.currentAccount = account;
+            this.currentAccount = account;
         });
 
         this.principal.hasAuthority('ROLE_ADMIN').then((value) => {
@@ -99,7 +139,7 @@ export class TeamComponent implements OnInit, OnDestroy {
         return item.id;
     }
     registerChangeInTeams() {
-        this.eventSubscriber = this.eventManager.subscribe('teamListModification', (response) => this.reset());
+        this.eventSubscriber = this.eventManager.subscribe('teamListModification', (response) => this.loadAll());
     }
 
     sort() {
@@ -110,24 +150,13 @@ export class TeamComponent implements OnInit, OnDestroy {
         return result;
     }
 
-    transition() {
-        this.router.navigate(['/user-management'], {
-            queryParams: {
-                page: this.page,
-                sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
-            }
-        });
-        this.loadAll();
-    }
-
     private onSuccess(data, headers) {
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = headers.get('X-Total-Count');
-        for (let i = 0; i < data.length; i++) {
-            this.teams.push(data[i]);
-        }
+        this.queryCount = this.totalItems;
+        // this.page = pagingParams.page;
+        this.teams = data;
     }
-
     private onError(error) {
         this.jhiAlertService.error(error.message, null, null);
     }

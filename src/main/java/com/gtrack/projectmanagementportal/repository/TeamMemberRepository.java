@@ -19,12 +19,15 @@ import java.util.Set;
 @Repository
 public interface TeamMemberRepository extends JpaRepository<TeamMember, Long> {
 
-    @Query("select team_member from TeamMember team_member where team_member.user.login = ?#{principal.username}")
-    Page<TeamMember> findByUserIsCurrentUser(Pageable pageable);
+    @Query("select team_member from TeamMember team_member where team_member.userInfo.user.login = ?#{principal.username}")
+    Page<TeamMember> findByUserInfoUserLoginIsCurrentUser(Pageable pageable);
     
-	Page<TeamMember> findByUserLogin(String userLogin, Pageable pageable);
-	Set<TeamMember> findByUserLogin(String userLogin);
+	Page<TeamMember> findByUserInfoUserLogin(String userLogin, Pageable pageable);
+	Set<TeamMember> findByUserInfoUserLogin(String userLogin);
 
-	Page<TeamMember> findByTeamId(Long id, Pageable pageable);
-	Set<TeamMember> findByTeamId(Long id);
+	Page<TeamMember> findByUserInfoId(Long userInfoId, Pageable pageable);
+	Set<TeamMember> findByUserInfoId(Long userInfoId);
+
+	Page<TeamMember> findByTeamId(Long teamId, Pageable pageable);
+	Set<TeamMember> findByTeamId(Long teamId);
 }

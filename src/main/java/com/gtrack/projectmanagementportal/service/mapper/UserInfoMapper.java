@@ -14,7 +14,7 @@ public interface UserInfoMapper extends EntityMapper<UserInfoDTO, UserInfo> {
     @Mapping(source = "user.id", target = "userId")
     @Mapping(source = "user.login", target = "userLogin")
     @Mapping(source = "supervisor.id", target = "supervisorId")
-    @Mapping(source = "supervisor.login", target = "supervisorLogin")
+    @Mapping(source = "supervisor.user.login", target = "supervisorUserLogin")
     @Mapping(source = "designation.id", target = "designationId")
     @Mapping(source = "designation.designation", target = "designationDesignation")
     UserInfoDTO toDto(UserInfo userInfo); 
