@@ -11,7 +11,7 @@ export class UserInfo implements BaseEntity {
         public userId?: number,
         public supervisorId?: number,
         public designationId?: number,
-        // public designationDesignation?: string,
+        public designationDesignation?: string,
     ) {
     }
 }

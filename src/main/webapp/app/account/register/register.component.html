@@ -40,19 +40,19 @@
                         <span *ngIf="!isAdmin"> - Browse more teams you can join.</span>
                         <span *ngIf="isAdmin"> - Browse teams.</span>
                     </li>
+                    <li>
+                        <a class="" routerLink="user-info" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
+                            <span>Users</span>
+                        </a>
+                        <span> - the list of users is found here. You can add users to your teams or join their teams.</span>
+                    </li>
                     <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
                         <a class="" routerLink="designation" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
                             <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
                             <span>Designations</span>
                         </a>
                         <span> - manage Designations here.</span>
-                    </li>
-                    <li>
-                        <a class="" routerLink="user-info" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                            <span>Users</span>
-                        </a>
-                        <span> - the list of users is found here. You can add users to your teams.</span>
                     </li>
                     <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
                 </ul>

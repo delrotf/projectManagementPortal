@@ -96,8 +96,6 @@ export class TeamMemberComponent implements OnInit, OnDestroy {
         this.activatedRoute.queryParams
         // .filter((params) => params.team)
         .subscribe((params) => {
-            console.log('JSON.stringify(this.params): ' + JSON.stringify(this.params));
-
           this.teamId = params.teamId;
           this.teamName = params.teamName;
           this.params = params;

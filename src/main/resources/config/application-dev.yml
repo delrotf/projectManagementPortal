@@ -32,12 +32,12 @@ spring:
         serialization.indent_output: true
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
-        url: jdbc:sqlserver://localhost:1433;database=ProjectManager
-#        username: SA
-#        password: yourStrong(!)Password
-#        url: jdbc:sqlserver://7gdbserver.database.windows.net:1433;database=ProjectManager;user=sa;password=sa;encrypt=true;hostNameInCertificate=*.database.windows.net;loginTimeout=30;
-        username: sa
-        password: sa
+#        url: jdbc:sqlserver://localhost:1433;database=ProjectManager
+#        username: sa
+#        password: sa
+        url: jdbc:sqlserver://7gdbserver.database.windows.net:1433;database=ProjectManager;user=tanny;password=project@123;encrypt=true;hostNameInCertificate=*.database.windows.net;loginTimeout=30;
+        username: tanny
+        password: project@123
         hikari:
             data-source-properties:
                 cachePrepStmts: true
