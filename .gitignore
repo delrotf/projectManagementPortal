@@ -1,7 +1,7 @@
 ######################
 # Project Specific
 ######################
-/target/www/**
+# /target/www/**
 /src/test/javascript/coverage/
 /src/test/javascript/PhantomJS*/
 
@@ -70,7 +70,7 @@ classes/
 # Maven
 ######################
 /log/
-/target/
+# /target/
 
 ######################
 # Gradle
