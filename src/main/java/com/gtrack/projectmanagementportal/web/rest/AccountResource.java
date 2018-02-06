@@ -146,7 +146,7 @@ public class AccountResource {
         if (userInfoDTO != null) {
             userInfoDTO.setFirstName(userDTO.getFirstName());
             userInfoDTO.setLastName(userDTO.getLastName());
-            userInfoDTO.setImageUrl(userDTO.getImageUrl());
+//            userInfoDTO.setImageUrl(userDTO.getImageUrl());
             try {
             	UserInfoDTO result = userInfoService.save(userInfoDTO);
             } catch (Exception e) {

@@ -154,7 +154,7 @@ public class UserService {
                 user.setLastName(lastName);
                 user.setEmail(email);
                 user.setLangKey(langKey);
-                user.setImageUrl(imageUrl);
+//                user.setImageUrl(imageUrl);
                 log.debug("Changed Information for User: {}", user);
             });
     }
@@ -173,7 +173,7 @@ public class UserService {
                 user.setFirstName(userDTO.getFirstName());
                 user.setLastName(userDTO.getLastName());
                 user.setEmail(userDTO.getEmail());
-                user.setImageUrl(userDTO.getImageUrl());
+//                user.setImageUrl(userDTO.getImageUrl());
                 user.setActivated(userDTO.isActivated());
                 user.setLangKey(userDTO.getLangKey());
                 Set<Authority> managedAuthorities = user.getAuthorities();

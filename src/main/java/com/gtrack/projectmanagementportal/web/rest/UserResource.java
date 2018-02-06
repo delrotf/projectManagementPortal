@@ -123,7 +123,7 @@ public class UserResource {
 		userInfoDTO.setUserId(userDTO.getId());
 		userInfoDTO.setFirstName(userDTO.getFirstName());
 		userInfoDTO.setLastName(userDTO.getLastName());
-		userInfoDTO.setImageUrl(userDTO.getImageUrl());
+//		userInfoDTO.setImageUrl(userDTO.getImageUrl());
 		try {
 			UserInfoDTO result = userInfoService.save(userInfoDTO);
 		} catch(Exception e) {
