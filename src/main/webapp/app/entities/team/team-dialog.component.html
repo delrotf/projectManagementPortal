@@ -39,12 +39,18 @@
                         <span class="fa fa-times"></span>
                     </button>
                 </div> -->
-                <img *ngIf="!team.image" src="../../../content/images/user_group-512.png" style="max-width: 100px">
-                <div *ngIf="team.image" class="form-text text-danger clearfix">
-                    <button type="button" onclick="document.getElementById('file_image').value = null" (click)="clearInputImage('image', 'imageContentType', 'fileImage')" class="btn btn-secondary btn-xs pull-left">
+                <div class="form-text text-danger clearfix badge-base">
+                    <img *ngIf="!team.image" src="../../../content/images/user_group-512.png" style="max-width: 100px">
+                    <img [src]="'data:' + team.imageContentType + ';base64,' + team.image" style="max-height: 100px;" *ngIf="team.image" alt="team image" />
+                    <button *ngIf="team.image" type="button" onclick="document.getElementById('file_image').value = null" (click)="clearInputImage('image', 'imageContentType', 'fileImage')" class="btn btn-secondary btn-xs pull-left badge-button">
+                                <span class="fa fa-times"></span>
+                        </button>
+
+
+                    <!-- <button *ngIf="team.image" type="button" onclick="document.getElementById('file_image').value = null" (click)="clearInputImage('image', 'imageContentType', 'fileImage')" class="btn btn-secondary btn-xs pull-left">
                             <img [src]="'data:' + team.imageContentType + ';base64,' + team.image" style="max-height: 100px;" *ngIf="team.image" alt="team image" />
                             <span class="fa fa-times"></span>
-                    </button>
+                    </button> -->
                 </div>
                 <br>
                 <input type="file" id="file_image" (change)="setFileData($event, team, 'image', true)" accept="image/*" />

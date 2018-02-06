@@ -17,7 +17,10 @@ import { ResponseWrapper } from '../../shared';
 
 @Component({
     selector: 'jhi-team-dialog',
-    templateUrl: './team-dialog.component.html'
+    templateUrl: './team-dialog.component.html',
+    styleUrls: [
+        'team.css'
+    ]
 })
 export class TeamDialogComponent implements OnInit {
 
