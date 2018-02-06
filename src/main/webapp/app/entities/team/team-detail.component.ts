@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
-import { JhiEventManager } from 'ng-jhipster';
+import { JhiEventManager, JhiDataUtils } from 'ng-jhipster';
 
 import { Team } from './team.model';
 import { TeamService } from './team.service';
@@ -18,6 +18,7 @@ export class TeamDetailComponent implements OnInit, OnDestroy {
 
     constructor(
         private eventManager: JhiEventManager,
+        private dataUtils: JhiDataUtils,
         private teamService: TeamService,
         private route: ActivatedRoute
     ) {
@@ -34,6 +35,13 @@ export class TeamDetailComponent implements OnInit, OnDestroy {
         this.teamService.find(id).subscribe((team) => {
             this.team = team;
         });
+    }
+    byteSize(field) {
+        return this.dataUtils.byteSize(field);
+    }
+
+    openFile(contentType, field) {
+        return this.dataUtils.openFile(contentType, field);
     }
     previousState() {
         window.history.back();

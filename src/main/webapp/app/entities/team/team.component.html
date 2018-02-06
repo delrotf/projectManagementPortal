@@ -42,6 +42,7 @@
                     <th jhiSortBy="name"><span>Name</span> <span class="fa fa-sort"></span></th>
                     <th jhiSortBy="code"><span>Code</span> <span class="fa fa-sort"></span></th>
                     <!-- <th jhiSortBy="imageUrl"><span>Image Url</span> <span class="fa fa-sort"></span></th> -->
+                    <!-- <th jhiSortBy="image"><span>Image</span> <span class="fa fa-sort"></span></th> -->
                     <!-- <th><span>Image</span> <span class="fa"></span></th> -->
                     <!-- <th jhiSortBy="processOrder"><span>Process Order</span> <span class="fa fa-sort"></span></th> -->
                     <!-- <th jhiSortBy="processExternalTask"><span>Process External Task</span> <span class="fa fa-sort"></span></th> -->
@@ -56,9 +57,14 @@
                     <!-- <td><a [routerLink]="['../team', team.id ]">{{team.id}}</a></td> -->
                     <!-- <td>{{team.name}}</td> -->
                     <td>
+                        <!-- <a *ngIf="team.image" (click)="openFile(team.imageContentType, team.image)">
+                            <img [src]="'data:' + team.imageContentType + ';base64,' + team.image" style="max-height: 30px;" alt="team image" />
+                        </a>
+                        <span *ngIf="team.image">{{team.imageContentType}}, {{byteSize(team.image)}}</span> -->
+
                         <a [routerLink]="['../team', team.id ]">
-                            <img *ngIf="team.imageUrl" src={{team.imageUrl}} style="max-width: 100px">
-                            <img *ngIf="!team.imageUrl" src="../../../content/images/user_group-512.png" style="max-width: 100px">
+                            <img *ngIf="team.image" [src]="'data:' + team.imageContentType + ';base64,' + team.image" style="max-height: 100px;" alt="team image" />
+                            <img *ngIf="!team.image" src="../../../content/images/user_group-512.png" style="max-width: 100px">
                         </a>
                     </td>
                     <td>

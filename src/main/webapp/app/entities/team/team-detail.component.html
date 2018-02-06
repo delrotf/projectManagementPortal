@@ -1,31 +1,58 @@
 <div *ngIf="team">
-    <h2><span>Team</span> {{team.id}}</h2>
+    <!-- <h2><span>Team</span> {{team.id}}</h2> -->
+    <h2><span>Team</span> {{team.name}}</h2>
     <hr>
     <jhi-alert-error></jhi-alert-error>
     <dl class="row-md jh-entity-details">
-        <dt><span>Name</span></dt>
+        <!-- <dt><span>Name</span></dt>
         <dd>
             <span>{{team.name}}</span>
-        </dd>
+        </dd> -->
+        <img *ngIf="!team.image" src="../../../content/images/user_group-512.png" style="max-width: 100px">
+        <div *ngIf="team.image">
+            <a (click)="openFile(team.imageContentType, team.image)">
+                <img [src]="'data:' + team.imageContentType + ';base64,' + team.image" style="max-width: 100%;" alt="team image" />
+            </a>
+            <!-- {{team.imageContentType}}, {{byteSize(team.image)}} -->
+        </div>
         <dt><span>Code</span></dt>
         <dd>
             <span>{{team.code}}</span>
         </dd>
-        <dt><span>Image</span></dt>
+        <!-- <dt><span>Image</span></dt>
         <dd>
-            <span><img src={{team.imageUrl}} style="max-width: 300px"></span>
-        </dd>
+            <!-- <span><img src={{team.imageUrl}} style="max-width: 300px"></span> >
+        <img *ngIf="!team.image" src="../../../content/images/user_group-512.png" style="max-width: 100px">
+        <div *ngIf="team.image">
+            <a (click)="openFile(team.imageContentType, team.image)">
+                <img [src]="'data:' + team.imageContentType + ';base64,' + team.image" style="max-width: 100%;" alt="team image" />
+            </a>
+            <!-- {{team.imageContentType}}, {{byteSize(team.image)}} >
+        </div>
+        </dd> -->
         <dt><span>Process Order</span></dt>
         <dd>
-            <span>{{team.processOrder}}</span>
+            <!-- <span>{{team.processOrder}}</span> -->
+            <span>
+                <jhi-boolean [value]="team.processOrder" textTrue="Yes" textFalse="No">
+                </jhi-boolean>
+            </span>
         </dd>
         <dt><span>Process External Task</span></dt>
         <dd>
-            <span>{{team.processExternalTask}}</span>
+            <!-- <span>{{team.processExternalTask}}</span> -->
+            <span>
+                <jhi-boolean [value]="team.processExternalTask" textTrue="Yes" textFalse="No">
+                </jhi-boolean>
+            </span>
         </dd>
         <dt><span>Active</span></dt>
         <dd>
-            <span>{{team.active}}</span>
+            <!-- <span>{{team.active}}</span> -->
+            <span>
+                <jhi-boolean [value]="team.active" textTrue="Active" textFalse="Inactive">
+                </jhi-boolean>
+            </span>
         </dd>
         <dt><span>Created Date</span></dt>
         <dd>

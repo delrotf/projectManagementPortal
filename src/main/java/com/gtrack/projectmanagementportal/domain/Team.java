@@ -32,6 +32,13 @@ public class Team implements Serializable {
     @Column(name = "image_url")
     private String imageUrl;
 
+    @Lob
+    @Column(name = "image")
+    private byte[] image;
+
+    @Column(name = "image_content_type")
+    private String imageContentType;
+
     @Column(name = "process_order")
     private Boolean processOrder;
 
@@ -96,6 +103,32 @@ public class Team implements Serializable {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public Team image(byte[] image) {
+        this.image = image;
+        return this;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
+
+    public String getImageContentType() {
+        return imageContentType;
+    }
+
+    public Team imageContentType(String imageContentType) {
+        this.imageContentType = imageContentType;
+        return this;
+    }
+
+    public void setImageContentType(String imageContentType) {
+        this.imageContentType = imageContentType;
     }
 
     public Boolean isProcessOrder() {
@@ -191,6 +224,8 @@ public class Team implements Serializable {
             ", name='" + getName() + "'" +
             ", code='" + getCode() + "'" +
             ", imageUrl='" + getImageUrl() + "'" +
+            ", image='" + getImage() + "'" +
+            ", imageContentType='" + getImageContentType() + "'" +
             ", processOrder='" + isProcessOrder() + "'" +
             ", processExternalTask='" + isProcessExternalTask() + "'" +
             ", active='" + isActive() + "'" +

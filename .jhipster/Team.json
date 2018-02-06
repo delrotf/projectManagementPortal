@@ -26,6 +26,11 @@
             "fieldType": "String"
         },
         {
+            "fieldName": "image",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "image"
+        },
+        {
             "fieldName": "processOrder",
             "fieldType": "Boolean"
         },

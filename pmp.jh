@@ -3,6 +3,7 @@ entity UserInfo {
 	lastName String required,
 	callingName String,
 	imageUrl String,
+    image ImageBlob,
 	phone String
 }
 
@@ -14,6 +15,7 @@ entity Team {
 	name String required,
     code String,
     imageUrl String,
+    image ImageBlob,
     processOrder Boolean,
     processExternalTask Boolean,
     active Boolean required,

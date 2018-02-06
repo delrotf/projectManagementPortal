@@ -6,6 +6,8 @@ export class Team implements BaseEntity {
         public name?: string,
         public code?: string,
         public imageUrl?: string,
+        public imageContentType?: string,
+        public image?: any,
         public processOrder?: boolean,
         public processExternalTask?: boolean,
         public active?: boolean,

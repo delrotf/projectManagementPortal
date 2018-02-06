@@ -23,6 +23,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Base64Utils;
 
 import javax.persistence.EntityManager;
 import java.time.Instant;
@@ -52,6 +53,11 @@ public class TeamResourceIntTest {
 
     private static final String DEFAULT_IMAGE_URL = "AAAAAAAAAA";
     private static final String UPDATED_IMAGE_URL = "BBBBBBBBBB";
+
+    private static final byte[] DEFAULT_IMAGE = TestUtil.createByteArray(1, "0");
+    private static final byte[] UPDATED_IMAGE = TestUtil.createByteArray(2, "1");
+    private static final String DEFAULT_IMAGE_CONTENT_TYPE = "image/jpg";
+    private static final String UPDATED_IMAGE_CONTENT_TYPE = "image/png";
 
     private static final Boolean DEFAULT_PROCESS_ORDER = false;
     private static final Boolean UPDATED_PROCESS_ORDER = true;
@@ -112,6 +118,8 @@ public class TeamResourceIntTest {
             .name(DEFAULT_NAME)
             .code(DEFAULT_CODE)
             .imageUrl(DEFAULT_IMAGE_URL)
+            .image(DEFAULT_IMAGE)
+            .imageContentType(DEFAULT_IMAGE_CONTENT_TYPE)
             .processOrder(DEFAULT_PROCESS_ORDER)
             .processExternalTask(DEFAULT_PROCESS_EXTERNAL_TASK)
             .active(DEFAULT_ACTIVE)
@@ -148,6 +156,8 @@ public class TeamResourceIntTest {
         assertThat(testTeam.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testTeam.getCode()).isEqualTo(DEFAULT_CODE);
         assertThat(testTeam.getImageUrl()).isEqualTo(DEFAULT_IMAGE_URL);
+        assertThat(testTeam.getImage()).isEqualTo(DEFAULT_IMAGE);
+        assertThat(testTeam.getImageContentType()).isEqualTo(DEFAULT_IMAGE_CONTENT_TYPE);
         assertThat(testTeam.isProcessOrder()).isEqualTo(DEFAULT_PROCESS_ORDER);
         assertThat(testTeam.isProcessExternalTask()).isEqualTo(DEFAULT_PROCESS_EXTERNAL_TASK);
         assertThat(testTeam.isActive()).isEqualTo(DEFAULT_ACTIVE);
@@ -245,6 +255,8 @@ public class TeamResourceIntTest {
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
             .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE.toString())))
             .andExpect(jsonPath("$.[*].imageUrl").value(hasItem(DEFAULT_IMAGE_URL.toString())))
+            .andExpect(jsonPath("$.[*].imageContentType").value(hasItem(DEFAULT_IMAGE_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].image").value(hasItem(Base64Utils.encodeToString(DEFAULT_IMAGE))))
             .andExpect(jsonPath("$.[*].processOrder").value(hasItem(DEFAULT_PROCESS_ORDER.booleanValue())))
             .andExpect(jsonPath("$.[*].processExternalTask").value(hasItem(DEFAULT_PROCESS_EXTERNAL_TASK.booleanValue())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())))
@@ -265,6 +277,8 @@ public class TeamResourceIntTest {
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()))
             .andExpect(jsonPath("$.code").value(DEFAULT_CODE.toString()))
             .andExpect(jsonPath("$.imageUrl").value(DEFAULT_IMAGE_URL.toString()))
+            .andExpect(jsonPath("$.imageContentType").value(DEFAULT_IMAGE_CONTENT_TYPE))
+            .andExpect(jsonPath("$.image").value(Base64Utils.encodeToString(DEFAULT_IMAGE)))
             .andExpect(jsonPath("$.processOrder").value(DEFAULT_PROCESS_ORDER.booleanValue()))
             .andExpect(jsonPath("$.processExternalTask").value(DEFAULT_PROCESS_EXTERNAL_TASK.booleanValue()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()))
@@ -294,6 +308,8 @@ public class TeamResourceIntTest {
             .name(UPDATED_NAME)
             .code(UPDATED_CODE)
             .imageUrl(UPDATED_IMAGE_URL)
+            .image(UPDATED_IMAGE)
+            .imageContentType(UPDATED_IMAGE_CONTENT_TYPE)
             .processOrder(UPDATED_PROCESS_ORDER)
             .processExternalTask(UPDATED_PROCESS_EXTERNAL_TASK)
             .active(UPDATED_ACTIVE)
@@ -312,6 +328,8 @@ public class TeamResourceIntTest {
         assertThat(testTeam.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testTeam.getCode()).isEqualTo(UPDATED_CODE);
         assertThat(testTeam.getImageUrl()).isEqualTo(UPDATED_IMAGE_URL);
+        assertThat(testTeam.getImage()).isEqualTo(UPDATED_IMAGE);
+        assertThat(testTeam.getImageContentType()).isEqualTo(UPDATED_IMAGE_CONTENT_TYPE);
         assertThat(testTeam.isProcessOrder()).isEqualTo(UPDATED_PROCESS_ORDER);
         assertThat(testTeam.isProcessExternalTask()).isEqualTo(UPDATED_PROCESS_EXTERNAL_TASK);
         assertThat(testTeam.isActive()).isEqualTo(UPDATED_ACTIVE);

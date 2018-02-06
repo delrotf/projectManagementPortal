@@ -2,7 +2,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
-import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
+import { JhiEventManager, JhiParseLinks, JhiAlertService, JhiDataUtils } from 'ng-jhipster';
 
 import { Team } from './team.model';
 import { TeamService } from './team.service';
@@ -48,6 +48,7 @@ currentAccount: any;
         private jhiAlertService: JhiAlertService,
         private principal: Principal,
         private activatedRoute: ActivatedRoute,
+        private dataUtils: JhiDataUtils,
         private router: Router,
         private eventManager: JhiEventManager
     ) {
@@ -55,11 +56,11 @@ currentAccount: any;
             this.currentAccount = account;
         });
 
-            this.itemsPerPage = ITEMS_PER_PAGE;
-            // this.addSelfToTeam = ADD_SELF_TO_TEAM;
-            // this.manageTeamMembers = MANAGE_TEAM_MEMBERS;
+        this.itemsPerPage = ITEMS_PER_PAGE;
+        // this.addSelfToTeam = ADD_SELF_TO_TEAM;
+        // this.manageTeamMembers = MANAGE_TEAM_MEMBERS;
 
-            this.routeData = this.activatedRoute.data.subscribe((data) => {
+        this.routeData = this.activatedRoute.data.subscribe((data) => {
             this.page = data.pagingParams.page;
             this.previousPage = data.pagingParams.page;
             this.reverse = data.pagingParams.ascending;
@@ -137,6 +138,13 @@ currentAccount: any;
 
     trackId(index: number, item: Team) {
         return item.id;
+    }
+    byteSize(field) {
+        return this.dataUtils.byteSize(field);
+    }
+
+    openFile(contentType, field) {
+        return this.dataUtils.openFile(contentType, field);
     }
     registerChangeInTeams() {
         this.eventSubscriber = this.eventManager.subscribe('teamListModification', (response) => this.loadAll());
