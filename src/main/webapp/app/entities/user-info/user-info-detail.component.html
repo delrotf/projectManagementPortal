@@ -3,12 +3,17 @@
     <hr>
     <jhi-alert-error></jhi-alert-error>
     <dl class="row-md jh-entity-details">
-        <!-- <dt><span>Image</span></dt> -->
-        <dt></dt>
+        <!-- <dt><span>Image</span></dt>
         <dd>
             <img *ngIf="userInfo.imageUrl" src={{userInfo.imageUrl}} style="max-width: 100px">
-            <img *ngIf="!userInfo.imageUrl" src="../../../content/images/user_200.png" style="max-width: 100px">
-        </dd>
+        </dd> -->
+        <img *ngIf="!userInfo.image" src="../../../content/images/user_200.png" style="max-width: 100px">
+        <div *ngIf="userInfo.image">
+            <a (click)="openFile(userInfo.imageContentType, userInfo.image)">
+                <img [src]="'data:' + userInfo.imageContentType + ';base64,' + userInfo.image" style="max-width: 100%;" alt="userInfo image" />
+            </a>
+            <!-- {{userInfo.imageContentType}}, {{byteSize(userInfo.image)}} -->
+        </div>
         <dt><span>First Name</span></dt>
         <dd>
             <span>{{userInfo.firstName}}</span>
@@ -21,6 +26,15 @@
         <dd>
             <span>{{userInfo.callingName}}</span>
         </dd>
+        <!-- <dt><span>Image</span></dt>
+        <dd>
+            <div *ngIf="userInfo.image">
+                <a (click)="openFile(userInfo.imageContentType, userInfo.image)">
+                    <img [src]="'data:' + userInfo.imageContentType + ';base64,' + userInfo.image" style="max-width: 100%;" alt="userInfo image"/>
+                </a>
+                {{userInfo.imageContentType}}, {{byteSize(userInfo.image)}}
+            </div>
+        </dd> -->
         <dt><span>Phone</span></dt>
         <dd>
             <span>{{userInfo.phone}}</span>
@@ -50,4 +64,6 @@
     <!-- <button *jhiHasAnyAuthority="'ROLE_ADMIN'" type="button" [routerLink]="['/', { outlets: { popup: 'user-info/'+ userInfo.id + '/edit'} }]" replaceUrl="true" queryParamsHandling="merge" class="btn btn-primary">
         <span class="fa fa-pencil"></span>&nbsp;<span> Edit</span>
     </button> -->
+</div>
+button> -->
 </div>

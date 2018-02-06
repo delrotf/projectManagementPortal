@@ -1,11 +1,11 @@
 import { Principal } from './../../shared/auth/principal.service';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Response } from '@angular/http';
 
 import { Observable } from 'rxjs/Observable';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
+import { JhiEventManager, JhiAlertService, JhiDataUtils } from 'ng-jhipster';
 
 import { UserInfo } from './user-info.model';
 import { UserInfoPopupService } from './user-info-popup.service';
@@ -16,7 +16,10 @@ import { ResponseWrapper } from '../../shared';
 
 @Component({
     selector: 'jhi-user-info-dialog',
-    templateUrl: './user-info-dialog.component.html'
+    templateUrl: './user-info-dialog.component.html',
+    styleUrls: [
+        'user-info.css'
+    ]
 })
 export class UserInfoDialogComponent implements OnInit {
 
@@ -32,11 +35,13 @@ export class UserInfoDialogComponent implements OnInit {
 
     constructor(
         public activeModal: NgbActiveModal,
+        private dataUtils: JhiDataUtils,
         private jhiAlertService: JhiAlertService,
         private userInfoService: UserInfoService,
         private userService: UserService,
         private principal: Principal,
         private designationService: DesignationService,
+        private elementRef: ElementRef,
         private eventManager: JhiEventManager
     ) {
     }
@@ -71,6 +76,22 @@ export class UserInfoDialogComponent implements OnInit {
 
         this.designationService.query()
             .subscribe((res: ResponseWrapper) => { this.designations = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
+    }
+
+    byteSize(field) {
+        return this.dataUtils.byteSize(field);
+    }
+
+    openFile(contentType, field) {
+        return this.dataUtils.openFile(contentType, field);
+    }
+
+    setFileData(event, entity, field, isImage) {
+        this.dataUtils.setFileData(event, entity, field, isImage);
+    }
+
+    clearInputImage(field: string, fieldContentType: string, idInput: string) {
+        this.dataUtils.clearInputImage(this.userInfo, this.elementRef, field, fieldContentType, idInput);
     }
 
     clear() {

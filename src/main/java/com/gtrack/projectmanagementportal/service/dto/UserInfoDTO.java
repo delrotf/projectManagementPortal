@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Objects;
+import javax.persistence.Lob;
 
 /**
  * A DTO for the UserInfo entity.
@@ -23,6 +24,10 @@ public class UserInfoDTO implements Serializable {
     private String callingName;
 
     private String imageUrl;
+
+    @Lob
+    private byte[] image;
+    private String imageContentType;
 
     private String phone;
 
@@ -76,6 +81,22 @@ public class UserInfoDTO implements Serializable {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
+
+    public String getImageContentType() {
+        return imageContentType;
+    }
+
+    public void setImageContentType(String imageContentType) {
+        this.imageContentType = imageContentType;
     }
 
     public String getPhone() {
@@ -163,6 +184,7 @@ public class UserInfoDTO implements Serializable {
             ", lastName='" + getLastName() + "'" +
             ", callingName='" + getCallingName() + "'" +
             ", imageUrl='" + getImageUrl() + "'" +
+            ", image='" + getImage() + "'" +
             ", phone='" + getPhone() + "'" +
             "}";
     }

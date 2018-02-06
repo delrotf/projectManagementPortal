@@ -23,6 +23,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Base64Utils;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -53,6 +54,11 @@ public class UserInfoResourceIntTest {
 
     private static final String DEFAULT_IMAGE_URL = "AAAAAAAAAA";
     private static final String UPDATED_IMAGE_URL = "BBBBBBBBBB";
+
+    private static final byte[] DEFAULT_IMAGE = TestUtil.createByteArray(1, "0");
+    private static final byte[] UPDATED_IMAGE = TestUtil.createByteArray(2, "1");
+    private static final String DEFAULT_IMAGE_CONTENT_TYPE = "image/jpg";
+    private static final String UPDATED_IMAGE_CONTENT_TYPE = "image/png";
 
     private static final String DEFAULT_PHONE = "AAAAAAAAAA";
     private static final String UPDATED_PHONE = "BBBBBBBBBB";
@@ -105,6 +111,8 @@ public class UserInfoResourceIntTest {
             .lastName(DEFAULT_LAST_NAME)
             .callingName(DEFAULT_CALLING_NAME)
             .imageUrl(DEFAULT_IMAGE_URL)
+            .image(DEFAULT_IMAGE)
+            .imageContentType(DEFAULT_IMAGE_CONTENT_TYPE)
             .phone(DEFAULT_PHONE);
         // Add required entity
         User user = UserResourceIntTest.createEntity(em);
@@ -139,6 +147,8 @@ public class UserInfoResourceIntTest {
         assertThat(testUserInfo.getLastName()).isEqualTo(DEFAULT_LAST_NAME);
         assertThat(testUserInfo.getCallingName()).isEqualTo(DEFAULT_CALLING_NAME);
         assertThat(testUserInfo.getImageUrl()).isEqualTo(DEFAULT_IMAGE_URL);
+        assertThat(testUserInfo.getImage()).isEqualTo(DEFAULT_IMAGE);
+        assertThat(testUserInfo.getImageContentType()).isEqualTo(DEFAULT_IMAGE_CONTENT_TYPE);
         assertThat(testUserInfo.getPhone()).isEqualTo(DEFAULT_PHONE);
     }
 
@@ -215,6 +225,8 @@ public class UserInfoResourceIntTest {
             .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_LAST_NAME.toString())))
             .andExpect(jsonPath("$.[*].callingName").value(hasItem(DEFAULT_CALLING_NAME.toString())))
             .andExpect(jsonPath("$.[*].imageUrl").value(hasItem(DEFAULT_IMAGE_URL.toString())))
+            .andExpect(jsonPath("$.[*].imageContentType").value(hasItem(DEFAULT_IMAGE_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].image").value(hasItem(Base64Utils.encodeToString(DEFAULT_IMAGE))))
             .andExpect(jsonPath("$.[*].phone").value(hasItem(DEFAULT_PHONE.toString())));
     }
 
@@ -233,6 +245,8 @@ public class UserInfoResourceIntTest {
             .andExpect(jsonPath("$.lastName").value(DEFAULT_LAST_NAME.toString()))
             .andExpect(jsonPath("$.callingName").value(DEFAULT_CALLING_NAME.toString()))
             .andExpect(jsonPath("$.imageUrl").value(DEFAULT_IMAGE_URL.toString()))
+            .andExpect(jsonPath("$.imageContentType").value(DEFAULT_IMAGE_CONTENT_TYPE))
+            .andExpect(jsonPath("$.image").value(Base64Utils.encodeToString(DEFAULT_IMAGE)))
             .andExpect(jsonPath("$.phone").value(DEFAULT_PHONE.toString()));
     }
 
@@ -260,6 +274,8 @@ public class UserInfoResourceIntTest {
             .lastName(UPDATED_LAST_NAME)
             .callingName(UPDATED_CALLING_NAME)
             .imageUrl(UPDATED_IMAGE_URL)
+            .image(UPDATED_IMAGE)
+            .imageContentType(UPDATED_IMAGE_CONTENT_TYPE)
             .phone(UPDATED_PHONE);
         UserInfoDTO userInfoDTO = userInfoMapper.toDto(updatedUserInfo);
 
@@ -276,6 +292,8 @@ public class UserInfoResourceIntTest {
         assertThat(testUserInfo.getLastName()).isEqualTo(UPDATED_LAST_NAME);
         assertThat(testUserInfo.getCallingName()).isEqualTo(UPDATED_CALLING_NAME);
         assertThat(testUserInfo.getImageUrl()).isEqualTo(UPDATED_IMAGE_URL);
+        assertThat(testUserInfo.getImage()).isEqualTo(UPDATED_IMAGE);
+        assertThat(testUserInfo.getImageContentType()).isEqualTo(UPDATED_IMAGE_CONTENT_TYPE);
         assertThat(testUserInfo.getPhone()).isEqualTo(UPDATED_PHONE);
     }
 

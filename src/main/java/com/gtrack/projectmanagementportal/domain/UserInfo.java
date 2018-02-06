@@ -35,6 +35,13 @@ public class UserInfo implements Serializable {
     @Column(name = "image_url")
     private String imageUrl;
 
+    @Lob
+    @Column(name = "image")
+    private byte[] image;
+
+    @Column(name = "image_content_type")
+    private String imageContentType;
+
     @Column(name = "phone")
     private String phone;
 
@@ -108,6 +115,32 @@ public class UserInfo implements Serializable {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public UserInfo image(byte[] image) {
+        this.image = image;
+        return this;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
+
+    public String getImageContentType() {
+        return imageContentType;
+    }
+
+    public UserInfo imageContentType(String imageContentType) {
+        this.imageContentType = imageContentType;
+        return this;
+    }
+
+    public void setImageContentType(String imageContentType) {
+        this.imageContentType = imageContentType;
     }
 
     public String getPhone() {
@@ -191,6 +224,8 @@ public class UserInfo implements Serializable {
             ", lastName='" + getLastName() + "'" +
             ", callingName='" + getCallingName() + "'" +
             ", imageUrl='" + getImageUrl() + "'" +
+            ", image='" + getImage() + "'" +
+            ", imageContentType='" + getImageContentType() + "'" +
             ", phone='" + getPhone() + "'" +
             "}";
     }

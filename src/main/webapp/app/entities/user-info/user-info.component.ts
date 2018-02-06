@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
-import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
+import { JhiEventManager, JhiParseLinks, JhiAlertService, JhiDataUtils } from 'ng-jhipster';
 
 import { UserInfo } from './user-info.model';
 import { UserInfoService } from './user-info.service';
@@ -35,6 +35,7 @@ export class UserInfoComponent implements OnInit, OnDestroy {
         private parseLinks: JhiParseLinks,
         private principal: Principal,
         private activatedRoute: ActivatedRoute,
+        private dataUtils: JhiDataUtils,
         private router: Router,
     ) {
         // this.userInfos = [];
@@ -98,6 +99,15 @@ export class UserInfoComponent implements OnInit, OnDestroy {
     trackId(index: number, item: UserInfo) {
         return item.id;
     }
+
+    byteSize(field) {
+        return this.dataUtils.byteSize(field);
+    }
+
+    openFile(contentType, field) {
+        return this.dataUtils.openFile(contentType, field);
+    }
+
     registerChangeInUserInfos() {
         this.eventSubscriber = this.eventManager.subscribe('userInfoListModification', (response) => this.loadAll());
     }

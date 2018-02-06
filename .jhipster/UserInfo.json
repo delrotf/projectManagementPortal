@@ -47,6 +47,11 @@
             "fieldType": "String"
         },
         {
+            "fieldName": "image",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "image"
+        },
+        {
             "fieldName": "phone",
             "fieldType": "String"
         }
