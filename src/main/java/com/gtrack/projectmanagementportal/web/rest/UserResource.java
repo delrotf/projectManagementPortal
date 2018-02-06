@@ -153,7 +153,7 @@ public class UserResource {
             throw new LoginAlreadyUsedException();
         }
         Optional<UserDTO> updatedUser = userService.updateUser(userDTO);
-        upsertUserInfo(userDTO);
+//        upsertUserInfo(userDTO);
 
         return ResponseUtil.wrapOrNotFound(updatedUser,
             HeaderUtil.createAlert("A user is updated with identifier " + userDTO.getLogin(), userDTO.getLogin()));

@@ -6,6 +6,7 @@ export class User {
     public email?: string;
     public activated?: Boolean;
     public langKey?: string;
+    public imageUrl: string;
     public authorities?: any[];
     public createdBy?: string;
     public createdDate?: Date;
@@ -21,6 +22,7 @@ export class User {
         email?: string,
         activated?: Boolean,
         langKey?: string,
+        imageUrl?: string,
         authorities?: any[],
         createdBy?: string,
         createdDate?: Date,
@@ -35,6 +37,7 @@ export class User {
         this.email = email ? email : null;
         this.activated = activated ? activated : false;
         this.langKey = langKey ? langKey : null;
+        this.imageUrl = imageUrl ? imageUrl : null;
         this.authorities = authorities ? authorities : null;
         this.createdBy = createdBy ? createdBy : null;
         this.createdDate = createdDate ? createdDate : null;

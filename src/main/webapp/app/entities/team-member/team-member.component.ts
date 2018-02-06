@@ -132,7 +132,6 @@ export class TeamMemberComponent implements OnInit, OnDestroy {
         this.totalItems = headers.get('X-Total-Count');
         this.queryCount = this.totalItems;
         // this.page = pagingParams.page;
-        console.log('this.teamMembers: ' + JSON.stringify(this.teamMembers));
         this.teamMembers = data;
     }
 

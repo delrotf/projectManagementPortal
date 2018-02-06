@@ -34,7 +34,7 @@ public class UserInfo implements Serializable {
 
     @Column(name = "image_url")
     private String imageUrl;
-    
+
     @Column(name = "phone")
     private String phone;
 
@@ -109,7 +109,7 @@ public class UserInfo implements Serializable {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
-    
+
     public String getPhone() {
         return phone;
     }
@@ -192,7 +192,6 @@ public class UserInfo implements Serializable {
             ", callingName='" + getCallingName() + "'" +
             ", imageUrl='" + getImageUrl() + "'" +
             ", phone='" + getPhone() + "'" +
-            ", user='" + getUser() + "'" +
             "}";
     }
 }

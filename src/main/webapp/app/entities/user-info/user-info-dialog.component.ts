@@ -46,19 +46,21 @@ export class UserInfoDialogComponent implements OnInit {
         // this.userService.query()
         //     .subscribe((res: ResponseWrapper) => { this.users = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
 
-        // find the user id of current login.
+        // find the user of current login.
         this.principal.identity().then((account) => {
-            console.log('account.login: ' + JSON.stringify(account.login));
             this.userService.find(account.login)
             .subscribe((user) => {
                 this.user = user;
             });
-                // find the userInfo of current login.
-                this.userInfoService.query({query: JSON.stringify({userLogin: account.login})})
-                    .subscribe((res: ResponseWrapper) => {
+            // find the userInfo of current login.
+            this.userInfoService.query({query: JSON.stringify({userLogin: account.login})})
+                .subscribe((res: ResponseWrapper) => {
+                    if (res.json.length) {
                         this.userInfo = res.json[0];
-                        console.log('this.userInfo: ' + JSON.stringify(this.userInfo));
-                    }, (res: ResponseWrapper) => this.onError(res.json));
+                    } else {
+                        this.userInfo = new UserInfo();
+                    }
+                }, (res: ResponseWrapper) => this.onError(res.json));
         });
 
         // for drop-down list of supervisor
@@ -77,6 +79,11 @@ export class UserInfoDialogComponent implements OnInit {
 
     save() {
         this.isSaving = true;
+        this.userInfo.firstName = this.user.firstName;
+        this.userInfo.lastName = this.user.lastName;
+        this.userInfo.imageUrl = this.user.imageUrl;
+        this.userInfo.userId = this.user.id;
+
         if (this.userInfo.id !== undefined) {
             this.subscribeToSaveResponse(
                 this.userInfoService.update(this.userInfo));

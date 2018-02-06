@@ -143,11 +143,16 @@ public class AccountResource {
         
         // upsert UserInfo
         UserInfoDTO userInfoDTO = userInfoService.findOneByUserLogin(userLogin);
-        userInfoDTO = userInfoDTO != null ? userInfoDTO : new UserInfoDTO();
-        userInfoDTO.setFirstName(userDTO.getFirstName());
-        userInfoDTO.setLastName(userDTO.getLastName());
-        userInfoDTO.setImageUrl(userDTO.getImageUrl());
-        UserInfoDTO result = userInfoService.save(userInfoDTO);
+        if (userInfoDTO != null) {
+            userInfoDTO.setFirstName(userDTO.getFirstName());
+            userInfoDTO.setLastName(userDTO.getLastName());
+            userInfoDTO.setImageUrl(userDTO.getImageUrl());
+            try {
+            	UserInfoDTO result = userInfoService.save(userInfoDTO);
+            } catch (Exception e) {
+            	// do nothing.
+            }
+        }
    }
 
     /**

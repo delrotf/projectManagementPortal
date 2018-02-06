@@ -20,7 +20,7 @@
             <a class="nav-link" routerLink="../team" routerLinkActive="active" [queryParams]="{ active: false, allOthers: allOthers }" [routerLinkActiveOptions]="{ exact: false }" replaceUrl="true" queryParamsHandling="merge">InActive</a>
         </li>
     </ul> -->
-    <ul *ngIf="!allOthers && currentAccount.login === params.teamHeadUserLogin" class="nav nav-pills">
+    <ul *ngIf="isAdmin || !allOthers && currentAccount.login === params.teamHeadUserLogin" class="nav nav-pills">
         <li class="nav-item">
             <a class="nav-link" routerLink="../team" routerLinkActive="active" [queryParams]="{ active: true }" [routerLinkActiveOptions]="{ exact: false }" replaceUrl="true" queryParamsHandling="merge">Active</a>
         </li>

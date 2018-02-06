@@ -53,7 +53,6 @@ export class TeamMemberDialogComponent implements OnInit {
         this.route.queryParams
         // .filter((params) => params.team)
         .subscribe((params) => {
-            console.log('JSON.stringify(this.params): ' + JSON.stringify(this.params));
             this.params = params;
             this.hasTeam = params.teamId ? true : false;
             this.hasUserInfo = params.userInfoId ? true : false;
@@ -68,7 +67,6 @@ export class TeamMemberDialogComponent implements OnInit {
                 })
                     .subscribe((res: ResponseWrapper) => {
                         this.teamMember.userInfoId = res.json[0].id;
-                        console.log('this.teamMember.userInfoId: ' + this.teamMember.userInfoId);
                     }, (res: ResponseWrapper) => this.onError(res.json));
             } else if (this.hasTeam) { // if has team, we need its userInfos
                 this.teamMember.teamId = params.teamId;
