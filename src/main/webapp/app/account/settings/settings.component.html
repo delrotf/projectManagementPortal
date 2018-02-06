@@ -59,13 +59,13 @@
                         </small>
                     </div>
                 </div>
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <label class="form-control-label" for="imageUrl">Image Url</label>
                     <input type="text" class="form-control" id="imageUrl" name="imageUrl" placeholder="Your avatar" [(ngModel)]="settingsAccount.imageUrl" #imageUrlInput="ngModel">
                     <br>
                     <img *ngIf="settingsAccount.imageUrl" src={{settingsAccount.imageUrl}} style="max-width: 100px">
                     <img *ngIf="!settingsAccount.imageUrl" src="../../../content/images/user_200.png" style="max-width: 100px">
-                </div>
+                </div> -->
                 <button type="submit" [disabled]="settingsForm.form.invalid" class="btn btn-primary"><span class="fa fa-save"></span>&nbsp;Save</button>
             </form>
             <hr>
