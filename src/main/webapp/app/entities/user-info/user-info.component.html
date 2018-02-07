@@ -38,7 +38,7 @@
                         </a>
                         <span *ngIf="userInfo.image">{{userInfo.imageContentType}}, {{byteSize(userInfo.image)}}</span> -->
                         <a [routerLink]="['../user-info', userInfo.id ]" [queryParams]="{ userId: userInfo.userId, userLogin: userInfo.userLogin }">
-                            <img *ngIf="userInfo.image" [src]="'data:' + userInfo.imageContentType + ';base64,' + userInfo.image" style="max-height: 30px;" alt="userInfo image" />
+                            <img *ngIf="userInfo.image" [src]="'data:' + userInfo.imageContentType + ';base64,' + userInfo.image" style="max-height: 100px;" alt="userInfo image" />
                             <!-- <img *ngIf="userInfo.imageUrl" src={{userInfo.imageUrl}} style="max-width: 100px"> -->
                             <img *ngIf="!userInfo.image" src="../../../content/images/user_200.png" style="max-width: 100px">
                         </a>
