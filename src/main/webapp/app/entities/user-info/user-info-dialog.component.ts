@@ -33,6 +33,8 @@ export class UserInfoDialogComponent implements OnInit {
 
     designations: Designation[];
 
+    account: any;
+
     constructor(
         public activeModal: NgbActiveModal,
         private dataUtils: JhiDataUtils,
@@ -42,7 +44,7 @@ export class UserInfoDialogComponent implements OnInit {
         private principal: Principal,
         private designationService: DesignationService,
         private elementRef: ElementRef,
-        private eventManager: JhiEventManager
+        private eventManager: JhiEventManager,
     ) {
     }
 
@@ -53,6 +55,8 @@ export class UserInfoDialogComponent implements OnInit {
 
         // find the user of current login.
         this.principal.identity().then((account) => {
+            this.account = account;
+
             this.userService.find(account.login)
             .subscribe((user) => {
                 this.user = user;
@@ -102,8 +106,10 @@ export class UserInfoDialogComponent implements OnInit {
         this.isSaving = true;
         this.userInfo.firstName = this.user.firstName;
         this.userInfo.lastName = this.user.lastName;
-        this.userInfo.imageUrl = this.user.imageUrl;
+        // this.userInfo.imageUrl = this.user.imageUrl;
         this.userInfo.userId = this.user.id;
+
+        this.account.imageURL = this.userInfo.image ? 'data:' + this.userInfo.imageContentType + ';base64,' + this.userInfo.image : null;
 
         if (this.userInfo.id !== undefined) {
             this.subscribeToSaveResponse(

@@ -40,6 +40,9 @@ export class SettingsComponent implements OnInit {
             this.success = null;
             this.error = 'ERROR';
         });
+
+        // reload for changes to take effect.
+        location.reload();
     }
 
     copyAccount(account) {

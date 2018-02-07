@@ -1,9 +1,11 @@
+import { UserInfo } from './../../entities/user-info/user-info.model';
+import { UserInfoService } from './../../entities/user-info/user-info.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { ProfileService } from '../profiles/profile.service';
-import { Principal, LoginModalService, LoginService } from '../../shared';
+import { Principal, LoginModalService, LoginService, ResponseWrapper } from '../../shared';
 
 import { VERSION } from '../../app.constants';
 import { JhiEventManager } from 'ng-jhipster';
@@ -24,20 +26,22 @@ export class NavbarComponent implements OnInit {
     version: string;
     account: Account;
     isAdmin: boolean;
+    userInfo: UserInfo;
 
     constructor(
         private loginService: LoginService,
         private principal: Principal,
         private loginModalService: LoginModalService,
         private profileService: ProfileService,
+        private userInfoService: UserInfoService,
         private eventManager: JhiEventManager,
         private router: Router
     ) {
         this.version = VERSION ? 'v' + VERSION : '';
         this.isNavbarCollapsed = true;
-        this.principal.identity().then((account) => {
-            this.account = account;
-        });
+        // this.principal.identity().then((account) => {
+        //     this.account = account;
+        // });
     }
 
     ngOnInit() {
@@ -47,22 +51,36 @@ export class NavbarComponent implements OnInit {
         });
         this.principal.identity().then((account) => {
             this.account = account;
+            // find the userInfo of current login.
+            if (account) {
+                this.userInfoService.query({query: JSON.stringify({userLogin: account.login})})
+                .subscribe((res: ResponseWrapper) => {
+                    if (res.json.length) {
+                        this.userInfo = res.json[0];
+                        account.imageURL = this.userInfo.image ? 'data:' + this.userInfo.imageContentType + ';base64,' + this.userInfo.image : null;
+                    } else {
+                        this.userInfo = new UserInfo();
+                    }
+                });
+            }
         });
-        this.registerAuthenticationSuccess();
 
         this.principal.hasAuthority('ROLE_ADMIN').then((value) => {
             this.isAdmin = value;
         });
+
+        this.registerAuthenticationSuccess();
     }
 
     registerAuthenticationSuccess() {
         this.eventManager.subscribe('authenticationSuccess', (message) => {
-            this.principal.identity().then((account) => {
-                this.account = account;
-            });
-            this.principal.hasAuthority('ROLE_ADMIN').then((value) => {
-                this.isAdmin = value;
-            });
+            // this.principal.identity().then((account) => {
+            //     this.account = account;
+            //     account.imageURL = this.userInfo.image ? 'data:' + this.userInfo.imageContentType + ';base64,' + this.userInfo.image : null;
+            // });
+            // this.principal.hasAuthority('ROLE_ADMIN').then((value) => {
+            //     this.isAdmin = value;
+            // });
            });
     }
 
@@ -89,6 +107,8 @@ export class NavbarComponent implements OnInit {
     }
 
     getImageUrl() {
-        return this.isAuthenticated() ? this.principal.getImageUrl() : null;
+        // return this.isAuthenticated() ? this.principal.getImageUrl() : null;
+        return this.isAuthenticated() && this.account ? this.account.imageURL : null;
+        // return this.isAuthenticated() && this.userInfo.image ? 'data:' + this.userInfo.imageContentType + ';base64,' + this.userInfo.image : null;
     }
 }
