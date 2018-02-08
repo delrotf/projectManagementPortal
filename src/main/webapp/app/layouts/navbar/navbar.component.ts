@@ -58,8 +58,8 @@ export class NavbarComponent implements OnInit {
                     if (res.json.length) {
                         this.userInfo = res.json[0];
                         account.imageURL = this.userInfo.image ? 'data:' + this.userInfo.imageContentType + ';base64,' + this.userInfo.image : null;
-                    } else {
-                        this.userInfo = new UserInfo();
+                    // } else {
+                    //     this.userInfo = new UserInfo();
                     }
                 });
             }
@@ -76,7 +76,7 @@ export class NavbarComponent implements OnInit {
         this.eventManager.subscribe('authenticationSuccess', (message) => {
             this.principal.identity().then((account) => {
                 this.account = account;
-                account.imageURL = this.userInfo.image ? 'data:' + this.userInfo.imageContentType + ';base64,' + this.userInfo.image : null;
+                account.imageURL = this.userInfo && this.userInfo.image ? 'data:' + this.userInfo.imageContentType + ';base64,' + this.userInfo.image : null;
             });
             this.principal.hasAuthority('ROLE_ADMIN').then((value) => {
                 this.isAdmin = value;
