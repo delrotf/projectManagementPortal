@@ -109,7 +109,10 @@ export class UserInfoDialogComponent implements OnInit {
         // this.userInfo.imageUrl = this.user.imageUrl;
         this.userInfo.userId = this.user.id;
 
-        this.account.imageURL = this.userInfo.image ? 'data:' + this.userInfo.imageContentType + ';base64,' + this.userInfo.image : null;
+        this.principal.identity().then((account) => {
+            this.account = account;
+            this.account.imageURL = this.userInfo && this.userInfo.image ? 'data:' + this.userInfo.imageContentType + ';base64,' + this.userInfo.image : null;
+        });
 
         if (this.userInfo.id !== undefined) {
             this.subscribeToSaveResponse(
