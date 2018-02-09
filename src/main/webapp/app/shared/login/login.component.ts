@@ -1,3 +1,6 @@
+import { Principal } from './../auth/principal.service';
+import { ResponseWrapper } from './../model/response-wrapper.model';
+import { UserInfoService } from './../../entities/user-info/user-info.service';
 import { Component, AfterViewInit, Renderer, ElementRef } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
@@ -24,6 +27,8 @@ export class JhiLoginModalComponent implements AfterViewInit {
         private elementRef: ElementRef,
         private renderer: Renderer,
         private router: Router,
+        private userInfoService: UserInfoService,
+        private principal: Principal,
         public activeModal: NgbActiveModal
     ) {
         this.credentials = {};
@@ -69,6 +74,20 @@ export class JhiLoginModalComponent implements AfterViewInit {
                 this.stateStorageService.storeUrl(null);
                 this.router.navigate([redirect]);
             }
+            this.principal.identity().then((account) => {
+                // find the userInfo of current login.
+                if (account) {
+                    this.userInfoService.query({query: JSON.stringify({userLogin: account.login})})
+                    .subscribe((res: ResponseWrapper) => {
+                        if (res.json.length) {
+                            const userInfo = res.json[0];
+                            account.imageURL = userInfo.image ? 'data:' + userInfo.imageContentType + ';base64,' + userInfo.image : null;
+                        // } else {
+                        //     this.userInfo = new UserInfo();
+                        }
+                    });
+                }
+            });
         }).catch(() => {
             this.authenticationError = true;
         });

@@ -36,6 +36,7 @@ export class SettingsComponent implements OnInit {
             this.principal.identity(true).then((account) => {
                 this.settingsAccount = this.copyAccount(account);
             });
+            location.reload();
         }, () => {
             this.success = null;
             this.error = 'ERROR';
