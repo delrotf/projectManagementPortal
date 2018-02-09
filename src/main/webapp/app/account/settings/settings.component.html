@@ -3,13 +3,12 @@
         <div class="col-md-8">
             <h2 *ngIf="settingsAccount">User settings for [<b>{{settingsAccount.login}}</b>]</h2>
 
-            <div class="alert alert-success" *ngIf="success">
-                <strong>Settings saved!</strong>
-            </div>
+            <form name="form" role="form" (click)="success=null" (ngSubmit)="save()" #settingsForm="ngForm" *ngIf="settingsAccount" novalidate>
 
-            <jhi-alert-error></jhi-alert-error>
-
-            <form name="form" role="form" (ngSubmit)="save()" #settingsForm="ngForm" *ngIf="settingsAccount" novalidate>
+                <div class="alert alert-success" *ngIf="success">
+                    <strong>Settings saved!</strong>
+                </div>
+                <jhi-alert-error></jhi-alert-error>
 
                 <div class="form-group">
                     <label class="form-control-label" for="firstName">First Name</label>
