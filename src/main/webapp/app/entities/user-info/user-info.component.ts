@@ -27,6 +27,7 @@ export class UserInfoComponent implements OnInit, OnDestroy {
     predicate: any;
     previousPage: any;
     reverse: any;
+    isTabular: boolean;
 
     constructor(
         private userInfoService: UserInfoService,
