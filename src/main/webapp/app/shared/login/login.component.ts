@@ -79,12 +79,13 @@ export class JhiLoginModalComponent implements AfterViewInit {
                 if (account) {
                     this.userInfoService.query({query: JSON.stringify({userLogin: account.login})})
                     .subscribe((res: ResponseWrapper) => {
+                        let userInfo = null;
                         if (res.json.length) {
-                            const userInfo = res.json[0];
-                            account.imageURL = userInfo.image ? 'data:' + userInfo.imageContentType + ';base64,' + userInfo.image : null;
+                            userInfo = res.json[0];
                         // } else {
                         //     this.userInfo = new UserInfo();
                         }
+                        account.imageURL = userInfo && userInfo.image ? 'data:' + userInfo.imageContentType + ';base64,' + userInfo.image : null;
                     });
                 }
             });
