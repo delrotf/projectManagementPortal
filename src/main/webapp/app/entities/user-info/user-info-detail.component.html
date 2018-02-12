@@ -46,7 +46,7 @@
         <dt><span>Supervisor</span></dt>
         <dd>
             <div *ngIf="userInfo.supervisorId">
-                <a [routerLink]="['/user-info', userInfo.supervisorId]">{{userInfo.supervisorUserLogin}}</a>
+                <a [routerLink]="['/user-info', userInfo.supervisorId]">[{{userInfo.supervisorUserLogin}}] {{userInfo.supervisorUserLastName}}, {{userInfo.supervisorUserFirstName}}</a>
             </div>
         </dd>
         <dt><span>Designation</span></dt>

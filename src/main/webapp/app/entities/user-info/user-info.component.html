@@ -64,142 +64,146 @@
                         </div> -->
                         {{userInfo.designationDesignation}}
                     </td>
-                    <td>{{userInfo.supervisorUserLogin}}
-                        <!-- <div *ngIf="userInfo.supervisorId">
-                            <a [routerLink]="['../user-info', userInfo.supervisorId  ]">{{userInfo.supervisorUserLogin}}</a>
-                        </div> -->
+                    <td>
+                        <div *ngIf="userInfo.supervisorId">
+                            <a [routerLink]="['../user-info', userInfo.supervisorId  ]">[{{userInfo.supervisorUserLogin}}] {{userInfo.supervisorUserLastName}}, {{userInfo.supervisorUserFirstName}}</a>
+                        </div>
                     </td>
                     <!-- <td>{{userInfo.phone}}</td> -->
                     <td class="text-right">
                         <button type="submit" [routerLink]="['../team' ]" [queryParams]="{ active: true, headed: true, teamHeadUserLogin: userInfo.userLogin }" class="btn btn-info btn-sm">
                             <span class="fa fa-eye"></span>
-                            <span class="d-none d-md-inline">View Headed Teams</span>
+                            <span class="d-none d-md-inline">Headed Teams</span>
                         </button>
                         <button type="submit" [routerLink]="['/', { outlets: { popup: ['team-member-new'] } }]" [queryParams]="{ userInfoId: userInfo.id, userId: userInfo.userId, userLogin: userInfo.userLogin }" class="btn btn-primary btn-sm">
                             <span class="fa fa-plus"></span>
                             <span class="d-none d-md-inline">Add to a Team...</span>
                         </button>
+                        <button *jhiHasAnyAuthority="'ROLE_ADMIN'" type="submit" [routerLink]="['/', { outlets: { popup: 'user-info/'+ userInfo.id + '/delete'} }]" replaceUrl="true" queryParamsHandling="merge" class="btn btn-danger btn-sm">
+                            <span class="fa fa-remove"></span>
+                            <span class="d-none d-md-inline">Delete</span>
+                        </button>
                     </td>
-                    <td *jhiHasAnyAuthority="'ROLE_ADMIN'" class="text-right">
-                        <!-- <div class="btn-group flex-btn-group-container">
+                    <!-- <td *jhiHasAnyAuthority="'ROLE_ADMIN'" class="text-right">
+                        <! <div class="btn-group flex-btn-group-container">
                             <button type="submit" [routerLink]="['../user-info', userInfo.id ]" class="btn btn-info btn-sm">
                             <span class="fa fa-eye"></span>
                             <span class="d-none d-md-inline">View</span>
                         </button> -->
-                        <!-- <button type="submit" [routerLink]="['/', { outlets: { popup: 'user-info/'+ userInfo.id + '/edit'} }]" replaceUrl="true" queryParamsHandling="merge" class="btn btn-primary btn-sm">
+                    <!-- <button type="submit" [routerLink]="['/', { outlets: { popup: 'user-info/'+ userInfo.id + '/edit'} }]" replaceUrl="true" queryParamsHandling="merge" class="btn btn-primary btn-sm">
                             <span class="fa fa-pencil"></span>
                             <span class="d-none d-md-inline">Edit</span>
-                        </button> -->
+                        </button> >
                         <button type="submit" [routerLink]="['/', { outlets: { popup: 'user-info/'+ userInfo.id + '/delete'} }]" replaceUrl="true" queryParamsHandling="merge" class="btn btn-danger btn-sm">
                             <span class="fa fa-remove"></span>
                             <span class="d-none d-md-inline">Delete</span>
                         </button>
+                        <! </div> >
+                    </td> -->
+                </tr>
+            </tbody>
+        </table>
     </div>
-    </td>
-    </tr>
-    </tbody>
-    </table>
-</div>
-<div class="table-responsive" *ngIf="userInfos && !isTabular">
-    <div>
-        <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
-            <!-- <th jhiSortBy="id"><span>ID</span> <span class="fa fa-sort"></span></th> -->
-            <th></th>
-            <th jhiSortBy="userLogin"><span>User</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="firstName"><span>First Name</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="lastName"><span>Last Name</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="callingName"><span>Calling Name</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="designationDesignation"><span>Designation</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="supervisorUserLogin"><span>Supervisor</span> <span class="fa fa-sort"></span></th>
-            <!-- <th jhiSortBy="phone"><span>Phone</span> <span class="fa fa-sort"></span></th> -->
-            <th></th>
-            <th *jhiHasAnyAuthority="'ROLE_ADMIN'"></th>
-        </tr>
-    </div>
-    <div class="container-fluid">
-        <div class="row justify-content-around">
-            <div *ngFor="let userInfo of userInfos ;trackBy: trackId" class="col-md">
-                <div class="card">
-                    <div class="media">
-                        <div class="mr-3">
-                            <!-- <td><a [routerLink]="['../user-info', userInfo.id ]">{{userInfo.id}}</a></td> -->
-                            <div>
-                                <!-- <a *ngIf="userInfo.image" (click)="openFile(userInfo.imageContentType, userInfo.image)">
-                                    <img [src]="'data:' + userInfo.imageContentType + ';base64,' + userInfo.image" style="max-height: 30px;" alt="userInfo image" />
-                                </a>
-                                <span *ngIf="userInfo.image">{{userInfo.imageContentType}}, {{byteSize(userInfo.image)}}</span> -->
-                                <a [routerLink]="['../user-info', userInfo.id ]" [queryParams]="{ userId: userInfo.userId, userLogin: userInfo.userLogin }">
-                                    <img *ngIf="userInfo.image" [src]="'data:' + userInfo.imageContentType + ';base64,' + userInfo.image" style="max-width: 150px;" alt="userInfo image" class="image-fluid rounded" />
-                                    <!-- <img *ngIf="userInfo.imageUrl" src={{userInfo.imageUrl}} style="max-width: 100px"> -->
-                                    <img *ngIf="!userInfo.image" src="../../../content/images/user_200.png" style="max-width: 150px" alt="userInfo image" class="image-fluid rounded" />
-                                </a>
-                            </div>
-                            <div class="text-center">
-                                <a [routerLink]="['../user-info', userInfo.id ]" [queryParams]="{ userId: userInfo.userId, userLogin: userInfo.userLogin }">
-                                        {{userInfo.userLogin}}
-                                    </a>
-                            </div>
-                        </div>
-                        <div class="media-body">
-                            <h5>{{userInfo.callingName || userInfo.firstName}}</h5>
-                            <h6>{{userInfo.lastName}}, {{userInfo.firstName}}</h6>
-                            <div>{{userInfo.email}}</div>
-                            <div>{{userInfo.phone}}</div>
-                            <div>
-                                <!-- <div *ngIf="userInfo.designationId">
-                                    <a [routerLink]="['../designation', userInfo.designationId  ]">{{userInfo.designationDesignation}}</a>
-                                </div> -->
-                                {{userInfo.designationDesignation}}
-                            </div>
-                            <div *ngIf="userInfo.supervisorUserLogin">
-                                <small>Supervisor: </small>
+    <div class="table-responsive" *ngIf="userInfos && !isTabular">
+        <div>
+            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
+                <!-- <th jhiSortBy="id"><span>ID</span> <span class="fa fa-sort"></span></th> -->
+                <th></th>
+                <th jhiSortBy="userLogin"><span>User</span> <span class="fa fa-sort"></span></th>
+                <th jhiSortBy="firstName"><span>First Name</span> <span class="fa fa-sort"></span></th>
+                <th jhiSortBy="lastName"><span>Last Name</span> <span class="fa fa-sort"></span></th>
+                <th jhiSortBy="callingName"><span>Calling Name</span> <span class="fa fa-sort"></span></th>
+                <th jhiSortBy="designationDesignation"><span>Designation</span> <span class="fa fa-sort"></span></th>
+                <th jhiSortBy="supervisorUserLogin"><span>Supervisor</span> <span class="fa fa-sort"></span></th>
+                <!-- <th jhiSortBy="phone"><span>Phone</span> <span class="fa fa-sort"></span></th> -->
+                <th></th>
+                <th *jhiHasAnyAuthority="'ROLE_ADMIN'"></th>
+            </tr>
+        </div>
+        <div class="container-fluid">
+            <div class="row justify-content-around">
+                <div *ngFor="let userInfo of userInfos ;trackBy: trackId" class="col-md">
+                    <div class="card">
+                        <div class="media">
+                            <div class="mr-3">
+                                <!-- <td><a [routerLink]="['../user-info', userInfo.id ]">{{userInfo.id}}</a></td> -->
                                 <div>
-                                    <a [routerLink]="['../user-info', userInfo.supervisorId  ]">[{{userInfo.supervisorUserLogin}}] </a>
+                                    <!-- <a *ngIf="userInfo.image" (click)="openFile(userInfo.imageContentType, userInfo.image)">
+                                            <img [src]="'data:' + userInfo.imageContentType + ';base64,' + userInfo.image" style="max-height: 30px;" alt="userInfo image" />
+                                        </a>
+                                        <span *ngIf="userInfo.image">{{userInfo.imageContentType}}, {{byteSize(userInfo.image)}}</span> -->
+                                    <a [routerLink]="['../user-info', userInfo.id ]" [queryParams]="{ userId: userInfo.userId, userLogin: userInfo.userLogin }">
+                                        <img *ngIf="userInfo.image" [src]="'data:' + userInfo.imageContentType + ';base64,' + userInfo.image" style="max-width: 150px;" alt="userInfo image" class="image-fluid rounded" />
+                                        <!-- <img *ngIf="userInfo.imageUrl" src={{userInfo.imageUrl}} style="max-width: 100px"> -->
+                                        <img *ngIf="!userInfo.image" src="../../../content/images/user_200.png" style="max-width: 150px" alt="userInfo image" class="image-fluid rounded" />
+                                    </a>
+                                </div>
+                                <div class="text-center">
+                                    <a [routerLink]="['../user-info', userInfo.id ]" [queryParams]="{ userId: userInfo.userId, userLogin: userInfo.userLogin }">
+                                                {{userInfo.userLogin}}
+                                            </a>
+                                </div>
+                            </div>
+                            <div class="media-body">
+                                <h5>{{userInfo.callingName || userInfo.firstName}}</h5>
+                                <h6>{{userInfo.userLastName}}, {{userInfo.userFirstName}}</h6>
+                                <div>{{userInfo.userEmail}}</div>
+                                <div>{{userInfo.phone}}</div>
+                                <div>
+                                    <!-- <div *ngIf="userInfo.designationId">
+                                            <a [routerLink]="['../designation', userInfo.designationId  ]">{{userInfo.designationDesignation}}</a>
+                                        </div> -->
+                                    {{userInfo.designationDesignation}}
+                                </div>
+                                <div *ngIf="userInfo.supervisorUserLogin">
+                                    <small>Supervisor: </small>
+                                    <div>
+                                        <a [routerLink]="['../user-info', userInfo.supervisorId  ]">[{{userInfo.supervisorUserLogin}}] {{userInfo.supervisorUserLastName}}, {{userInfo.supervisorUserFirstName}}</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="card-footer">
-                        <span class="btn-group flex-btn-group-container">
-                                <button type="submit" [routerLink]="['../team' ]" [queryParams]="{ active: true, headed: true, teamHeadUserLogin: userInfo.userLogin }" class="btn btn-info btn-sm">
-                                    <span class="fa fa-eye"></span>
-                        <span class="d-none d-md-inline">Headed Teams</span>
-                        </button>
-                        <button type="submit" [routerLink]="['/', { outlets: { popup: ['team-member-new'] } }]" [queryParams]="{ userInfoId: userInfo.id, userId: userInfo.userId, userLogin: userInfo.userLogin }" class="btn btn-primary btn-sm">
-                                    <span class="fa fa-plus"></span>
-                                    <span class="d-none d-md-inline">Add to a Team...</span>
-                                </button>
-                        <button *jhiHasAnyAuthority="'ROLE_ADMIN'" type="submit" [routerLink]="['/', { outlets: { popup: 'user-info/'+ userInfo.id + '/delete'} }]" replaceUrl="true" queryParamsHandling="merge" class="btn btn-danger btn-sm">
-                                    <span class="fa fa-remove"></span>
-                                    <span class="d-none d-md-inline">Delete</span>
-                                </button>
-                        </span>
-                        <!-- <span *jhiHasAnyAuthority="'ROLE_ADMIN'" class="btn-group flex-btn-group-container">
-                            <! <button type="submit" [routerLink]="['../user-info', userInfo.id ]" class="btn btn-info btn-sm">
-                                    <span class="fa fa-eye"></span>
-                                    <span class="d-none d-md-inline">View</span>
-                                </button> -->
-                        <!-- <button type="submit" [routerLink]="['/', { outlets: { popup: 'user-info/'+ userInfo.id + '/edit'} }]" replaceUrl="true" queryParamsHandling="merge" class="btn btn-primary btn-sm">
-                                    <span class="fa fa-pencil"></span>
-                                    <span class="d-none d-md-inline">Edit</span>
-                                </button> >
-                                <button type="submit" [routerLink]="['/', { outlets: { popup: 'user-info/'+ userInfo.id + '/delete'} }]" replaceUrl="true" queryParamsHandling="merge" class="btn btn-danger btn-sm">
-                                    <span class="fa fa-remove"></span>
-                                    <span class="d-none d-md-inline">Delete</span>
-                                </button>
-                            </span> -->
+                        <div class="card-footer">
+                            <span class="btn-group flex-btn-group-container">
+                                        <button type="submit" [routerLink]="['../team' ]" [queryParams]="{ active: true, headed: true, teamHeadUserLogin: userInfo.userLogin }" class="btn btn-info btn-sm">
+                                            <span class="fa fa-eye"></span>
+                            <span class="d-none d-md-inline">Headed Teams</span>
+                            </button>
+                            <button type="submit" [routerLink]="['/', { outlets: { popup: ['team-member-new'] } }]" [queryParams]="{ userInfoId: userInfo.id, userId: userInfo.userId, userLogin: userInfo.userLogin }" class="btn btn-primary btn-sm">
+                                            <span class="fa fa-plus"></span>
+                                            <span class="d-none d-md-inline">Add to a Team...</span>
+                                        </button>
+                            <button *jhiHasAnyAuthority="'ROLE_ADMIN'" type="submit" [routerLink]="['/', { outlets: { popup: 'user-info/'+ userInfo.id + '/delete'} }]" replaceUrl="true" queryParamsHandling="merge" class="btn btn-danger btn-sm">
+                                            <span class="fa fa-remove"></span>
+                                            <span class="d-none d-md-inline">Delete</span>
+                                        </button>
+                            </span>
+                            <!-- <span *jhiHasAnyAuthority="'ROLE_ADMIN'" class="btn-group flex-btn-group-container">
+                                    <! <button type="submit" [routerLink]="['../user-info', userInfo.id ]" class="btn btn-info btn-sm">
+                                            <span class="fa fa-eye"></span>
+                                            <span class="d-none d-md-inline">View</span>
+                                        </button> -->
+                            <!-- <button type="submit" [routerLink]="['/', { outlets: { popup: 'user-info/'+ userInfo.id + '/edit'} }]" replaceUrl="true" queryParamsHandling="merge" class="btn btn-primary btn-sm">
+                                            <span class="fa fa-pencil"></span>
+                                            <span class="d-none d-md-inline">Edit</span>
+                                        </button> >
+                                        <button type="submit" [routerLink]="['/', { outlets: { popup: 'user-info/'+ userInfo.id + '/delete'} }]" replaceUrl="true" queryParamsHandling="merge" class="btn btn-danger btn-sm">
+                                            <span class="fa fa-remove"></span>
+                                            <span class="d-none d-md-inline">Delete</span>
+                                        </button>
+                                    </span> -->
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<div *ngIf="userInfos && userInfos.length">
-    <div class="row justify-content-center">
-        <jhi-item-count [page]="page" [total]="queryCount" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+    <div *ngIf="userInfos && userInfos.length">
+        <div class="row justify-content-center">
+            <jhi-item-count [page]="page" [total]="queryCount" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+        </div>
+        <div class="row justify-content-center">
+            <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage(page)"></ngb-pagination>
+        </div>
     </div>
-    <div class="row justify-content-center">
-        <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage(page)"></ngb-pagination>
-    </div>
-</div>
 </div>

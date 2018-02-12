@@ -35,9 +35,21 @@ public class UserInfoDTO implements Serializable {
 
     private String userLogin;
 
+    private String userFirstName;
+
+    private String userLastName;
+
+    private String userEmail;
+
     private Long supervisorId;
 
     private String supervisorUserLogin;
+
+    private String supervisorUserFirstName;
+
+    private String supervisorUserLastName;
+
+    private String supervisorCallingName;
 
     private Long designationId;
 
@@ -123,6 +135,30 @@ public class UserInfoDTO implements Serializable {
         this.userLogin = userLogin;
     }
 
+    public String getUserFirstName() {
+        return userFirstName;
+    }
+
+    public void setUserFirstName(String userFirstName) {
+        this.userFirstName = userFirstName;
+    }
+
+    public String getUserLastName() {
+        return userLastName;
+    }
+
+    public void setUserLastName(String userLastName) {
+        this.userLastName = userLastName;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
+
     public Long getSupervisorId() {
         return supervisorId;
     }
@@ -188,4 +224,28 @@ public class UserInfoDTO implements Serializable {
             ", phone='" + getPhone() + "'" +
             "}";
     }
+
+	public String getSupervisorUserFirstName() {
+		return supervisorUserFirstName;
+	}
+
+	public void setSupervisorUserFirstName(String supervisorUserFirstName) {
+		this.supervisorUserFirstName = supervisorUserFirstName;
+	}
+
+	public String getSupervisorUserLastName() {
+		return supervisorUserLastName;
+	}
+
+	public void setSupervisorUserLastName(String supervisorUserLastName) {
+		this.supervisorUserLastName = supervisorUserLastName;
+	}
+
+	public String getSupervisorCallingName() {
+		return supervisorCallingName;
+	}
+
+	public void setSupervisorCallingName(String supervisorCallingName) {
+		this.supervisorCallingName = supervisorCallingName;
+	}
 }
