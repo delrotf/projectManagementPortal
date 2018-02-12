@@ -95,7 +95,7 @@
                 <option [ngValue]="null"></option>
                 <!-- <option [ngValue]="userOption.userId" *ngFor="let userOption of usersForSupervisor; trackBy: trackUserById">[{{userOption.userLogin}}] {{userOption.firstName}} {{userOption.lastName}}</option> -->
                 <option [ngValue]="userInfoOption.id" *ngFor="let userInfoOption of userInfosForSupervisor; trackBy: trackUserInfoById">
-                    [{{userInfoOption.userLogin}}] {{userInfoOption.firstName}} {{userInfoOption.lastName}}
+                    {{userInfoOption.lastName}}, {{userInfoOption.firstName}} [{{userInfoOption.userLogin}}]
                     <!-- <img *ngIf="userInfoOption.imageUrl" src={{userInfoOption.imageUrl}} style="max-width: 100px"> -->
                     <!-- <img *ngIf="!userInfoOption.imageUrl" src="../../../content/images/user_200.png" style="max-width: 100px"> -->
                         </option>
