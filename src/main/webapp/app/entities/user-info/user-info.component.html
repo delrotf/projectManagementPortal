@@ -17,7 +17,7 @@
             <i class="fa fa-address-card"></i>
         </button>
         <button type="button" (click)="isTabular=true" class="btn btn-secondary btn-sm" [disabled]="isTabular">
-            <i (click)="isTabular=true" class="fa fa-table"></i>
+            <i (click)="isTabular=true" class="fa fa-list"></i>
         </button>
     </span>
     <div class="table-responsive" *ngIf="userInfos && isTabular">
@@ -140,8 +140,8 @@
                                 </div>
                                 <div class="text-center">
                                     <a [routerLink]="['../user-info', userInfo.id ]" [queryParams]="{ userId: userInfo.userId, userLogin: userInfo.userLogin }">
-                                                {{userInfo.userLogin}}
-                                            </a>
+                                        {{userInfo.userLogin}}
+                                    </a>
                                 </div>
                             </div>
                             <div class="media-body">
