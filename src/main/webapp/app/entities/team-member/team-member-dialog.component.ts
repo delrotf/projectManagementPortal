@@ -105,12 +105,14 @@ export class TeamMemberDialogComponent implements OnInit {
             this.subscribeToSaveResponse(
                 this.teamMemberService.create(this.teamMember));
         }
-        // this.router.navigate(['/team'], {
-        //     queryParams: {
-        //         active: this.params.active,
-        //         allOthers: this.params.allOthers,
-        //     }
-        // });
+        if (this.params.allOthers) {
+            this.router.navigate(['/team'], {
+                queryParams: {
+                    active: this.params.active,
+                    allOthers: this.params.allOthers,
+                }
+            });
+        }
     }
 
     private subscribeToSaveResponse(result: Observable<TeamMember>) {
