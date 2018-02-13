@@ -149,22 +149,26 @@ public class TeamResource {
         boolean isAllOthers = allOthers != null ? Boolean.parseBoolean(allOthers) : false;
         boolean isHeaded = headed != null ? Boolean.parseBoolean(headed) : false;
         
+        HttpHeaders headers = null;
         if (userLogin != null && !isAllOthers && !isHeaded) {
         	// drop-down items.
         	page = teamService.findByActiveAndIdNotInAndTeamHeadUserLogin(isActive, teamHeadUserLogin, pageable);
 //        	page = teamService.findByActiveAndIdNotIn(isActive, userLogin, pageable);
+        	headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/teams?active=" + isActive + "&headed=" + isHeaded + "&teamHeadUserLogin=" + teamHeadUserLogin);
         } else if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ADMIN)) {
         	// all access for admin
         	page = teamService.findAll(pageable);
+        	headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/teams");
         } else if (isAllOthers) {
         	// browse all other teams.
         	page = teamService.findByActiveAndIdNotInAndTeamHeadUserLoginNot(isActive, SecurityUtils.getCurrentUserLogin().get(), pageable);
+        	headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/teams?active=" + isActive + "&allOthers=" + isAllOthers);
         } else if (isHeaded) {
         	// headed teams.
         	page = teamService.findByActiveAndTeamHeadUserLogin(isActive, teamHeadUserLogin, pageable);
+        	headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/teams?active=" + isActive + "&headed=" + isHeaded + "&teamHeadUserLogin=" + teamHeadUserLogin);
         }
         
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/teams");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
