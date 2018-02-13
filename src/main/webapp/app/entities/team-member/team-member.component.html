@@ -1,7 +1,7 @@
 <div [ngSwitch]="teamId != null">
     <h2 *ngSwitchCase="true">
         <span>Team Members Of {{teamName}}</span>
-        <button class="btn btn-primary float-right jh-create-entity create-team-member" [routerLink]="['/', { outlets: { popup: ['team-member-new'] } }]" [queryParams]="{ teamId: teamId, teamName: teamName }">
+        <button class="btn btn-primary float-right jh-create-entity create-team-member" [routerLink]="['/', { outlets: { popup: ['team-member-new'] } }]" [queryParams]="{ teamId: teamId, teamName: teamName }" replaceUrl="true" queryParamsHandling="merge">
             <span class="fa fa-plus"></span>
             <span >
             Add a Team Member
@@ -25,8 +25,13 @@
                 <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
                     <!-- <th jhiSortBy="id"><span>ID</span> <span class="fa fa-sort"></span></th> -->
                     <!-- <th jhiSortBy="updatedTime"><span>Updated Time</span> <span class="fa fa-sort"></span></th> -->
+                    <th *ngSwitchCase="true"></th>
                     <th *ngSwitchCase="true" jhiSortBy="userInfoUserLogin"><span>User</span> <span class="fa fa-sort"></span></th>
-                    <th *ngSwitchCase="false" jhiSortBy="teamName"><span>Team</span> <span class="fa fa-sort"></span></th>
+                    <th *ngSwitchCase="true" jhiSortBy="userInfoCallingName"><span>Calling Name</span> <span class="fa fa-sort"></span></th>
+                    <th *ngSwitchCase="true" jhiSortBy="userInfoUserFirstName"><span>First Name</span> <span class="fa fa-sort"></span></th>
+                    <th *ngSwitchCase="true" jhiSortBy="userInfoUserLastName"><span>Last Name</span> <span class="fa fa-sort"></span></th>
+                    <th *ngSwitchCase="false"></th>
+                    <th *ngSwitchCase="false" jhiSortBy="teamName"><span>Team Name</span> <span class="fa fa-sort"></span></th>
                     <th></th>
                 </tr>
             </thead>
@@ -35,12 +40,34 @@
                     <!-- <td><a [routerLink]="['../team-member', teamMember.id ]">{{teamMember.id}}</a></td> -->
                     <!-- <td>{{teamMember.updatedTime | date:'medium'}}</td> -->
                     <td *ngSwitchCase="true">
+                        <a [routerLink]="['../user-info', teamMember.userInfoId ]" [queryParams]="{ userId: teamMember.userInfoUserId, userLogin: teamMember.userInfoUserLogin }">
+                            <img *ngIf="teamMember.userInfoImage" [src]="'data:' + teamMember.userInfoImageContentType + ';base64,' + teamMember.userInfoImage" style="max-width: 150px;" alt="userInfo image" class="image-fluid rounded" />
+                            <!-- <img *ngIf="userInfo.imageUrl" src={{userInfo.imageUrl}} style="max-width: 100px"> -->
+                            <img *ngIf="!teamMember.userInfoImage" src="../../../content/images/user_200.png" style="max-width: 150px" alt="userInfo image" class="image-fluid rounded" />
+                        </a>
+                    </td>
+                    <td *ngSwitchCase="true">
                         <div *ngIf="teamMember.userInfoId">
                             <a [routerLink]="['../user-info', teamMember.userInfoId  ]">{{teamMember.userInfoUserLogin}}</a>
                         </div>
                     </td>
-                    <td>
-                        <div *ngSwitchCase="false">
+                    <td *ngSwitchCase="true">
+                        {{teamMember.userInfoCallingName}}
+                    </td>
+                    <td *ngSwitchCase="true">
+                        {{teamMember.userInfoUserFirstName}}
+                    </td>
+                    <td *ngSwitchCase="true">
+                        {{teamMember.userInfoUserLastName}}
+                    </td>
+                    <td *ngSwitchCase="false">
+                        <a [routerLink]="['../team', teamMember.teamId ]">
+                            <img *ngIf="teamMember.teamImage" [src]="'data:' + teamMember.teamImageContentType + ';base64,' + teamMember.teamImage" style="max-height: 100px;" alt="team image" />
+                            <img *ngIf="!teamMember.teamImage" src="../../../content/images/user_group-512.png" style="max-width: 100px" alt="team image" />
+                        </a>
+                    </td>
+                    <td *ngSwitchCase="false">
+                        <div>
                             <a [routerLink]="['../team', teamMember.teamId  ]">{{teamMember.teamName}}</a>
                         </div>
                     </td>
@@ -54,11 +81,11 @@
                             <span class="fa fa-pencil"></span>
                             <span class="d-none d-md-inline">Edit</span>
                         </button> -->
-                        <button *ngIf="teamMember.userInfoUserLogin === currentAccount.login" type="submit" [routerLink]="['/', { outlets: { popup: 'team-member/'+ teamMember.id + '/delete'} }]" replaceUrl="true" queryParamsHandling="merge" class="btn btn-danger btn-sm">
+                            <button *ngIf="teamMember.userInfoUserLogin === currentAccount.login" type="submit" [routerLink]="['/', { outlets: { popup: 'team-member/'+ teamMember.id + '/delete'} }]" replaceUrl="true" queryParamsHandling="merge" class="btn btn-danger btn-sm">
                             <span class="fa fa-remove"></span>
                             <span class="d-none d-md-inline">Remove Me...</span>
                         </button>
-                        <button *ngIf="teamMember.userInfoUserLogin !== currentAccount.login" type="submit" [routerLink]="['/', { outlets: { popup: 'team-member/'+ teamMember.id + '/delete'} }]" replaceUrl="true" queryParamsHandling="merge" class="btn btn-danger btn-sm">
+                            <button *ngIf="teamMember.userInfoUserLogin !== currentAccount.login" type="submit" [routerLink]="['/', { outlets: { popup: 'team-member/'+ teamMember.id + '/delete'} }]" replaceUrl="true" queryParamsHandling="merge" class="btn btn-danger btn-sm">
                             <span class="fa fa-remove"></span>
                             <span class="d-none d-md-inline">Remove...</span>
                         </button>

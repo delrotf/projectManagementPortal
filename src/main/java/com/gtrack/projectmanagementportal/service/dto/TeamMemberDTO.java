@@ -19,12 +19,18 @@ public class TeamMemberDTO implements Serializable {
     private Instant updatedTime;
 
     private Long userInfoId;
+    private String userInfoCallingName;
+    private byte[] userInfoImage;
+    private String userInfoImageContentType;
 
     private String userInfoUserLogin;
-
+    private String userInfoUserFirstName;
+    private String userInfoUserLastName;
+    
     private Long teamId;
-
     private String teamName;
+    private byte[] teamImage;
+    private String teamImageContentType;
 
     public Long getId() {
         return id;
@@ -102,4 +108,60 @@ public class TeamMemberDTO implements Serializable {
             ", updatedTime='" + getUpdatedTime() + "'" +
             "}";
     }
+
+	public String getUserInfoCallingName() {
+		return userInfoCallingName;
+	}
+
+	public void setUserInfoCallingName(String userInfoCallingName) {
+		this.userInfoCallingName = userInfoCallingName;
+	}
+
+	public String getUserInfoUserFirstName() {
+		return userInfoUserFirstName;
+	}
+
+	public void setUserInfoUserFirstName(String userInfoUserFirstName) {
+		this.userInfoUserFirstName = userInfoUserFirstName;
+	}
+
+	public String getUserInfoUserLastName() {
+		return userInfoUserLastName;
+	}
+
+	public void setUserInfoUserLastName(String userInfoUserLastName) {
+		this.userInfoUserLastName = userInfoUserLastName;
+	}
+
+	public byte[] getUserInfoImage() {
+		return userInfoImage;
+	}
+
+	public void setUserInfoImage(byte[] userInfoImage) {
+		this.userInfoImage = userInfoImage;
+	}
+
+	public String getUserInfoImageContentType() {
+		return userInfoImageContentType;
+	}
+
+	public void setUserInfoImageContentType(String userInfoImageContentType) {
+		this.userInfoImageContentType = userInfoImageContentType;
+	}
+
+	public byte[] getTeamImage() {
+		return teamImage;
+	}
+
+	public void setTeamImage(byte[] teamImage) {
+		this.teamImage = teamImage;
+	}
+
+	public String getTeamImageContentType() {
+		return teamImageContentType;
+	}
+
+	public void setTeamImageContentType(String teamImageContentType) {
+		this.teamImageContentType = teamImageContentType;
+	}
 }
