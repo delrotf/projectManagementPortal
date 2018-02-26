@@ -13,6 +13,7 @@ import { TeamService } from './team.service';
 import { ITEMS_PER_PAGE, Principal, ResponseWrapper } from '../../shared';
 
 @Component({
+    // tslint:disable-next-line:component-selector
     selector: '[jhi-team-td]',
     templateUrl: './team-td.component.html',
     styleUrls: [
