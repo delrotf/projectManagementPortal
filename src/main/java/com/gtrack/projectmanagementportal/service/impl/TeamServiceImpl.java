@@ -95,7 +95,7 @@ public class TeamServiceImpl implements TeamService{
     }
 
     /**
-     * Get all the teams.
+     * Get all other teams.
      *
      * @param pageable the pagination information
      * @return the list of entities
@@ -120,6 +120,31 @@ public class TeamServiceImpl implements TeamService{
                     .map(teamMapper::toDto);
         }
         
+    }
+
+    /**
+     * Get all the teams I'm member of.
+     *
+     * @param pageable the pagination information
+     * @return the list of entities
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Page<TeamDTO> findByActiveAndIdInAndTeamHeadUserLoginNot(boolean isActive, String userLogin, Pageable pageable) {
+        log.debug("Request to get Teams by Id not in");
+        
+        Set<TeamMember> teamMembersOfUser = teamMemberService.findByUserInfoUserLogin(userLogin);
+        
+        Set<Long> ids = new HashSet<>();
+
+        if (teamMembersOfUser != null && !teamMembersOfUser.isEmpty()) {
+            for (TeamMember teamMember : teamMembersOfUser) {
+    			ids.add(teamMember.getTeam().getId());
+    		}
+        }
+        
+        return teamRepository.findByActiveAndIdInAndTeamHeadUserLoginNot(isActive, ids, userLogin, pageable)
+                .map(teamMapper::toDto);
     }
 
     /**

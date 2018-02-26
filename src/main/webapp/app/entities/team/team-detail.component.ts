@@ -5,6 +5,7 @@ import { JhiEventManager, JhiDataUtils } from 'ng-jhipster';
 
 import { Team } from './team.model';
 import { TeamService } from './team.service';
+import { Principal } from '../../shared';
 
 @Component({
     selector: 'jhi-team-detail',
@@ -12,6 +13,7 @@ import { TeamService } from './team.service';
 })
 export class TeamDetailComponent implements OnInit, OnDestroy {
 
+    currentAccount: any;
     team: Team;
     private subscription: Subscription;
     private eventSubscriber: Subscription;
@@ -20,8 +22,12 @@ export class TeamDetailComponent implements OnInit, OnDestroy {
         private eventManager: JhiEventManager,
         private dataUtils: JhiDataUtils,
         private teamService: TeamService,
+        private principal: Principal,
         private route: ActivatedRoute
     ) {
+        this.principal.identity().then((account) => {
+            this.currentAccount = account;
+        });
     }
 
     ngOnInit() {

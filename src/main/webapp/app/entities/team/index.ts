@@ -5,4 +5,6 @@ export * from './team-dialog.component';
 export * from './team-delete-dialog.component';
 export * from './team-detail.component';
 export * from './team.component';
+export * from './team-card.component';
+export * from './team-td.component';
 export * from './team.route';

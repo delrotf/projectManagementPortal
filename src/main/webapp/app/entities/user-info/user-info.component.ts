@@ -9,7 +9,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     selector: 'jhi-user-info',
-    templateUrl: './user-info.component.html'
+    templateUrl: './user-info.component.html',
+    styleUrls: [
+        'user-info.css'
+    ]
 })
 export class UserInfoComponent implements OnInit, OnDestroy {
 

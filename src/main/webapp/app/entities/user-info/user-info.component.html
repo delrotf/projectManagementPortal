@@ -123,7 +123,7 @@
         <div class="container-fluid">
             <div class="row justify-content-around">
                 <div *ngFor="let userInfo of userInfos ;trackBy: trackId" class="col-md">
-                    <div class="card">
+                    <div class="card p-1">
                         <div class="media">
                             <div class="mr-3">
                                 <!-- <td><a [routerLink]="['../user-info', userInfo.id ]">{{userInfo.id}}</a></td> -->
@@ -133,9 +133,9 @@
                                         </a>
                                         <span *ngIf="userInfo.image">{{userInfo.imageContentType}}, {{byteSize(userInfo.image)}}</span> -->
                                     <a [routerLink]="['../user-info', userInfo.id ]" [queryParams]="{ userId: userInfo.userId, userLogin: userInfo.userLogin }">
-                                        <img *ngIf="userInfo.image" [src]="'data:' + userInfo.imageContentType + ';base64,' + userInfo.image" style="max-width: 150px;" alt="userInfo image" class="image-fluid rounded" />
+                                        <img *ngIf="userInfo.image" [src]="'data:' + userInfo.imageContentType + ';base64,' + userInfo.image" alt="userInfo image" class="teamhead-image" />
                                         <!-- <img *ngIf="userInfo.imageUrl" src={{userInfo.imageUrl}} style="max-width: 100px"> -->
-                                        <img *ngIf="!userInfo.image" src="../../../content/images/user_200.png" style="max-width: 150px" alt="userInfo image" class="image-fluid rounded" />
+                                        <img *ngIf="!userInfo.image" src="../../../content/images/user_200.png" alt="userInfo image" class="teamhead-image" />
                                     </a>
                                 </div>
                                 <div class="text-center">
@@ -165,18 +165,18 @@
                         </div>
                         <div class="card-footer">
                             <span class="btn-group flex-btn-group-container">
-                                        <button type="submit" [routerLink]="['../team' ]" [queryParams]="{ active: true, headed: true, teamHeadUserLogin: userInfo.userLogin }" class="btn btn-info btn-sm">
-                                            <span class="fa fa-eye"></span>
+                                <button type="submit" [routerLink]="['../team' ]" [queryParams]="{ active: true, headed: true, teamHeadUserLogin: userInfo.userLogin }" class="btn btn-info btn-sm">
+                                    <span class="fa fa-eye"></span>
                             <span class="d-none d-md-inline">Headed Teams</span>
                             </button>
                             <button type="submit" [routerLink]="['/', { outlets: { popup: ['team-member-new'] } }]" [queryParams]="{ userInfoId: userInfo.id, userId: userInfo.userId, userLogin: userInfo.userLogin }" class="btn btn-primary btn-sm">
-                                            <span class="fa fa-plus"></span>
-                                            <span class="d-none d-md-inline">Add to a Team...</span>
-                                        </button>
+                                    <span class="fa fa-plus"></span>
+                                    <span class="d-none d-md-inline">Add to a Team...</span>
+                                </button>
                             <button *jhiHasAnyAuthority="'ROLE_ADMIN'" type="submit" [routerLink]="['/', { outlets: { popup: 'user-info/'+ userInfo.id + '/delete'} }]" replaceUrl="true" queryParamsHandling="merge" class="btn btn-danger btn-sm">
-                                            <span class="fa fa-remove"></span>
-                                            <span class="d-none d-md-inline">Delete</span>
-                                        </button>
+                                    <span class="fa fa-remove"></span>
+                                    <span class="d-none d-md-inline">Delete</span>
+                                </button>
                             </span>
                             <!-- <span *jhiHasAnyAuthority="'ROLE_ADMIN'" class="btn-group flex-btn-group-container">
                                     <! <button type="submit" [routerLink]="['../user-info', userInfo.id ]" class="btn btn-info btn-sm">

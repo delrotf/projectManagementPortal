@@ -1,16 +1,13 @@
 {
     "fluentMethods": true,
-    "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "relationshipValidateRules": "required",
-            "relationshipName": "teamHead",
-            "otherEntityName": "userInfo",
-            "otherEntityField": "userLogin"
-        }
-    ],
-    "fields": [
-        {
+    "relationships": [{
+        "relationshipType": "many-to-one",
+        "relationshipValidateRules": "required",
+        "relationshipName": "teamHead",
+        "otherEntityName": "userInfo",
+        "otherEntityField": "userLogin"
+    }],
+    "fields": [{
             "fieldName": "name",
             "fieldType": "String",
             "fieldValidateRules": [
@@ -58,5 +55,5 @@
     "dto": "mapstruct",
     "pagination": "pagination",
     "service": "serviceImpl",
-    "jpaMetamodelFiltering": false
+    "jpaMetamodelFiltering": true
 }

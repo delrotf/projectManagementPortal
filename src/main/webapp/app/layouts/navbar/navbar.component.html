@@ -42,7 +42,11 @@
                         </a>
                     </li>
                     <li>
-                        <a *ngIf="!isAdmin" class="dropdown-item" routerLink="team-member" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                        <!-- <a *ngIf="!isAdmin" class="dropdown-item" routerLink="team-member" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
+                            <span>Teams I'm A Member Of</span>
+                        </a> -->
+                        <a *ngIf="!isAdmin" class="dropdown-item" routerLink="team" [queryParams]="{ active: true, imMemberOf: true }" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
                             <span>Teams I'm A Member Of</span>
                         </a>

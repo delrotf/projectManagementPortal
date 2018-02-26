@@ -9,7 +9,7 @@ import { ITEMS_PER_PAGE, Principal, ResponseWrapper } from '../../shared';
 
 @Component({
     selector: 'jhi-team-member',
-    templateUrl: './team-member.component.html'
+    templateUrl: './team-member.component.html',
 })
 export class TeamMemberComponent implements OnInit, OnDestroy {
 

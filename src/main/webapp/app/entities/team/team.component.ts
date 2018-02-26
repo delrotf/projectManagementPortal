@@ -1,5 +1,9 @@
+import { UserInfo } from './../user-info/user-info.model';
+import { UserInfoService } from './../user-info/user-info.service';
+import { TeamMember } from './../team-member/team-member.model';
+import { TeamMemberService } from './../team-member/team-member.service';
 // import { ADD_SELF_TO_TEAM, MANAGE_TEAM_MEMBERS, My_ACTIVE_TEAMS, My_INACTIVE_TEAMS, BROWSE_MORE_TEAMS } from './../../shared/constants/screen.constants';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, ViewContainerRef, TemplateRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { JhiEventManager, JhiParseLinks, JhiAlertService, JhiDataUtils } from 'ng-jhipster';
@@ -10,12 +14,18 @@ import { ITEMS_PER_PAGE, Principal, ResponseWrapper } from '../../shared';
 
 @Component({
     selector: 'jhi-team',
-    templateUrl: './team.component.html'
+    templateUrl: './team.component.html',
+    styleUrls: [
+        'team.css'
+    ]
 })
 export class TeamComponent implements OnInit, OnDestroy {
 
 currentAccount: any;
     teams: Team[];
+    teamMembers: {[key: string]: TeamMember[]};
+    isMember: {[key: string]: boolean};
+    userInfo: UserInfo;
     error: any;
     success: any;
     eventSubscriber: Subscription;
@@ -34,16 +44,15 @@ currentAccount: any;
 
     params: {[key: string]: any};
     active: boolean;
+    imMemberOf: boolean;
     allOthers: boolean;
 
-    // addSelfToTeam: any;
-    // manageTeamMembers: any;
-    // myActiveTeams: any;
-    // myInactiveTeams: any;
-    // browseMoreTeams: any;
+    isTabular: boolean;
 
     constructor(
         private teamService: TeamService,
+        private teamMemberService: TeamMemberService,
+        private userInfoService: UserInfoService,
         private parseLinks: JhiParseLinks,
         private jhiAlertService: JhiAlertService,
         private principal: Principal,
@@ -57,8 +66,6 @@ currentAccount: any;
         });
 
         this.itemsPerPage = ITEMS_PER_PAGE;
-        // this.addSelfToTeam = ADD_SELF_TO_TEAM;
-        // this.manageTeamMembers = MANAGE_TEAM_MEMBERS;
 
         this.routeData = this.activatedRoute.data.subscribe((data) => {
             this.page = data.pagingParams.page;
@@ -71,6 +78,7 @@ currentAccount: any;
         .subscribe((params) => {
             this.params = params;
             this.active = params.active;
+            this.imMemberOf = params.imMemberOf;
             this.allOthers = params.allOthers;
             this.loadAll();
         });
@@ -97,7 +105,10 @@ currentAccount: any;
         this.router.navigate(['/team'], {queryParams:
             {
                 active: this.params.active,
+                imMemberOf: this.params.imMemberOf,
                 allOthers: this.params.allOthers,
+                headed: this.params.headed,
+                teamHeadUserLogin: this.params.teamHeadUserLogin,
                 page: this.page,
                 size: this.itemsPerPage,
                 sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
@@ -114,13 +125,8 @@ currentAccount: any;
         }]);
         this.loadAll();
     }
-    ngOnInit() {
-        // this.addSelfToTeam = ADD_SELF_TO_TEAM;
-        // this.manageTeamMembers = MANAGE_TEAM_MEMBERS;
-        // this.myActiveTeams = My_ACTIVE_TEAMS;
-        // this.myInactiveTeams = My_INACTIVE_TEAMS;
-        // this.browseMoreTeams = BROWSE_MORE_TEAMS;
 
+    ngOnInit() {
         this.principal.identity().then((account) => {
             this.currentAccount = account;
         });

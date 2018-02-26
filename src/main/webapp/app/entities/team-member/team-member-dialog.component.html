@@ -1,8 +1,8 @@
 <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
 
     <div class="modal-header">
-        <h4 *ngIf="params.userLogin && !params.teamName" class="modal-title" id="myTeamMemberLabel">Add <strong>{{params.userLogin}}</strong> to one of your teams</h4>
-        <h4 *ngIf="params.teamName && !params.userLogin" class="modal-title" id="myTeamMemberLabel">Add a User to <strong>{{params.teamName}}</strong></h4>
+        <h4 *ngIf="params.userLogin && !params.teamName" class="modal-title" id="myTeamMemberLabel">Add <strong>{{params.userLogin}}</strong> to your teams</h4>
+        <h4 *ngIf="params.teamName && !params.userLogin" class="modal-title" id="myTeamMemberLabel">Add users to <strong>{{params.teamName}}</strong></h4>
         <h4 *ngIf="params.teamName && params.userLogin" class="modal-title" id="myTeamMemberLabel">Add Yourself to <strong>{{params.teamName}}</strong></h4>
 
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="clear()">&times;</button>
@@ -36,11 +36,29 @@
         </div>
         <ng-template #elseBlock>
             <div *ngIf="hasTeam && userInfos && userInfos.length; else usersElseBlock" class="form-group">
-                <label class="form-control-label" for="field_userInfo">User</label>
-                <select class="form-control" id="field_userInfo" name="userInfo" [(ngModel)]="teamMember.userInfoId" required>
-                <option *ngIf="!editForm.value.userInfo" [ngValue]="null" selected></option>
-                <option [ngValue]="userInfoOption.id" *ngFor="let userInfoOption of userInfos; trackBy: trackUserInfoById">{{userInfoOption.userLogin}}</option>
-            </select>
+                <label class="form-control-label" for="field_userInfo">Users</label>
+                <!-- <select class="form-control" id="field_userInfo" name="userInfo" [(ngModel)]="teamMember.userInfoId" required>
+                    <option *ngIf="!editForm.value.userInfo" [ngValue]="null" selected></option>
+                    <option [ngValue]="userInfoOption.id" *ngFor="let userInfoOption of userInfos; trackBy: trackUserInfoById">{{userInfoOption.userLogin}}</option>
+                </select> -->
+
+                <div class="list-group">
+                    <button type="submit" (click)="teamMember.userInfoId = userInfo.id" *ngFor="let userInfo of userInfos; trackBy: trackUserInfoById" [disabled]="isSaving" class="list-group-item list-group-item-action flex-column align-items-start">
+                        <div class="media">
+                            <div>
+                                <img *ngIf="userInfo.image" [src]="'data:' + userInfo.imageContentType + ';base64,' + userInfo.image" alt="userInfo image" class="teammember-image mr-3" />
+                                <img *ngIf="!userInfo.image" src="../../../content/images/user_200.png" alt="userInfo image" class="teammember-image mr-3" />
+                                <!-- <br>
+                                        [{{userInfo.userLogin}}]  -->
+                            </div>
+                            <div class="media-body">
+                                <div class="mt-0">{{userInfo.callingName || userInfo.userFirstName}}</div>
+                                <div>{{userInfo.userLastName}}, {{userInfo.userFirstName}}</div>
+                                <div>{{userInfo.userEmail}}</div>
+                            </div>
+                        </div>
+                    </button>
+                </div>
             </div>
             <div [hidden]="!(editForm.controls.userInfo?.dirty && editForm.controls.userInfo?.invalid)">
                 <small class="form-text text-danger" [hidden]="!editForm.controls.userInfo?.errors?.required">
@@ -54,10 +72,38 @@
             </ng-template>
             <div *ngIf="hasUserInfo && teams && teams.length; else teamsElseBlock" class="form-group">
                 <label class="form-control-label" for="field_team">Teams</label>
-                <select class="form-control" id="field_team" name="team" [(ngModel)]="teamMember.teamId" required>
-                <option *ngIf="!editForm.value.team" [ngValue]="null" selected></option>
-                <option [ngValue]="teamOption.id" *ngFor="let teamOption of teams; trackBy: trackTeamById">{{teamOption.name}}</option>
-            </select>
+                <!-- <select class="form-control" id="field_team" name="team" [(ngModel)]="teamMember.teamId" required>
+                    <option *ngIf="!editForm.value.team" [ngValue]="null" selected></option>
+                    <option [ngValue]="teamOption.id" *ngFor="let teamOption of teams; trackBy: trackTeamById">{{teamOption.name}}</option>
+                </select> -->
+                <div class="list-group">
+                    <button type="submit" (click)="teamMember.teamId = team.id" *ngFor="let team of teams; trackBy: trackTeamById" [disabled]="isSaving" class="list-group-item list-group-item-action flex-column align-items-start">
+                        <div class="media">
+                            <div>
+                                <img *ngIf="team.image" [src]="'data:' + team.imageContentType + ';base64,' + team.image" style="max-width: 70px;" alt="team image" class="mr-3" />
+                                <img *ngIf="!team.image" src="../../../content/images/user_group-512.png" style="max-width: 70px" alt="team image" class="mr-3" />
+                                <!-- <br>
+                                        [{{teamMember.userInfoUserLogin}}]  -->
+                            </div>
+                            <div class="media-body">
+                                <div class="mt-0">{{team.name}}</div>
+                                <!-- <div class="media">
+                                    <div>
+                                        <img *ngIf="team.teamHeadImage" [src]="'data:' + team.teamHeadImageContentType + ';base64,' + team.teamHeadImage" alt="teamHead image" class="teammember-image mr-3" />
+                                        <img *ngIf="!team.teamHeadImage" src="../../../content/images/user_200.png" alt="teamHead image" class="teammember-image mr-3" />
+                                        <!-- <br>
+                                                [{{userInfo.userLogin}}]  >
+                                    </div>
+                                    <div class="media-body">
+                                        <div class="mt-0">{{team.teamHeadCallingName || team.teamHeadUserFirstName}}</div>
+                                        <div>{{team.teamHeadUserLastName}}, {{team.teamHeadUserFirstName}}</div>
+                                        <div>{{team.teamHeadUserEmail}}</div>
+                                    </div>
+                                </div> -->
+                            </div>
+                        </div>
+                </button>
+                </div>
             </div>
             <div [hidden]="!(editForm.controls.team?.dirty && editForm.controls.team?.invalid)">
                 <small class="form-text text-danger" [hidden]="!editForm.controls.team?.errors?.required">
@@ -71,8 +117,7 @@
             </ng-template>
         </ng-template>
     </div>
-
-    <div *ngIf="!showOk; else okElseBlock" class="modal-footer">
+    <div *ngIf="hasUserLogin && !hasUserInfo; else okElseBlock" class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
             <span class="fa fa-ban"></span>&nbsp;<span>Cancel</span>
         </button>
@@ -83,7 +128,7 @@
     <ng-template #okElseBlock>
         <div class="modal-footer">
             <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="clear()">
-                        <span class="fa fa-check"></span>&nbsp;<span>OK</span>
+                        <span class="fa fa-ban"></span>&nbsp;<span>Close</span>
                     </button>
         </div>
     </ng-template>

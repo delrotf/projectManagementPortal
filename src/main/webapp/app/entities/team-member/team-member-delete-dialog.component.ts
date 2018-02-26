@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
@@ -15,12 +15,19 @@ import { TeamMemberService } from './team-member.service';
 export class TeamMemberDeleteDialogComponent {
 
     teamMember: TeamMember;
+    params: any
 
     constructor(
         private teamMemberService: TeamMemberService,
         public activeModal: NgbActiveModal,
+        private route: ActivatedRoute,
+        private router: Router,
         private eventManager: JhiEventManager
     ) {
+        this.route.queryParams
+        .subscribe((params) => {
+            this.params = params;
+        });
     }
 
     clear() {
@@ -33,6 +40,17 @@ export class TeamMemberDeleteDialogComponent {
                 name: 'teamMemberListModification',
                 content: 'Deleted an teamMember'
             });
+
+            if (this.params.imMemberOf) {
+                this.router.navigate(['/team'], {
+                    queryParams: {
+                        active: this.params.active,
+                        imMemberOf: this.params.imMemberOf,
+                        deleted: id,
+                    }
+                });
+            }
+
             this.activeModal.dismiss(true);
         });
     }

@@ -1,7 +1,6 @@
 {
     "fluentMethods": true,
-    "relationships": [
-        {
+    "relationships": [{
             "relationshipType": "many-to-one",
             "relationshipValidateRules": "required",
             "relationshipName": "userInfo",
@@ -16,19 +15,17 @@
             "otherEntityField": "name"
         }
     ],
-    "fields": [
-        {
-            "fieldName": "updatedTime",
-            "fieldType": "Instant",
-            "fieldValidateRules": [
-                "required"
-            ]
-        }
-    ],
+    "fields": [{
+        "fieldName": "updatedTime",
+        "fieldType": "Instant",
+        "fieldValidateRules": [
+            "required"
+        ]
+    }],
     "changelogDate": "20180112072017",
     "entityTableName": "team_member",
     "dto": "mapstruct",
     "pagination": "pagination",
     "service": "serviceImpl",
-    "jpaMetamodelFiltering": false
+    "jpaMetamodelFiltering": true
 }

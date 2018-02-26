@@ -15,6 +15,8 @@ import {
     teamRoute,
     teamPopupRoute,
     TeamResolvePagingParams,
+    TeamCardComponent,
+    TeamTdComponent,
 } from './';
 
 const ENTITY_STATES = [
@@ -30,6 +32,8 @@ const ENTITY_STATES = [
     ],
     declarations: [
         TeamComponent,
+        TeamCardComponent,
+        TeamTdComponent,
         TeamDetailComponent,
         TeamDialogComponent,
         TeamDeleteDialogComponent,

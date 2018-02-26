@@ -40,8 +40,64 @@ public class TeamDTO implements Serializable {
     private Long teamHeadId;
 
     private String teamHeadUserLogin;
+    private String teamHeadCallingName;
+    private String teamHeadUserFirstName;
+    private String teamHeadUserLastName;
+    private byte[] teamHeadImage;
+    private String teamHeadImageContentType;
+    private String teamHeadUserEmail;
+    private String teamHeadPhone;
 
-    public Long getId() {
+    private Long teamHeadSupervisorId;
+    private String teamHeadSupervisorUserLogin;
+    private String teamHeadSupervisorUserFirstName;
+    private String teamHeadSupervisorUserLastName;
+    private String teamHeadSupervisorCallingName;
+    private byte[] teamHeadSupervisorImage;
+    private String teamHeadSupervisorImageContentType;
+
+
+    public String getTeamHeadSupervisorCallingName() {
+		return teamHeadSupervisorCallingName;
+	}
+
+	public void setTeamHeadSupervisorCallingName(String teamHeadSupervisorCallingName) {
+		this.teamHeadSupervisorCallingName = teamHeadSupervisorCallingName;
+	}
+
+	public String getTeamHeadSupervisorUserLastName() {
+		return teamHeadSupervisorUserLastName;
+	}
+
+	public void setTeamHeadSupervisorUserLastName(String teamHeadSupervisorUserLastName) {
+		this.teamHeadSupervisorUserLastName = teamHeadSupervisorUserLastName;
+	}
+
+	public String getTeamHeadSupervisorUserFirstName() {
+		return teamHeadSupervisorUserFirstName;
+	}
+
+	public void setTeamHeadSupervisorUserFirstName(String teamHeadSupervisorUserFirstName) {
+		this.teamHeadSupervisorUserFirstName = teamHeadSupervisorUserFirstName;
+	}
+
+	public String getTeamHeadSupervisorUserLogin() {
+		return teamHeadSupervisorUserLogin;
+	}
+
+	public void setTeamHeadSupervisorUserLogin(String teamHeadSupervisorUserLogin) {
+		this.teamHeadSupervisorUserLogin = teamHeadSupervisorUserLogin;
+	}
+
+	public Long getTeamHeadSupervisorId() {
+		return teamHeadSupervisorId;
+	}
+
+	public void setTeamHeadSupervisorId(Long teamHeadSupervisorId) {
+		this.teamHeadSupervisorId = teamHeadSupervisorId;
+	}
+
+	public Long getId() {
         return id;
     }
 
@@ -172,4 +228,88 @@ public class TeamDTO implements Serializable {
             ", createdDate='" + getCreatedDate() + "'" +
             "}";
     }
+
+	public String getTeamHeadCallingName() {
+		return teamHeadCallingName;
+	}
+
+	public void setTeamHeadCallingName(String teamHeadCallingName) {
+		this.teamHeadCallingName = teamHeadCallingName;
+	}
+
+	public String getTeamHeadUserFirstName() {
+		return teamHeadUserFirstName;
+	}
+
+	public void setTeamHeadUserFirstName(String teamHeadUserFirstName) {
+		this.teamHeadUserFirstName = teamHeadUserFirstName;
+	}
+
+	public String getTeamHeadUserLastName() {
+		return teamHeadUserLastName;
+	}
+
+	public void setTeamHeadUserLastName(String teamHeadUserLastName) {
+		this.teamHeadUserLastName = teamHeadUserLastName;
+	}
+
+	public byte[] getTeamHeadImage() {
+		return teamHeadImage;
+	}
+
+	public void setTeamHeadImage(byte[] teamHeadImage) {
+		this.teamHeadImage = teamHeadImage;
+	}
+
+	public String getTeamHeadImageContentType() {
+		return teamHeadImageContentType;
+	}
+
+	public void setTeamHeadImageContentType(String teamHeadImageContentType) {
+		this.teamHeadImageContentType = teamHeadImageContentType;
+	}
+
+	public Boolean getProcessOrder() {
+		return processOrder;
+	}
+
+	public Boolean getProcessExternalTask() {
+		return processExternalTask;
+	}
+
+	public Boolean getActive() {
+		return active;
+	}
+
+	public byte[] getTeamHeadSupervisorImage() {
+		return teamHeadSupervisorImage;
+	}
+
+	public void setTeamHeadSupervisorImage(byte[] teamHeadSupervisorImage) {
+		this.teamHeadSupervisorImage = teamHeadSupervisorImage;
+	}
+
+	public String getTeamHeadSupervisorImageContentType() {
+		return teamHeadSupervisorImageContentType;
+	}
+
+	public void setTeamHeadSupervisorImageContentType(String teamHeadSupervisorImageContentType) {
+		this.teamHeadSupervisorImageContentType = teamHeadSupervisorImageContentType;
+	}
+
+	public String getTeamHeadUserEmail() {
+		return teamHeadUserEmail;
+	}
+
+	public void setTeamHeadUserEmail(String teamHeadUserEmail) {
+		this.teamHeadUserEmail = teamHeadUserEmail;
+	}
+
+	public String getTeamHeadPhone() {
+		return teamHeadPhone;
+	}
+
+	public void setTeamHeadPhone(String teamHeadPhone) {
+		this.teamHeadPhone = teamHeadPhone;
+	}
 }

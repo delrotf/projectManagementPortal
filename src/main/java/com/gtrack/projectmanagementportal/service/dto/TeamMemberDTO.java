@@ -26,9 +26,20 @@ public class TeamMemberDTO implements Serializable {
     private String userInfoUserLogin;
     private String userInfoUserFirstName;
     private String userInfoUserLastName;
+    private String userInfoUserEmail;
+    private String userInfoPhone;
+    private Long userInfoSupervisorId;
+    private byte[] userInfoSupervisorImage;
+    private String userInfoSupervisorImageContentType;
+    private String userInfoSupervisorUserLogin;
+    private String userInfoSupervisorUserFirstName;
+    private String userInfoSupervisorUserLastName;
+    private String userInfoSupervisorCallingName;
     
     private Long teamId;
     private String teamName;
+    private String teamCode;
+    private Instant teamCreatedDate;
     private byte[] teamImage;
     private String teamImageContentType;
 
@@ -133,6 +144,30 @@ public class TeamMemberDTO implements Serializable {
 		this.userInfoUserLastName = userInfoUserLastName;
 	}
 
+	public String getUserInfoUserEmail() {
+		return userInfoUserEmail;
+	}
+
+	public void setUserInfoUserEmail(String userInfoUserEmail) {
+		this.userInfoUserEmail = userInfoUserEmail;
+	}
+
+	public String getUserInfoPhone() {
+		return userInfoPhone;
+	}
+
+	public void setUserInfoPhone(String userInfoPhone) {
+		this.userInfoPhone = userInfoPhone;
+	}
+
+	public String getTeamCode() {
+		return teamCode;
+	}
+
+	public void setTeamCode(String teamCode) {
+		this.teamCode = teamCode;
+	}
+
 	public byte[] getUserInfoImage() {
 		return userInfoImage;
 	}
@@ -163,5 +198,69 @@ public class TeamMemberDTO implements Serializable {
 
 	public void setTeamImageContentType(String teamImageContentType) {
 		this.teamImageContentType = teamImageContentType;
+	}
+
+	public Long getUserInfoSupervisorId() {
+		return userInfoSupervisorId;
+	}
+
+	public void setUserInfoSupervisorId(Long userInfoSupervisorId) {
+		this.userInfoSupervisorId = userInfoSupervisorId;
+	}
+
+	public String getUserInfoSupervisorUserLogin() {
+		return userInfoSupervisorUserLogin;
+	}
+
+	public void setUserInfoSupervisorUserLogin(String userInfoSupervisorUserLogin) {
+		this.userInfoSupervisorUserLogin = userInfoSupervisorUserLogin;
+	}
+
+	public String getUserInfoSupervisorUserFirstName() {
+		return userInfoSupervisorUserFirstName;
+	}
+
+	public void setUserInfoSupervisorUserFirstName(String userInfoSupervisorUserFirstName) {
+		this.userInfoSupervisorUserFirstName = userInfoSupervisorUserFirstName;
+	}
+
+	public String getUserInfoSupervisorUserLastName() {
+		return userInfoSupervisorUserLastName;
+	}
+
+	public void setUserInfoSupervisorUserLastName(String userInfoSupervisorUserLastName) {
+		this.userInfoSupervisorUserLastName = userInfoSupervisorUserLastName;
+	}
+
+	public String getUserInfoSupervisorCallingName() {
+		return userInfoSupervisorCallingName;
+	}
+
+	public void setUserInfoSupervisorCallingName(String userInfoSupervisorCallingName) {
+		this.userInfoSupervisorCallingName = userInfoSupervisorCallingName;
+	}
+
+	public Instant getTeamCreatedDate() {
+		return teamCreatedDate;
+	}
+
+	public void setTeamCreatedDate(Instant teamCreatedDate) {
+		this.teamCreatedDate = teamCreatedDate;
+	}
+
+	public byte[] getUserInfoSupervisorImage() {
+		return userInfoSupervisorImage;
+	}
+
+	public void setUserInfoSupervisorImage(byte[] userInfoSupervisorImage) {
+		this.userInfoSupervisorImage = userInfoSupervisorImage;
+	}
+
+	public String getUserInfoSupervisorImageContentType() {
+		return userInfoSupervisorImageContentType;
+	}
+
+	public void setUserInfoSupervisorImageContentType(String userInfoSupervisorImageContentType) {
+		this.userInfoSupervisorImageContentType = userInfoSupervisorImageContentType;
 	}
 }

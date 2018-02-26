@@ -26,7 +26,11 @@
                         <span> - the teams you created and managed. Here is where you add team members.</span>
                     </li>
                     <li *ngIf="!isAdmin">
-                        <a class="" routerLink="team-member" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                        <!-- <a class="" routerLink="team-member" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
+                            <span>Teams I'm A Member Of</span>
+                        </a> -->
+                        <a class="" routerLink="team" routerLinkActive="active" [queryParams]="{ active: true, imMemberOf: true }" [routerLinkActiveOptions]="{ exact: true }">
                             <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
                             <span>Teams I'm A Member Of</span>
                         </a>

@@ -17,7 +17,10 @@ import { ResponseWrapper } from '../../shared';
 
 @Component({
     selector: 'jhi-team-member-dialog',
-    templateUrl: './team-member-dialog.component.html'
+    templateUrl: './team-member-dialog.component.html',
+    styleUrls: [
+        'team-member.css'
+    ]
 })
 export class TeamMemberDialogComponent implements OnInit {
 
@@ -105,14 +108,6 @@ export class TeamMemberDialogComponent implements OnInit {
             this.subscribeToSaveResponse(
                 this.teamMemberService.create(this.teamMember));
         }
-        if (this.params.allOthers) {
-            this.router.navigate(['/team'], {
-                queryParams: {
-                    active: this.params.active,
-                    allOthers: this.params.allOthers,
-                }
-            });
-        }
     }
 
     private subscribeToSaveResponse(result: Observable<TeamMember>) {
@@ -123,7 +118,36 @@ export class TeamMemberDialogComponent implements OnInit {
     private onSaveSuccess(result: TeamMember) {
         this.eventManager.broadcast({ name: 'teamMemberListModification', content: 'OK'});
         this.isSaving = false;
-        this.activeModal.dismiss(result);
+        if (this.params.allOthers || this.params.headed) {
+            this.router.navigate(['/team'], {
+                queryParams: {
+                    active: this.params.active,
+                    allOthers: this.params.allOthers,
+                    headed: this.params.headed,
+                    saved: result.id,
+                    teamId: result.teamId,
+                    teamName: this.params.teamName,
+                    teamHeadUserLogin: this.params.teamHeadUserLogin,
+                    userInfoId: this.params.userInfoId,
+                    userId: this.params.userId,
+                    userLogin: this.params.userLogin
+                }
+            });
+        } else if (this.params.userInfoId) {
+            this.router.navigate(['/user-info'], {
+                queryParams: {
+                    // active: this.params.active,
+                    saved: result.id,
+                    userInfoId: this.params.userInfoId,
+                    userId: this.params.userId,
+                    userLogin: this.params.userLogin
+                }
+            });
+        }
+
+        if (this.hasUserLogin && !this.hasUserInfo) {
+            this.activeModal.dismiss(result);
+        }
     }
 
     private onSaveError() {

@@ -47,6 +47,7 @@ public interface TeamService {
 	Page<TeamDTO> findByTeamHeadUserLoginIsCurrentUser(Pageable pageable);
 	Page<TeamDTO> findByActiveAndTeamHeadUserLogin(boolean isActive, String teamHeadLogin, Pageable pageable);
 	Page<TeamDTO> findByActiveAndIdNotInAndTeamHeadUserLoginNot(boolean isActive, String teamHeadLogin, Pageable pageable);
+	Page<TeamDTO> findByActiveAndIdInAndTeamHeadUserLoginNot(boolean isActive, String teamHeadLogin, Pageable pageable);
 	Page<TeamDTO> findByActiveAndIdNotInAndTeamHeadUserLogin(boolean isActive, String teamHeadLogin, Pageable pageable);
 	Page<TeamDTO> findByActiveAndIdNotIn(boolean isActive, String userLogin, Pageable pageable);
 	Page<TeamDTO> findByActive(boolean isActive, Pageable pageable);

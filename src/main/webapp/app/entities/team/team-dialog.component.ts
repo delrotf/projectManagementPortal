@@ -43,7 +43,7 @@ export class TeamDialogComponent implements OnInit {
     ngOnInit() {
         this.isSaving = false;
         this.principal.hasAuthority('ROLE_ADMIN').then((hasAuthority) => {
-            if (hasAuthority) {
+            if (hasAuthority) { // for teamhead select
                 this.userInfoService.query().subscribe(
                     (res: ResponseWrapper) => {
                         this.userInfos = res.json;
@@ -85,11 +85,11 @@ export class TeamDialogComponent implements OnInit {
 
     save() {
         this.isSaving = true;
-        this.team.createdDate = new Date().toISOString();
         if (this.team.id !== undefined) {
             this.subscribeToSaveResponse(this.teamService.update(this.team));
         } else {
             this.team.active = true;
+            this.team.createdDate = new Date().toISOString();
             this.subscribeToSaveResponse(this.teamService.create(this.team));
         }
     }
