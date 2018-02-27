@@ -1,0 +1,21 @@
+.my-fixed-side {
+    display: none;
+}
+
+@media screen and (min-width: 993px) {
+    .top-filler {
+        height: 60px;
+    }
+    .my-fixed-top {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1030;
+    }
+    .my-fixed-side {
+        position: fixed;
+        top: 80px;
+        display: block;
+    }
+}

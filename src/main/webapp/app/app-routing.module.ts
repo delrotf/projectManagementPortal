@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { errorRoute, navbarRoute } from './layouts';
+import { errorRoute, navbarRoute, sidebarRoute } from './layouts';
 
 const LAYOUT_ROUTES = [
     navbarRoute,
+    sidebarRoute,
     ...errorRoute
 ];
 

@@ -68,6 +68,9 @@ export class RegisterComponent implements OnInit, AfterViewInit {
     }
 
     ngAfterViewInit() {
+        this.principal.identity().then((account) => {
+            this.account = account;
+        });
         if (!this.isAuthenticated()) {
             this.renderer.invokeElementMethod(this.elementRef.nativeElement.querySelector('#login'), 'focus', []);
         }

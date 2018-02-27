@@ -13,8 +13,8 @@
             <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                 <a class="nav-link" routerLink="/" (click)="collapseNavbar()">
                     <span>
-                        <i class="fa fa-home" aria-hidden="true"></i>
-                        <span>Home</span>
+                            <i class="fa fa-home" aria-hidden="true"></i>
+                            <!-- <span>Home</span> -->
                     </span>
                 </a>
             </li>
@@ -26,12 +26,13 @@
             </li>
             <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
             <li *ngSwitchCase="true" ngbDropdown class="nav-item dropdown pointer" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-                <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu">
+                <!-- <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu"> -->
+                <a class="nav-link" ngbDropdownToggle href="javascript:void(0);" id="entity-menu">
                     <span>
-                        <i class="fa fa-th-list" aria-hidden="true"></i>
-                        <span>
-                            Options
-                        </span>
+                            <i class="fa fa-th-list" aria-hidden="true"></i>
+                            <!-- <span>
+                                Options
+                            </span> -->
                     </span>
                 </a>
                 <ul class="dropdown-menu" ngbDropdownMenu>
@@ -43,9 +44,9 @@
                     </li>
                     <li>
                         <!-- <a *ngIf="!isAdmin" class="dropdown-item" routerLink="team-member" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                            <span>Teams I'm A Member Of</span>
-                        </a> -->
+                                <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
+                                <span>Teams I'm A Member Of</span>
+                            </a> -->
                         <a *ngIf="!isAdmin" class="dropdown-item" routerLink="team" [queryParams]="{ active: true, imMemberOf: true }" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
                             <span>Teams I'm A Member Of</span>
@@ -73,10 +74,11 @@
                 </ul>
             </li>
             <li *jhiHasAnyAuthority="'ROLE_ADMIN'" ngbDropdown class="nav-item dropdown pointer" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-                <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="admin-menu">
+                <!-- <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="admin-menu"> -->
+                <a class="nav-link" ngbDropdownToggle href="javascript:void(0);" id="admin-menu">
                     <span>
-                        <i class="fa fa-user-plus" aria-hidden="true"></i>
-                        <span>Administration</span>
+                            <i class="fa fa-user-plus" aria-hidden="true"></i>
+                            <span>Administration</span>
                     </span>
                 </a>
                 <ul class="dropdown-menu" ngbDropdownMenu>
@@ -126,19 +128,20 @@
                 </ul>
             </li>
             <li *ngSwitchCase="true" ngbDropdown class="nav-item dropdown pointer" placement="bottom-right" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-                <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="account-menu">
+                <!-- <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="account-menu"> -->
+                <a class="nav-link" ngbDropdownToggle href="javascript:void(0);" id="account-menu">
                     <span *ngSwitchCase="false">
-                        <i class="fa fa-user" aria-hidden="true"></i>
-                        <span>
-                        Account
-                        </span>
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                            <span>
+                            Account
+                            </span>
                     </span>
-                    <span *ngSwitchCase="true">
-                        <img *ngIf="getImageUrl()" [src]="getImageUrl()" class="profile-image img-circle" alt="Avatar">
-                        <img *ngIf="!getImageUrl()" src="../../../content/images/user_200.png" class="profile-image img-circle" alt="Avatar">
-                        <span *ngIf="account">
-                            {{account.login}}
-                        </span>
+                    <span *ngSwitchCase="true" style="white-space: nowrap">
+                            <img *ngIf="getImageUrl()" [src]="getImageUrl()" class="profile-image img-circle" alt="Avatar">
+                            <img *ngIf="!getImageUrl()" src="../../../content/images/user_200.png" class="profile-image img-circle" alt="Avatar">
+                            <span *ngIf="account">
+                                {{account.login}}
+                            </span>
                     </span>
                 </a>
                 <ul class="dropdown-menu" ngbDropdownMenu>
@@ -161,17 +164,17 @@
                         </a>
                     </li>
                     <!-- <li *ngSwitchCase="false">
-                        <a class="dropdown-item" (click)="login()" id="login">
-                            <i class="fa fa-fw fa-sign-in" aria-hidden="true"></i>
-                            <span>Sign in</span>
-                        </a>
-                    </li> -->
+                            <a class="dropdown-item" (click)="login()" id="login">
+                                <i class="fa fa-fw fa-sign-in" aria-hidden="true"></i>
+                                <span>Sign in</span>
+                            </a>
+                        </li> -->
                     <!-- <li *ngSwitchCase="false">
-                        <a class="dropdown-item" routerLink="register" routerLinkActive="active" (click)="collapseNavbar()">
-                            <i class="fa fa-fw fa-user-plus" aria-hidden="true"></i>
-                            <span>Register</span>
-                        </a>
-                    </li> -->
+                            <a class="dropdown-item" routerLink="register" routerLinkActive="active" (click)="collapseNavbar()">
+                                <i class="fa fa-fw fa-user-plus" aria-hidden="true"></i>
+                                <span>Register</span>
+                            </a>
+                        </li> -->
                 </ul>
             </li>
         </ul>
