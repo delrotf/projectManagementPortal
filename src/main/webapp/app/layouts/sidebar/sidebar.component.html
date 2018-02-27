@@ -9,7 +9,7 @@
                     </span>
                 </span>
             </a>
-            <ul class="dropdown-menu" ngbDropdownMenu>
+            <ul class="dropdown-menu mb-4" ngbDropdownMenu>
                 <li *ngIf="account">
                     <a class="dropdown-item" routerLink="team" [queryParams]="{ active: true, headed: true, teamHeadUserLogin: account.login }" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
                         <!-- <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i> -->
