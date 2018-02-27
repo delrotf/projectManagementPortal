@@ -99,6 +99,11 @@ export class NavbarComponent implements OnInit {
     logout() {
         this.collapseNavbar();
         this.loginService.logout();
+        this.eventManager.broadcast({
+            name: 'logoutSuccess',
+            content: 'Sending Logout Success'
+        });
+
         this.router.navigate(['']);
     }
 
