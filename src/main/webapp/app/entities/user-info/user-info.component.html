@@ -124,8 +124,8 @@
             <br>
             <div class="row justify-content-around">
                 <div *ngFor="let userInfo of userInfos ;trackBy: trackId" class="col-md">
-                    <div class="card p-1">
-                        <div class="media">
+                    <div class="card shadow m-4">
+                        <div class="media p-2">
                             <div class="mr-3">
                                 <!-- <td><a [routerLink]="['../user-info', userInfo.id ]">{{userInfo.id}}</a></td> -->
                                 <div>
@@ -199,6 +199,7 @@
             </div>
         </div>
     </div>
+    <br>
     <div *ngIf="userInfos && userInfos.length">
         <div class="row justify-content-center">
             <jhi-item-count [page]="page" [total]="queryCount" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>

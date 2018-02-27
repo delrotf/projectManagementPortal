@@ -1,4 +1,4 @@
-<div class="card" style="width: 18rem;">
+<div class="card mb-4 shadow" style="width: 18rem;">
     <a [routerLink]="['../team', team.id ]">
         <div class="overlay-container">
             <img *ngIf="team.image" [src]="'data:' + team.imageContentType + ';base64,' + team.image" style="max-height: 18rem;" class="card-img-top" alt="team image" />
