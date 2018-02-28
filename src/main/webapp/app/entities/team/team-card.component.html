@@ -1,16 +1,45 @@
-<div class="card mb-4 shadow" style="width: 18rem;">
-    <a [routerLink]="['../team', team.id ]">
+<div class="card mb-4 shadow" style="width: 18rem;" [ngClass]="{ 'hidden': delete }">{{delete}}
         <div class="overlay-container">
-            <img *ngIf="team.image" [src]="'data:' + team.imageContentType + ';base64,' + team.image" style="max-height: 18rem;" class="card-img-top" alt="team image" />
+    <a [routerLink]="['../team', team.id ]">
+        <img *ngIf="team.image" [src]="'data:' + team.imageContentType + ';base64,' + team.image" style="max-height: 18rem;" class="card-img-top" alt="team image" />
             <img *ngIf="!team.image" src="../../../content/images/user_group-512.png" style="max-height: 18rem;" class="card-img-top" alt="team image">
-            <div class="overlay text-center p-2">
-                <h6>{{team.name}}<br>
+    </a>
+    <div class="overlay text-center p-2">
+                    <span class="col-md-auto m-0 p-0">
+                            <ng-template #popTeamheadContent>
+                                <div class="media">
+                                    <div>
+                                        <img *ngIf="team.teamHeadImage" [src]="'data:' + team.teamHeadImageContentType + ';base64,' + team.teamHeadImage" style="max-width: 150px;" alt="userInfo image" class="mr-3" />
+                                        <img *ngIf="!team.teamHeadImage" src="../../../content/images/user_200.png" style="max-width: 150px" alt="userInfo image" class="mr-3" />
+                                        <!-- <br>
+                                                    [{{teamMember.userInfoUserLogin}}]  -->
+                                    </div>
+                                    <div class="media-body">
+                                        <div class="mt-0">{{team.teamHeadCallingName || team.teamHeadUserFirstName}}</div>
+                                        <div>{{team.teamHeadUserLastName}}, {{team.teamHeadUserFirstName}}</div>
+                                        <div>{{team.teamHeadUserEmail}}</div>
+                                        <div>{{team.teamHeadPhone}}</div>
+                                    </div>
+                                </div>
+                            </ng-template>
+                                <div class="media">
+                                            <button type="button" (click)="coordinates($event)" class="btn btn-primary m-0 p-0 rounded-circle" [ngbPopover]="popTeamheadContent" popoverTitle="{{team.teamHeadCallingName || team.teamHeadUserFirstName}}" #pHead="ngbPopover" triggers="focus:blur" placement="{{popoverPlacement}}" container="body">
+                                                    <img *ngIf="team.teamHeadImage" [src]="'data:' + team.teamHeadImageContentType + ';base64,' + team.teamHeadImage" alt="userInfo image" class="teamhead-image img-circle" />
+                                        <img *ngIf="!team.teamHeadImage" src="../../../content/images/user_200.png" alt="userInfo image" class="teamhead-image img-circle" />
+                                    </button>
+                                    <div class="media-body">
+                                        <h6>{{team.name}}<br>
+                                        <small *ngIf="team.code">{{team.code}}</small><br *ngIf="team.code">
+                                        <small>{{team.createdDate | date:'yyyy-MM-dd'}}</small>
+                                    </div>
+                                </div>
+                            </span>
+                        <!-- <h6>{{team.name}}<br>
                     <small *ngIf="team.code">{{team.code}}</small><br *ngIf="team.code">
                     <small>{{team.createdDate | date:'yyyy-MM-dd'}}</small>
-                </h6>
+                </h6> -->
             </div>
         </div>
-    </a>
     <div class="card-body p-0 container">
         <!-- <a class="card-title list-group-flush" [routerLink]="['../team', team.id ]"><h5 class="text-center">{{team.name}}</h5></a> -->
         <div class="card-text list-group list-group-flush">
@@ -33,28 +62,6 @@
                 </a> -->
             <!-- <div class="list-group-item">Created: {{team.createdDate | date:'yyyy-MM-dd'}}</div> -->
             <div class="list-group-item m-0 p-3 row">
-                <span class="col-md-auto m-0 p-0">
-                        <ng-template #popTeamheadContent>
-                            <div class="media">
-                                <div>
-                                    <img *ngIf="team.teamHeadImage" [src]="'data:' + team.teamHeadImageContentType + ';base64,' + team.teamHeadImage" style="max-width: 150px;" alt="userInfo image" class="mr-3" />
-                                    <img *ngIf="!team.teamHeadImage" src="../../../content/images/user_200.png" style="max-width: 150px" alt="userInfo image" class="mr-3" />
-                                    <!-- <br>
-                                                [{{teamMember.userInfoUserLogin}}]  -->
-                                </div>
-                                <div class="media-body">
-                                    <div class="mt-0">{{team.teamHeadCallingName || team.teamHeadUserFirstName}}</div>
-                                    <div>{{team.teamHeadUserLastName}}, {{team.teamHeadUserFirstName}}</div>
-                                    <div>{{team.teamHeadUserEmail}}</div>
-                                    <div>{{team.teamHeadPhone}}</div>
-                                </div>
-                            </div>
-                        </ng-template>
-                        <button type="button" (click)="coordinates($event)" class="btn btn-primary m-0 p-0 rounded-circle" [ngbPopover]="popTeamheadContent" popoverTitle="{{team.teamHeadfoCallingName || team.teamHeadUserFirstName}}" #pHead="ngbPopover" triggers="focus:blur" placement="{{popoverPlacement}}" container="body">
-                            <img *ngIf="team.teamHeadImage" [src]="'data:' + team.teamHeadImageContentType + ';base64,' + team.teamHeadImage" alt="userInfo image" class="teamhead-image img-circle" />
-                            <img *ngIf="!team.teamHeadImage" src="../../../content/images/user_200.png" alt="userInfo image" class="teamhead-image img-circle" />
-                        </button>
-                    </span>
                 <span class="col m-0 p-0" *ngFor="let teamMember of teamMembers">
                         <ng-template #popUserContent>
                             <div>
@@ -88,13 +95,13 @@
         </div>
     </div>
     </ng-template>
-    <button type="button" (blur)="closePopover(pUser)" (click)="coordinates($event)" class="btn btn-info m-0 p-1 rounded-circle" [ngbPopover]="popUserContent" popoverTitle="{{teamMember.userInfoCallingName || teamMember.userInfoUserFirstName}}" #pUser="ngbPopover"
-        placement="{{popoverPlacement}}" container="body" *ngIf="teamMember.userInfoId !== team.teamHeadId && teamMember.userInfoUserLogin === currentAccount.login">
+    <button type="button" (blur)="closePopover(pUser)" (click)="coordinates($event)" class="btn btn-outline-info m-0 p-1 rounded-circle" [ngbPopover]="popUserContent" popoverTitle="{{teamMember.userInfoCallingName || teamMember.userInfoUserFirstName}}" #pUser="ngbPopover"
+        placement="{{popoverPlacement}}" container="body" *ngIf="teamMember.userInfoUserLogin === currentAccount.login">
                             <img *ngIf="teamMember.userInfoImage" [src]="'data:' + teamMember.userInfoImageContentType + ';base64,' + teamMember.userInfoImage" alt="userInfo image" class="teammember-image img-circle" />
                             <img *ngIf="!teamMember.userInfoImage" src="../../../content/images/user_200.png" alt="userInfo image" class="teammember-image img-circle" />
                         </button>
     <button type="button" (blur)="closePopover(pUser)" (click)="coordinates($event)" class="btn btn-primary m-0 p-0 rounded-circle" [ngbPopover]="popUserContent" popoverTitle="{{teamMember.userInfoCallingName || teamMember.userInfoUserFirstName}}" #pUser="ngbPopover"
-        placement="{{popoverPlacement}}" container="body" *ngIf="teamMember.userInfoId !== team.teamHeadId && teamMember.userInfoUserLogin !== currentAccount.login">
+        placement="{{popoverPlacement}}" container="body" *ngIf="teamMember.userInfoUserLogin !== currentAccount.login">
                             <img *ngIf="teamMember.userInfoImage" [src]="'data:' + teamMember.userInfoImageContentType + ';base64,' + teamMember.userInfoImage" alt="userInfo image" class="teammember-image img-circle" />
                             <img *ngIf="!teamMember.userInfoImage" src="../../../content/images/user_200.png" alt="userInfo image" class="teammember-image img-circle" />
                         </button>
@@ -105,7 +112,7 @@
     </button>
     </span>
     <span class="col m-0 p-0">
-                        <button *ngIf="!isMember && team.active && team.teamHeadUserLogin !== currentAccount.login && !isAdmin" type="submit" [routerLink]="['/', { outlets: { popup: ['team-member-new'] } }]" [queryParams]="{ teamHeadUserLogin: team.teamHeadUserLogin, userLogin: currentAccount.login, teamId: team.id, teamName: team.name }"
+                        <button *ngIf="!isMember && team.active && team.teamHeadUserLogin !== currentAccount.login && !isAdmin" type="submit" (click)="saved = null" [routerLink]="['/', { outlets: { popup: ['team-member-new'] } }]" [queryParams]="{ teamHeadUserLogin: team.teamHeadUserLogin, userLogin: currentAccount.login, teamId: team.id, teamName: team.name }"
                             class="btn btn-outline-info rounded-circle ng-hide" replaceUrl="true" queryParamsHandling="merge">
                                 <span class="fa fa-plus"></span>
     <!-- <span class="d-none d-md-inline">Join Team</span> -->

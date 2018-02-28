@@ -40,11 +40,12 @@ currentAccount: any;
     reverse: any;
 
     isAdmin: boolean;
-    userInfoId: string;
 
     params: {[key: string]: any};
     active: boolean;
     imMemberOf: boolean;
+    userMemberOf: boolean;
+    userLogin: string;
     allOthers: boolean;
 
     isTabular: boolean;
@@ -79,7 +80,16 @@ currentAccount: any;
             this.params = params;
             this.active = params.active;
             this.imMemberOf = params.imMemberOf;
+            this.userMemberOf = params.userMemberOf;
+            this.userLogin = params.userLogin;
             this.allOthers = params.allOthers;
+
+            if (this.params.userInfoId) {
+                this.userInfoService.find(this.params.userInfoId).subscribe((userInfo) => {
+                    this.userInfo = userInfo;
+                });
+            }
+
             this.loadAll();
         });
     }
@@ -106,6 +116,8 @@ currentAccount: any;
             {
                 active: this.params.active,
                 imMemberOf: this.params.imMemberOf,
+                userMemberOf: this.params.userMemberOf,
+                userLogin: this.params.userLogin,
                 allOthers: this.params.allOthers,
                 headed: this.params.headed,
                 teamHeadUserLogin: this.params.teamHeadUserLogin,

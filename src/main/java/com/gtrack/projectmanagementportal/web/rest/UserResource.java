@@ -121,6 +121,7 @@ public class UserResource {
         userInfoDTO = userInfoDTO != null ? userInfoDTO : new UserInfoDTO();
         
 		userInfoDTO.setUserId(userDTO.getId());
+		userInfoDTO.setCallingName(userDTO.getFirstName());
 		userInfoDTO.setFirstName(userDTO.getFirstName());
 		userInfoDTO.setLastName(userDTO.getLastName());
 //		userInfoDTO.setImageUrl(userDTO.getImageUrl());

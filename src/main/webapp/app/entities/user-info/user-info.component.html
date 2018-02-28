@@ -26,12 +26,12 @@
                 <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
                     <!-- <th jhiSortBy="id"><span>ID</span> <span class="fa fa-sort"></span></th> -->
                     <th></th>
-                    <th jhiSortBy="userLogin"><span>User</span> <span class="fa fa-sort"></span></th>
+                    <!-- <th jhiSortBy="userLogin"><span>User</span> <span class="fa fa-sort"></span></th> -->
+                    <th jhiSortBy="callingName"><span>Calling Name</span> <span class="fa fa-sort"></span></th>
                     <th jhiSortBy="firstName"><span>First Name</span> <span class="fa fa-sort"></span></th>
                     <th jhiSortBy="lastName"><span>Last Name</span> <span class="fa fa-sort"></span></th>
-                    <th jhiSortBy="callingName"><span>Calling Name</span> <span class="fa fa-sort"></span></th>
                     <th jhiSortBy="designationDesignation"><span>Designation</span> <span class="fa fa-sort"></span></th>
-                    <th jhiSortBy="supervisorUserLogin"><span>Supervisor</span> <span class="fa fa-sort"></span></th>
+                    <th jhiSortBy="supervisorCallingName"><span>Supervisor</span> <span class="fa fa-sort"></span></th>
                     <!-- <th jhiSortBy="phone"><span>Phone</span> <span class="fa fa-sort"></span></th> -->
                     <th></th>
                     <th *jhiHasAnyAuthority="'ROLE_ADMIN'"></th>
@@ -51,13 +51,15 @@
                             <img *ngIf="!userInfo.image" src="../../../content/images/user_200.png" style="max-width: 100px" alt="userInfo image">
                         </a>
                     </td>
-                    <td><a [routerLink]="['../user-info', userInfo.id ]" [queryParams]="{ userId: userInfo.userId, userLogin: userInfo.userLogin }">
-                        {{userInfo.userLogin}}
-                    </a>
+                    <td>
+                        <a [routerLink]="['../user-info', userInfo.id ]" [queryParams]="{ userId: userInfo.userId, userLogin: userInfo.userLogin }">
+                            <!-- {{userInfo.userLogin}} -->
+                            {{userInfo.callingName}}
+                        </a>
                     </td>
+                    <!-- <td>{{userInfo.callingName}}</td> -->
                     <td>{{userInfo.firstName}}</td>
                     <td>{{userInfo.lastName}}</td>
-                    <td>{{userInfo.callingName}}</td>
                     <td>
                         <!-- <div *ngIf="userInfo.designationId">
                             <a [routerLink]="['../designation', userInfo.designationId  ]">{{userInfo.designationDesignation}}</a>
@@ -66,16 +68,20 @@
                     </td>
                     <td>
                         <div *ngIf="userInfo.supervisorId">
-                            <a [routerLink]="['../user-info', userInfo.supervisorId  ]">[{{userInfo.supervisorUserLogin}}] {{userInfo.supervisorUserLastName}}, {{userInfo.supervisorUserFirstName}}</a>
+                            <a [routerLink]="['../user-info', userInfo.supervisorId  ]">"{{userInfo.supervisorCallingName}}" {{userInfo.supervisorUserLastName}}, {{userInfo.supervisorUserFirstName}}</a>
                         </div>
                     </td>
                     <!-- <td>{{userInfo.phone}}</td> -->
                     <td class="text-right">
-                        <button type="submit" [routerLink]="['../team' ]" [queryParams]="{ active: true, headed: true, teamHeadUserLogin: userInfo.userLogin }" class="btn btn-info btn-sm">
+                        <button *ngIf="userInfo.userLogin !== currentAccount.login" type="submit" [routerLink]="['../team' ]" [queryParams]="{ active: true, headed: true, teamHeadUserLogin: userInfo.userLogin, userInfoId: userInfo.id }" class="btn btn-info btn-sm">
                             <span class="fa fa-eye"></span>
                             <span class="d-none d-md-inline">Headed Teams</span>
                         </button>
-                        <button type="submit" [routerLink]="['/', { outlets: { popup: ['team-member-new'] } }]" [queryParams]="{ userInfoId: userInfo.id, userId: userInfo.userId, userLogin: userInfo.userLogin }" class="btn btn-primary btn-sm">
+                        <button *ngIf="userInfo.userLogin !== currentAccount.login" type="submit" [routerLink]="['../team' ]" [queryParams]="{ active: true, userMemberOf: true, userLogin: userInfo.userLogin, userInfoId: userInfo.id }" class="btn btn-secondary btn-sm">
+                            <span class="fa fa-eye"></span>
+                    <span class="d-none d-md-inline">Member Of</span>
+                    </button>
+                    <button type="submit" [routerLink]="['/', { outlets: { popup: ['team-member-new'] } }]" [queryParams]="{ userInfoId: userInfo.id, userId: userInfo.userId, userLogin: userInfo.userLogin }" class="btn btn-primary btn-sm">
                             <span class="fa fa-plus"></span>
                             <span class="d-none d-md-inline">Add to a Team...</span>
                         </button>
@@ -110,11 +116,11 @@
                 <!-- <th jhiSortBy="id"><span>ID</span> <span class="fa fa-sort"></span></th> -->
                 <th></th>
                 <th jhiSortBy="userLogin"><span>User</span> <span class="fa fa-sort"></span></th>
+                <th jhiSortBy="callingName"><span>Calling Name</span> <span class="fa fa-sort"></span></th>
                 <th jhiSortBy="firstName"><span>First Name</span> <span class="fa fa-sort"></span></th>
                 <th jhiSortBy="lastName"><span>Last Name</span> <span class="fa fa-sort"></span></th>
-                <th jhiSortBy="callingName"><span>Calling Name</span> <span class="fa fa-sort"></span></th>
                 <th jhiSortBy="designationDesignation"><span>Designation</span> <span class="fa fa-sort"></span></th>
-                <th jhiSortBy="supervisorUserLogin"><span>Supervisor</span> <span class="fa fa-sort"></span></th>
+                <th jhiSortBy="supervisorCallingName"><span>Supervisor</span> <span class="fa fa-sort"></span></th>
                 <!-- <th jhiSortBy="phone"><span>Phone</span> <span class="fa fa-sort"></span></th> -->
                 <th></th>
                 <th *jhiHasAnyAuthority="'ROLE_ADMIN'"></th>
@@ -139,14 +145,16 @@
                                         <img *ngIf="!userInfo.image" src="../../../content/images/user_200.png" alt="userInfo image" class="teamhead-image" />
                                     </a>
                                 </div>
-                                <div class="text-center">
+                                <!-- <div class="text-center">
                                     <a [routerLink]="['../user-info', userInfo.id ]" [queryParams]="{ userId: userInfo.userId, userLogin: userInfo.userLogin }">
                                         {{userInfo.userLogin}}
                                     </a>
-                                </div>
+                                </div> -->
                             </div>
                             <div class="media-body">
-                                <h5>{{userInfo.callingName || userInfo.firstName}}</h5>
+                                <a [routerLink]="['../user-info', userInfo.id ]" [queryParams]="{ userId: userInfo.userId, userLogin: userInfo.userLogin }">
+                                    <h5>{{userInfo.callingName || userInfo.firstName}}</h5>
+                                </a>
                                 <h6>{{userInfo.userLastName}}, {{userInfo.userFirstName}}</h6>
                                 <div>{{userInfo.userEmail}}</div>
                                 <div>{{userInfo.phone}}</div>
@@ -159,17 +167,24 @@
                                 <div *ngIf="userInfo.supervisorUserLogin">
                                     <small>Supervisor: </small>
                                     <div>
-                                        <a [routerLink]="['../user-info', userInfo.supervisorId  ]">[{{userInfo.supervisorUserLogin}}] {{userInfo.supervisorUserLastName}}, {{userInfo.supervisorUserFirstName}}</a>
+                                        <a [routerLink]="['../user-info', userInfo.supervisorId  ]">"{{userInfo.supervisorCallingName}}"</a>
+                                        <div class="m-0 p-0">
+                                            <small>{{userInfo.supervisorUserLastName}}, {{userInfo.supervisorUserFirstName}}</small>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="card-footer">
                             <span class="btn-group flex-btn-group-container">
-                                <button type="submit" [routerLink]="['../team' ]" [queryParams]="{ active: true, headed: true, teamHeadUserLogin: userInfo.userLogin }" class="btn btn-info btn-sm">
+                                <button *ngIf="userInfo.userLogin !== currentAccount.login" type="submit" [routerLink]="['../team' ]" [queryParams]="{ active: true, headed: true, teamHeadUserLogin: userInfo.userLogin, userInfoId: userInfo.id }" class="btn btn-info btn-sm">
                                     <span class="fa fa-eye"></span>
                             <span class="d-none d-md-inline">Headed Teams</span>
                             </button>
+                            <button *ngIf="userInfo.userLogin !== currentAccount.login" type="submit" [routerLink]="['../team' ]" [queryParams]="{ active: true, userMemberOf: true, userLogin: userInfo.userLogin, userInfoId: userInfo.id }" class="btn btn-secondary btn-sm">
+                                <span class="fa fa-eye"></span>
+                        <span class="d-none d-md-inline">Member Of</span>
+                        </button>
                             <button type="submit" [routerLink]="['/', { outlets: { popup: ['team-member-new'] } }]" [queryParams]="{ userInfoId: userInfo.id, userId: userInfo.userId, userLogin: userInfo.userLogin }" class="btn btn-primary btn-sm">
                                     <span class="fa fa-plus"></span>
                                     <span class="d-none d-md-inline">Add to a Team...</span>

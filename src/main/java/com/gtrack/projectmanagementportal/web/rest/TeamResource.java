@@ -110,6 +110,7 @@ public class TeamResource {
         String active = null;
         String allOthers = null;
         String imMemberOf = null;
+        String userMemberOf = null;
         String headed = null;
         
         if (query != null) {
@@ -140,6 +141,11 @@ public class TeamResource {
         			// do nothing.
         		}
                 try {
+                	userMemberOf = json.getString("userMemberOf");
+        		} catch (JSONException e) {
+        			// do nothing.
+        		}
+                try {
                 	allOthers = json.getString("allOthers");
         		} catch (JSONException e) {
         			// do nothing.
@@ -154,10 +160,11 @@ public class TeamResource {
         boolean isActive = active != null ? Boolean.parseBoolean(active) : true;
         boolean isAllOthers = allOthers != null ? Boolean.parseBoolean(allOthers) : false;
         boolean isImMemberOf = imMemberOf != null ? Boolean.parseBoolean(imMemberOf) : false;
+        boolean isUserMemberOf = userMemberOf != null ? Boolean.parseBoolean(userMemberOf) : false;
         boolean isHeaded = headed != null ? Boolean.parseBoolean(headed) : false;
         
         HttpHeaders headers = null;
-        if (userLogin != null && !isAllOthers && !isHeaded) {
+        if (userLogin != null && !isAllOthers && !isHeaded && !isUserMemberOf) {
         	// drop-down items.
         	page = teamService.findByActiveAndIdNotInAndTeamHeadUserLogin(isActive, userLogin, pageable);
 //        	page = teamService.findByActiveAndIdNotIn(isActive, userLogin, pageable);
@@ -170,6 +177,10 @@ public class TeamResource {
         	// teams Im member of.
         	page = teamService.findByActiveAndIdInAndTeamHeadUserLoginNot(isActive, SecurityUtils.getCurrentUserLogin().get(), pageable);
         	headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/teams?active=" + isActive + "&imMemberOf=" + isImMemberOf);
+        } else if (isUserMemberOf && userLogin != null) {
+        	// teams user is member of.
+        	page = teamService.findByActiveAndIdInAndTeamHeadUserLoginNot(isActive, userLogin, pageable);
+        	headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/teams?active=" + isActive + "&userMemberOf=" + isUserMemberOf + "&userLogin=" + userLogin);
         } else if (isAllOthers) {
         	// browse all other teams.
         	page = teamService.findByActiveAndIdNotInAndTeamHeadUserLoginNot(isActive, SecurityUtils.getCurrentUserLogin().get(), pageable);
