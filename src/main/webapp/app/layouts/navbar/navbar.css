@@ -56,7 +56,19 @@ Navbar
         display: none;
     }
 }
-
+@media screen and (max-width: 768px) {
+/* @media screen and (min-width: 992px) { */
+    .truncate {
+        width: 200px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .navbar-version {
+        display: none;
+    }
+}
+    
 @media screen and (max-width: 992px) {
     .jh-logo-container {
         width: 100%;
