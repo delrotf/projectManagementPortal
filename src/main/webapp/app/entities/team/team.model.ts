@@ -13,6 +13,10 @@ export class Team implements BaseEntity {
         public active?: boolean,
         public createdDate?: any,
         public teamHeadId?: number,
+        public teamHeadCallingName?: string,
+        public teamHeadUserFirstName?: string,
+        public teamHeadImage?: any,
+        public teamHeadUserLogin?: string,
     ) {
         this.processOrder = false;
         this.processExternalTask = false;

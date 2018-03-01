@@ -43,6 +43,7 @@ currentAccount: any;
 
     params: {[key: string]: any};
     active: boolean;
+    headed: boolean;
     imMemberOf: boolean;
     userMemberOf: boolean;
     userLogin: string;
@@ -79,6 +80,7 @@ currentAccount: any;
         .subscribe((params) => {
             this.params = params;
             this.active = params.active;
+            this.headed = params.headed;
             this.imMemberOf = params.imMemberOf;
             this.userMemberOf = params.userMemberOf;
             this.userLogin = params.userLogin;

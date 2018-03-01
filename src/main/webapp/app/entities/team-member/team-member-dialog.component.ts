@@ -38,6 +38,7 @@ export class TeamMemberDialogComponent implements OnInit {
     teams: Team[];
 
     params: any;
+    filter: string;
 
     constructor(
         public activeModal: NgbActiveModal,
@@ -49,6 +50,7 @@ export class TeamMemberDialogComponent implements OnInit {
         private route: ActivatedRoute,
         private router: Router,
     ) {
+        this.filter = '';
     }
 
     ngOnInit() {
@@ -67,16 +69,14 @@ export class TeamMemberDialogComponent implements OnInit {
                 this.teamMember.teamId = params.teamId;
                 this.userInfoService.query({
                     query: JSON.stringify({userLogin: this.params.userLogin})
-                })
-                    .subscribe((res: ResponseWrapper) => {
+                }).subscribe((res: ResponseWrapper) => {
                         this.teamMember.userInfoId = res.json[0].id;
                     }, (res: ResponseWrapper) => this.onError(res.json));
             } else if (this.hasTeam) { // if has team, we need its userInfos
                 this.teamMember.teamId = params.teamId;
                 this.userInfoService.query({
                     query: JSON.stringify(params)
-                })
-                    .subscribe((res: ResponseWrapper) => {
+                }).subscribe((res: ResponseWrapper) => {
                         this.userInfos = res.json;
                         this.showOk = this.userInfos && this.userInfos.length ? false : true;
                     }, (res: ResponseWrapper) => this.onError(res.json));

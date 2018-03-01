@@ -61,7 +61,8 @@
         <dt><span>Team Head</span></dt>
         <dd>
             <div *ngIf="team.teamHeadId">
-                <a [routerLink]="['/user-info', team.teamHeadId]">{{team.teamHeadUserLogin}}</a>
+                <a [routerLink]="['/user-info', team.teamHeadId]">{{team.teamHeadCallingName || team.teamHeadUserFirstName}}</a>
+                <div>{{team.teamHeadUserLastName}}, {{team.teamHeadUserFirstName}}</div>
             </div>
         </dd>
     </dl>
@@ -73,14 +74,3 @@
     <button *jhiHasAnyAuthority="'ROLE_ADMIN'" type="button" [routerLink]="['/', { outlets: { popup: 'team/'+ team.id + '/edit'} }]" replaceUrl="true" queryParamsHandling="merge" class="btn btn-primary">
         <span class="fa fa-pencil"></span>&nbsp;<span> Edit</span>
     </button>
-    <div class="btn-group">
-            <button *ngIf="team.teamHeadUserLogin === currentAccount.login" type="submit" [routerLink]="['/', { outlets: { popup: 'team/'+ team.id + '/edit'} }]" replaceUrl="true" queryParamsHandling="merge" class="btn btn-primary btn-sm">
-                        <span class="fa fa-pencil"></span>
-                        <span class="d-none d-md-inline">Edit</span>
-                    </button>
-            <button *ngIf="team.teamHeadUserLogin === currentAccount.login" type="submit" [routerLink]="['/', { outlets: { popup: 'team/'+ team.id + '/delete'} }]" replaceUrl="true" queryParamsHandling="merge" class="btn btn-danger btn-sm">
-                        <span class="fa fa-remove"></span>
-                        <span class="d-none d-md-inline">Delete</span>
-                    </button>
-    
-</div>

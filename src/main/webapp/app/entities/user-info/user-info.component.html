@@ -68,13 +68,13 @@
                     </td>
                     <td>
                         <div *ngIf="userInfo.supervisorId">
-                            <a [routerLink]="['../user-info', userInfo.supervisorId  ]">"{{userInfo.supervisorCallingName}}" {{userInfo.supervisorUserLastName}}, {{userInfo.supervisorUserFirstName}}</a>
+                            <a [routerLink]="['../user-info', userInfo.supervisorId  ]">{{userInfo.supervisorCallingName || userInfo.supervisorUserFirstName}} {{userInfo.supervisorUserLastName}}, {{userInfo.supervisorUserFirstName}}</a>
                         </div>
                     </td>
                     <!-- <td>{{userInfo.phone}}</td> -->
                     <td class="text-right">
                         <button *ngIf="userInfo.userLogin !== currentAccount.login" type="submit" [routerLink]="['../team' ]" [queryParams]="{ active: true, headed: true, teamHeadUserLogin: userInfo.userLogin, userInfoId: userInfo.id }" class="btn btn-info btn-sm">
-                            <span class="fa fa-eye"></span>
+                            <span class="fa fa-users"></span>
                             <span class="d-none d-md-inline">Headed Teams</span>
                         </button>
                         <button *ngIf="userInfo.userLogin !== currentAccount.login" type="submit" [routerLink]="['../team' ]" [queryParams]="{ active: true, userMemberOf: true, userLogin: userInfo.userLogin, userInfoId: userInfo.id }" class="btn btn-secondary btn-sm">
@@ -127,7 +127,6 @@
             </tr>
         </div>
         <div class="container-fluid">
-            <br>
             <div class="row justify-content-around">
                 <div *ngFor="let userInfo of userInfos ;trackBy: trackId" class="col-md">
                     <div class="card shadow m-4">
@@ -167,7 +166,7 @@
                                 <div *ngIf="userInfo.supervisorUserLogin">
                                     <small>Supervisor: </small>
                                     <div>
-                                        <a [routerLink]="['../user-info', userInfo.supervisorId  ]">"{{userInfo.supervisorCallingName}}"</a>
+                                        <a [routerLink]="['../user-info', userInfo.supervisorId  ]">{{userInfo.supervisorCallingName || userInfo.supervisorUserFirstName}}</a>
                                         <div class="m-0 p-0">
                                             <small>{{userInfo.supervisorUserLastName}}, {{userInfo.supervisorUserFirstName}}</small>
                                         </div>
@@ -178,7 +177,7 @@
                         <div class="card-footer">
                             <span class="btn-group flex-btn-group-container">
                                 <button *ngIf="userInfo.userLogin !== currentAccount.login" type="submit" [routerLink]="['../team' ]" [queryParams]="{ active: true, headed: true, teamHeadUserLogin: userInfo.userLogin, userInfoId: userInfo.id }" class="btn btn-info btn-sm">
-                                    <span class="fa fa-eye"></span>
+                                    <span class="fa fa-users"></span>
                             <span class="d-none d-md-inline">Headed Teams</span>
                             </button>
                             <button *ngIf="userInfo.userLogin !== currentAccount.login" type="submit" [routerLink]="['../team' ]" [queryParams]="{ active: true, userMemberOf: true, userLogin: userInfo.userLogin, userInfoId: userInfo.id }" class="btn btn-secondary btn-sm">

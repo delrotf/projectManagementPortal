@@ -1,8 +1,8 @@
 <div>
     <h2>
-        <span *ngIf="isAdmin">Teams</span>
+        <span *ngIf="isAdmin && allOthers">Teams</span>
         <span *ngIf="!isAdmin && imMemberOf">Teams I'm a Member of</span>
-        <span *ngIf="!isAdmin && userMemberOf && userLogin">
+        <span *ngIf="userMemberOf && userLogin">
             Teams {{userLogin}}
             <span *ngIf="userInfo && userInfo.image">
                 <img [src]="'data:' + userInfo.imageContentType + ';base64,' + userInfo.image" alt="userInfo image" class="teammember-image img-circle" />
@@ -10,9 +10,9 @@
             </span>
             is a Member of
         </span>
-        <span *ngIf="!isAdmin && !allOthers && currentAccount.login === params.teamHeadUserLogin">My Teams</span>
+        <span *ngIf="!isAdmin && !allOthers && headed && currentAccount.login === params.teamHeadUserLogin">My Teams</span>
         <span *ngIf="!isAdmin && allOthers">Browse More Teams</span>
-        <span *ngIf="!userMemberOf && !imMemberOf && !isAdmin && !allOthers && currentAccount.login !== params.teamHeadUserLogin">
+        <span *ngIf="!userMemberOf && !imMemberOf && headed && !allOthers && currentAccount.login !== params.teamHeadUserLogin">
             Headed Teams of {{params.teamHeadUserLogin}}
             <span *ngIf="userInfo && userInfo.image">
                 <img [src]="'data:' + userInfo.imageContentType + ';base64,' + userInfo.image" alt="userInfo image" class="teammember-image img-circle" />

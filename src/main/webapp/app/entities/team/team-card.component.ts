@@ -11,6 +11,7 @@ import { JhiEventManager, JhiParseLinks, JhiAlertService, JhiDataUtils } from 'n
 import { Team } from './team.model';
 import { TeamService } from './team.service';
 import { ITEMS_PER_PAGE, Principal, ResponseWrapper } from '../../shared';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
     selector: 'jhi-team-card',
@@ -53,6 +54,8 @@ export class TeamCardComponent implements OnInit {
     clientX = 0;
     clientY = 0;
     saved: string;
+    delete: boolean;
+    isSaving: boolean;
 
     constructor(
         private teamService: TeamService,
@@ -144,23 +147,77 @@ export class TeamCardComponent implements OnInit {
         setTimeout(() => { popover.close() }, 200);
     }
 
+    join(userLogin: string) {
+        this.isSaving = true;
+        if (this.params.allOthers) {
+            this.delete = true;
+        }
+        const teamMember = new TeamMember();
+        teamMember.updatedTime = new Date().toISOString();
+
+        this.userInfoService.query({
+            query: JSON.stringify({userLogin})
+        }).subscribe((res: ResponseWrapper) => {
+            teamMember.userInfoId = res.json[0].id;
+            teamMember.teamId = this.team.id;
+            this.subscribeToSaveResponse(
+                this.teamMemberService.create(teamMember));
+        }, (res: ResponseWrapper) => this.onError(res.json));
+    }
+
+    private subscribeToSaveResponse(result: Observable<TeamMember>) {
+        result.subscribe((res: TeamMember) =>
+            this.onSaveSuccess(res), (res: Response) => this.onSaveError());
+    }
+
+    private onSaveSuccess(result: TeamMember) {
+        this.eventManager.broadcast({ name: 'teamMemberListModification', content: 'OK'});
+        this.isSaving = false;
+        if (this.params.allOthers) {
+            setTimeout(() => {
+                this.router.navigate(['/team'], {
+                    queryParams: {
+                        active: this.params.active,
+                        allOthers: this.params.allOthers,
+                        headed: this.params.headed,
+                        saved: result.id,
+                        teamId: result.teamId,
+                        teamName: this.params.teamName,
+                        teamHeadUserLogin: this.params.teamHeadUserLogin,
+                        userInfoId: this.params.userInfoId,
+                        userId: this.params.userId,
+                        userLogin: this.params.userLogin
+                    }
+                });
+            }, 500);
+        }
+    }
+
+    private onSaveError() {
+        this.isSaving = false;
+    }
+
     confirmDelete(id: number) {
+        if (this.params.imMemberOf) {
+            this.delete = true;
+        }
         this.teamMemberService.delete(id).subscribe((response) => {
             this.eventManager.broadcast({
                 name: 'teamMemberListModification',
                 content: 'Deleted an teamMember'
             });
-
             if (this.params.imMemberOf) {
-                this.router.navigate(['/team'], {
-                    queryParams: {
-                        active: this.params.active,
-                        imMemberOf: this.params.imMemberOf,
-                        deleted: id,
-                    }
-                });
+                setTimeout(() => {
+                    this.router.navigate(['/team'], {
+                        queryParams: {
+                            active: this.params.active,
+                            imMemberOf: this.params.imMemberOf,
+                            deleted: id,
+                        }
+                    });
+                }, 500);
             } else {
-                this.getMembers(this.team.id.toString());
+                    this.getMembers(this.team.id.toString());
             }
         });
     }
