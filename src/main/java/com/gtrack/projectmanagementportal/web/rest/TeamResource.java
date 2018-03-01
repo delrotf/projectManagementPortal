@@ -169,7 +169,7 @@ public class TeamResource {
         	page = teamService.findByActiveAndIdNotInAndTeamHeadUserLogin(isActive, userLogin, pageable);
 //        	page = teamService.findByActiveAndIdNotIn(isActive, userLogin, pageable);
         	headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/teams?active=" + isActive + "&headed=" + isHeaded + "&userLogin=" + userLogin);
-        } else if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ADMIN) && !isHeaded) {
+        } else if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ADMIN) && !isHeaded && !isUserMemberOf) {
         	// all access for admin
         	page = teamService.findAll(pageable);
         	headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/teams");
