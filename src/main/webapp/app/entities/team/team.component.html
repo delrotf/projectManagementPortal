@@ -7,11 +7,10 @@
             <span *ngIf="userInfo && userInfo.image">
                 <img [src]="'data:' + userInfo.imageContentType + ';base64,' + userInfo.image" alt="userInfo image" class="teammember-image img-circle" />
                 <!-- <img *ngIf="!userInfo.image" src="../../../content/images/user_200.png" alt="userInfo image" class="teammember-image img-circle" /> -->
-            </span>
-            is a Member of
+            </span> is a Member of
         </span>
         <span *ngIf="!isAdmin && !allOthers && headed && currentAccount.login === params.teamHeadUserLogin">My Teams</span>
-        <span *ngIf="!isAdmin && allOthers">Browse More Teams</span>
+        <span *ngIf="!isAdmin && allOthers">Browse More Teams<small class="text-muted"> you are not yet a member of.</small></span>
         <span *ngIf="!userMemberOf && !imMemberOf && headed && !allOthers && currentAccount.login !== params.teamHeadUserLogin">
             Headed Teams of {{params.teamHeadUserLogin}}
             <span *ngIf="userInfo && userInfo.image">
