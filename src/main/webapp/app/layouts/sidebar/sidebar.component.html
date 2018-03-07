@@ -1,4 +1,24 @@
 <div [ngSwitch]="isAdmin">
+    <div>
+        <div *ngIf="userInfo" class="media">
+            <div>
+                <img *ngIf="userInfo.image" [src]="'data:' + userInfo.imageContentType + ';base64,' + userInfo.image" alt="profile image" class="profile-image img-circle mr-3" />
+                <img *ngIf="!userInfo.image" src="../../../content/images/user_200.png" alt="profile image" class="profile-image img-circle mr-3" />
+            </div>
+            <div class="media-body">
+                <div class="mt-0 font-weight-normal">{{userInfo.callingName}}</div>
+            </div>
+        </div>
+        <div *ngIf="!userInfo" class="media">
+            <div>
+                <img src="../../../content/images/user_200.png" alt="profile image" class="profile-image img-circle mr-3" />
+            </div>
+            <div class="media-body">
+                <div *ngIf="account" class="mt-0 font-weight-normal">{{account.login}}</div>
+            </div>
+        </div>
+    </div>
+    <br>
     <ul *ngSwitchCase="false" class="p-0">
         <li ngbDropdown #myDrop="ngbDropdown" autoClose="false" class="nav-item dropdown pointer" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
             <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu">
@@ -11,7 +31,7 @@
             </a>
             <ul class="dropdown-menu mb-4" ngbDropdownMenu>
                 <li *ngIf="account">
-                    <a class="dropdown-item" routerLink="team" [queryParams]="{ active: true, headed: true, teamHeadUserLogin: account.login }" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                    <a class="dropdown-item" routerLink="team" [queryParams]="{ viewId: myTeams, inactive: false }" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }">
                         <!-- <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i> -->
                         <span>My Teams</span>
                     </a>
@@ -21,13 +41,13 @@
                                 <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
                                 <span>Teams I'm A Member Of</span>
                             </a> -->
-                    <a class="dropdown-item" routerLink="team" [queryParams]="{ active: true, imMemberOf: true }" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                    <a class="dropdown-item" routerLink="team" [queryParams]="{ viewId: teamsImMemberOf }" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
                         <!-- <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i> -->
                         <span>Teams I'm A Member Of</span>
                     </a>
                 </li>
                 <li>
-                    <a class="dropdown-item" routerLink="team" [queryParams]="{ active: true, allOthers: true }" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                    <a class="dropdown-item" routerLink="team" [queryParams]="{ viewId: browseMoreTeams }" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
                         <!-- <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i> -->
                         <span>Browse More Teams</span>
                     </a>
@@ -51,7 +71,7 @@
     </ul>
     <ul *ngSwitchCase="true" class="p-0">
         <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-            <a class="dropdown-item" style="padding: .5rem 1rem" routerLink="team" [queryParams]="{ active: true, allOthers: true }" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+            <a class="dropdown-item" style="padding: .5rem 1rem" routerLink="team" [queryParams]="{ viewId: allTeams, inactive: false }" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
                 <span>
                     <i class="fa fa-fw fa-users" aria-hidden="true"></i>
                     <span>Teams</span>

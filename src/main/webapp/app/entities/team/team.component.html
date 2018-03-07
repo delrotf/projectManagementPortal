@@ -1,31 +1,31 @@
 <div>
     <h2>
-        <span *ngIf="isAdmin && allOthers">Teams</span>
-        <span *ngIf="!isAdmin && imMemberOf">Teams I'm a Member of</span>
-        <span *ngIf="userMemberOf && userLogin">
+        <span *ngIf="isAdmin && viewId === allTeams">Teams</span>
+        <span *ngIf="!isAdmin && viewId === teamsImMemberOf">Teams I'm a Member of</span>
+        <span *ngIf="viewId === usersMemberOf && userLogin">
             Teams {{userLogin}}
             <span *ngIf="userInfo && userInfo.image">
                 <img [src]="'data:' + userInfo.imageContentType + ';base64,' + userInfo.image" alt="userInfo image" class="teammember-image img-circle" />
                 <!-- <img *ngIf="!userInfo.image" src="../../../content/images/user_200.png" alt="userInfo image" class="teammember-image img-circle" /> -->
             </span> is a Member of
         </span>
-        <span *ngIf="!isAdmin && !allOthers && headed && currentAccount.login === params.teamHeadUserLogin">My Teams</span>
-        <span *ngIf="!isAdmin && allOthers">Browse More Teams<small class="text-muted"> you are not yet a member of.</small></span>
-        <span *ngIf="!userMemberOf && !imMemberOf && headed && !allOthers && currentAccount.login !== params.teamHeadUserLogin">
+        <span *ngIf="!isAdmin && viewId === myTeams">My Teams</span>
+        <span *ngIf="!isAdmin && viewId === browseMoreTeams">Browse More Teams<small class="text-muted"> I'm not yet a member of.</small></span>
+        <span *ngIf="viewId === usersHeadedTeams && currentAccount.login !== params.teamHeadUserLogin">
             Headed Teams of {{params.teamHeadUserLogin}}
             <span *ngIf="userInfo && userInfo.image">
                 <img [src]="'data:' + userInfo.imageContentType + ';base64,' + userInfo.image" alt="userInfo image" class="teammember-image img-circle" />
                 <!-- <img *ngIf="!userInfo.image" src="../../../content/images/user_200.png" alt="userInfo image" class="teammember-image img-circle" /> -->
             </span>
         </span>
-        <button *ngIf="isAdmin || !allOthers && currentAccount.login === params.teamHeadUserLogin" class="btn btn-primary float-right jh-create-entity create-team" [routerLink]="['/', { outlets: { popup: ['team-new'] } }]" replaceUrl="true" queryParamsHandling="merge">
+        <button *ngIf="isAdmin || viewId !== browseMoreTeams && currentAccount.login === params.teamHeadUserLogin" class="btn btn-primary float-right jh-create-entity create-team" [routerLink]="['/', { outlets: { popup: ['team-new'] } }]" replaceUrl="true" queryParamsHandling="merge">
             <span class="fa fa-plus"></span>
             <span >
             Create new Team
             </span>
         </button>
     </h2>
-    <a *ngIf="(userMemberOf && params.userLogin) || !imMemberOf && !allOthers && currentAccount.login !== params.teamHeadUserLogin" class="" routerLink="../user-info">
+    <a *ngIf="(viewId === usersMemberOf || viewId === usersHeadedTeams) && currentAccount.login !== params.teamHeadUserLogin" class="" routerLink="../user-info">
         <i class="fa fa-fw fa-arrow-circle-left" aria-hidden="true"></i>
         <span>Back To Users</span>
     </a>
@@ -34,15 +34,15 @@
             <a class="nav-link" routerLink="../team" routerLinkActive="active" [queryParams]="{ active: true, allOthers: allOthers }" [routerLinkActiveOptions]="{ exact: false }" replaceUrl="true" queryParamsHandling="merge">Active</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" routerLink="../team" routerLinkActive="active" [queryParams]="{ active: false, allOthers: allOthers }" [routerLinkActiveOptions]="{ exact: false }" replaceUrl="true" queryParamsHandling="merge">InActive</a>
+            <a class="nav-link" routerLink="../team" routerLinkActive="active" [queryParams]="{ active: false, allOthers: allOthers }" [routerLinkActiveOptions]="{ exact: false }" replaceUrl="true" queryParamsHandling="merge">inactive</a>
         </li>
     </ul> -->
-    <ul *ngIf="isAdmin || !allOthers && currentAccount.login === params.teamHeadUserLogin" class="nav nav-pills">
+    <ul *ngIf="viewId === allTeams || viewId === myTeams" class="nav nav-pills">
         <li class="nav-item">
-            <a class="nav-link" routerLink="../team" routerLinkActive="active" [queryParams]="{ active: true }" [routerLinkActiveOptions]="{ exact: false }" replaceUrl="true" queryParamsHandling="merge">Active</a>
+            <a class="nav-link" routerLink="../team" routerLinkActive="active" [queryParams]="{ inactive: false }" [routerLinkActiveOptions]="{ exact: false }" replaceUrl="false" queryParamsHandling="merge">Active</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" routerLink="../team" routerLinkActive="active" [queryParams]="{ active: false }" [routerLinkActiveOptions]="{ exact: false }" replaceUrl="true" queryParamsHandling="merge">InActive</a>
+            <a class="nav-link" routerLink="../team" routerLinkActive="active" [queryParams]="{ inactive: true }" [routerLinkActiveOptions]="{ exact: false }" replaceUrl="false" queryParamsHandling="merge">Inactive</a>
         </li>
     </ul>
 
@@ -72,7 +72,7 @@
                     <!-- <th jhiSortBy="processOrder"><span>Process Order</span> <span class="fa fa-sort"></span></th> -->
                     <!-- <th jhiSortBy="processExternalTask"><span>Process External Task</span> <span class="fa fa-sort"></span></th> -->
                     <!-- <th jhiSortBy="active"><span>Active</span> <span class="fa fa-sort"></span></th> -->
-                    <th *ngIf="imMemberOf || allOthers" jhiSortBy="teamHeadCallingName"><span>Team Head</span> <span class="fa fa-sort"></span></th>
+                    <th *ngIf="viewId === teamsImMemberOf || viewId === browseMoreTeams || viewId === allTeams" jhiSortBy="teamHeadCallingName"><span>Team Head</span> <span class="fa fa-sort"></span></th>
                     <th jhiSortBy="createdDate"><span>Created Date</span> <span class="fa fa-sort"></span></th>
                     <th></th>
                 </tr>
@@ -97,7 +97,7 @@
                 <!-- <th jhiSortBy="processOrder"><span>Process Order</span> <span class="fa fa-sort"></span></th> -->
                 <!-- <th jhiSortBy="processExternalTask"><span>Process External Task</span> <span class="fa fa-sort"></span></th> -->
                 <!-- <th jhiSortBy="active"><span>Active</span> <span class="fa fa-sort"></span></th> -->
-                <th *ngIf="allOthers" jhiSortBy="teamHeadCallingName"><span>Team Head</span> <span class="fa fa-sort"></span></th>
+                <th *ngIf="viewId === teamsImMemberOf || viewId === browseMoreTeams || viewId === allTeams" jhiSortBy="teamHeadCallingName"><span>Team Head</span> <span class="fa fa-sort"></span></th>
                 <th jhiSortBy="createdDate"><span>Created Date</span> <span class="fa fa-sort"></span></th>
                 <th></th>
             </tr>

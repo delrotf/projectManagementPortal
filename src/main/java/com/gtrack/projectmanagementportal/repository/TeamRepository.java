@@ -26,6 +26,8 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
 
     // for teams Im member of
     Page<Team> findByActiveAndIdInAndTeamHeadUserLoginNot(boolean active, Set<Long> ids, String teamHeadLogin, Pageable pageable);
+    // for users member of my teams
+    Page<Team> findByActiveAndIdInAndTeamHeadUserLogin(boolean active, Set<Long> ids, String teamHeadLogin, Pageable pageable);
 
     // for all others
     Page<Team> findByActiveAndIdNotInAndTeamHeadUserLoginNot(boolean active, Set<Long> ids, String teamHeadLogin, Pageable pageable);

@@ -1,3 +1,6 @@
+import { Principal } from './../../shared/auth/principal.service';
+import { VIEW_TEAMS_My, VIEW_TEAMS_ALL, VIEW_TEAMS_BROWSE_MORE,
+    ACTION_JOIN_TEAM, ACTION_ADD_USERS_TO_TEAM, ACTION_TEAMS_TO_USER } from './../../shared/constants/page.constants';
 import { UserInfo } from './../user-info/user-info.model';
 import { UserInfoService } from './../user-info/user-info.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
@@ -24,14 +27,19 @@ import { ResponseWrapper } from '../../shared';
 })
 export class TeamMemberDialogComponent implements OnInit {
 
+    currentAccount: any;
     teamMember: TeamMember;
     isSaving: boolean;
 
-    hasTeam: boolean;
-    hasUserInfo: boolean;
-    hasUserLogin: boolean;
+    viewId: string;
+    myTeams = VIEW_TEAMS_My;
+    allTeams = VIEW_TEAMS_ALL;
+    browseMoreTeams = VIEW_TEAMS_BROWSE_MORE;
 
-    showOk: boolean;
+    action: string;
+    joinTeam = ACTION_JOIN_TEAM;
+    addUsersToTeam = ACTION_ADD_USERS_TO_TEAM;
+    addTeamsToUser = ACTION_TEAMS_TO_USER;
 
     userInfos: UserInfo[];
 
@@ -46,46 +54,49 @@ export class TeamMemberDialogComponent implements OnInit {
         private teamMemberService: TeamMemberService,
         private userInfoService: UserInfoService,
         private teamService: TeamService,
+        private principal: Principal,
         private eventManager: JhiEventManager,
         private route: ActivatedRoute,
         private router: Router,
     ) {
-        this.filter = '';
     }
 
     ngOnInit() {
-        this.showOk = true;
+        this.principal.identity().then((account) => {
+            this.currentAccount = account;
+        });
+
         this.route.queryParams
         // .filter((params) => params.team)
         .subscribe((params) => {
             this.params = params;
-            this.hasTeam = params.teamId ? true : false;
-            this.hasUserInfo = params.userInfoId ? true : false;
-            this.hasUserLogin = params.userLogin ? true : false;
+            this.viewId = params.viewId;
+            this.action = params.action;
 
-            // adding self to a team.
-            if (this.hasUserLogin && !this.hasUserInfo) {
-                this.showOk = false;
+            const userLogin = params.userLogin;
+            const userInfoId = params.userInfoId;
+            const teamId = params.teamId;
+
+            // join team.
+            if (this.action === this.joinTeam) {
                 this.teamMember.teamId = params.teamId;
                 this.userInfoService.query({
-                    query: JSON.stringify({userLogin: this.params.userLogin})
+                    query: JSON.stringify({userLogin})
                 }).subscribe((res: ResponseWrapper) => {
                         this.teamMember.userInfoId = res.json[0].id;
                     }, (res: ResponseWrapper) => this.onError(res.json));
-            } else if (this.hasTeam) { // if has team, we need its userInfos
-                this.teamMember.teamId = params.teamId;
+            } else if (this.action === this.addUsersToTeam && teamId) { // for add users to teams. if has team, we need its userInfos selection
+                this.teamMember.teamId = teamId;
                 this.userInfoService.query({
                     query: JSON.stringify(params)
                 }).subscribe((res: ResponseWrapper) => {
                         this.userInfos = res.json;
-                        this.showOk = this.userInfos && this.userInfos.length ? false : true;
                     }, (res: ResponseWrapper) => this.onError(res.json));
-            } else if (this.hasUserInfo) { // If has userInfo, we need its team
-                this.teamMember.userInfoId = params.userInfoId;
+            } else if (this.action === this.addTeamsToUser && userInfoId) { // for add teams to users. If has userInfo, we need its teams selection
+                this.teamMember.userInfoId = userInfoId;
                 this.teamService.query({query: JSON.stringify(params)})
                     .subscribe((res: ResponseWrapper) => {
                         this.teams = res.json;
-                        this.showOk = this.teams && this.teams.length ? false : true;
                 }, (res: ResponseWrapper) => this.onError(res.json));
             }
         });
@@ -118,12 +129,12 @@ export class TeamMemberDialogComponent implements OnInit {
     private onSaveSuccess(result: TeamMember) {
         this.eventManager.broadcast({ name: 'teamMemberListModification', content: 'OK'});
         this.isSaving = false;
-        if (this.params.allOthers || this.params.headed) {
-            this.router.navigate(['/team'], {
+        if (this.router.url.startsWith('/team')) {
+        this.router.navigate(['/team'], {
                 queryParams: {
-                    active: this.params.active,
-                    allOthers: this.params.allOthers,
-                    headed: this.params.headed,
+                    inactive: this.params.inactive,
+                    viewId: this.params.viewId,
+                    action: this.params.action,
                     saved: result.id,
                     teamId: result.teamId,
                     teamName: this.params.teamName,
@@ -133,9 +144,13 @@ export class TeamMemberDialogComponent implements OnInit {
                     userLogin: this.params.userLogin
                 }
             });
+            if (this.action === this.joinTeam) {
+                this.activeModal.dismiss('cancel');
+            }
         } else if (this.params.userInfoId) {
             this.router.navigate(['/user-info'], {
                 queryParams: {
+                    action: this.params.action,
                     // active: this.params.active,
                     saved: result.id,
                     userInfoId: this.params.userInfoId,
@@ -145,9 +160,9 @@ export class TeamMemberDialogComponent implements OnInit {
             });
         }
 
-        if (this.hasUserLogin && !this.hasUserInfo) {
-            this.activeModal.dismiss(result);
-        }
+    //     if (this.hasUserLogin && !this.hasUserInfo) {
+    //         this.activeModal.dismiss(result);
+    //     }
     }
 
     private onSaveError() {

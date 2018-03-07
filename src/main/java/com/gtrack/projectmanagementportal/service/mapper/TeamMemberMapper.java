@@ -3,6 +3,8 @@ package com.gtrack.projectmanagementportal.service.mapper;
 import com.gtrack.projectmanagementportal.domain.*;
 import com.gtrack.projectmanagementportal.service.dto.TeamMemberDTO;
 
+import java.time.Instant;
+
 import org.mapstruct.*;
 
 /**
@@ -29,9 +31,16 @@ public interface TeamMemberMapper extends EntityMapper<TeamMemberDTO, TeamMember
     @Mapping(source = "userInfo.supervisor.user.lastName", target = "userInfoSupervisorUserLastName")
     @Mapping(source = "team.id", target = "teamId")
     @Mapping(source = "team.name", target = "teamName")
+    @Mapping(source = "team.code", target = "teamCode")
     @Mapping(source = "team.createdDate", target = "teamCreatedDate")
     @Mapping(source = "team.image", target = "teamImage")
     @Mapping(source = "team.imageContentType", target = "teamImageContentType")
+    @Mapping(source = "team.teamHead.user.login", target = "teamTeamHeadUserLogin")
+    @Mapping(source = "team.teamHead.callingName", target = "teamTeamHeadCallingName")
+    @Mapping(source = "team.teamHead.user.firstName", target = "teamTeamHeadUserFirstName")
+    @Mapping(source = "team.teamHead.user.lastName", target = "teamTeamHeadUserLastName")
+    @Mapping(source = "team.teamHead.image", target = "teamTeamHeadImage")
+    @Mapping(source = "team.teamHead.imageContentType", target = "teamTeamHeadImageContentType")
     TeamMemberDTO toDto(TeamMember teamMember);
 
     @Mapping(source = "userInfoId", target = "userInfo")

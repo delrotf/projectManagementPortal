@@ -148,6 +148,31 @@ public class TeamServiceImpl implements TeamService{
     }
 
     /**
+     * Get my teams a user is member of.
+     *
+     * @param pageable the pagination information
+     * @return the list of entities
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Page<TeamDTO> findByActiveAndIdInAndTeamHeadUserLogin(boolean isActive, String userLogin, String teamHeadUserLogin, Pageable pageable) {
+        log.debug("Request to get Teams by Id not in");
+        
+        Set<TeamMember> teamMembersOfUser = teamMemberService.findByUserInfoUserLogin(userLogin);
+        
+        Set<Long> ids = new HashSet<>();
+
+        if (teamMembersOfUser != null && !teamMembersOfUser.isEmpty()) {
+            for (TeamMember teamMember : teamMembersOfUser) {
+    			ids.add(teamMember.getTeam().getId());
+    		}
+        }
+        
+        return teamRepository.findByActiveAndIdInAndTeamHeadUserLogin(isActive, ids, teamHeadUserLogin, pageable)
+                .map(teamMapper::toDto);
+    }
+
+    /**
      * Get all the teams.
      *
      * @param pageable the pagination information

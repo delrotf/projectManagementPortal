@@ -6,6 +6,10 @@ import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Register } from './register.service';
 import { LoginModalService, EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from '../../shared';
 import { JhiEventManager } from 'ng-jhipster';
+import { VIEW_TEAMS_My, VIEW_TEAMS_ALL, VIEW_TEAMS_IM_MEMBER_OF, VIEW_TEAMS_BROWSE_MORE,
+    VIEW_TEAMS_USERS_MEMBER_OF,
+    VIEW_TEAMS_USERS_MEMBER_OF_MY,
+    VIEW_TEAMS_USERS_HEADED} from './../../shared/constants/page.constants';
 
 @Component({
     selector: 'jhi-register',
@@ -29,6 +33,15 @@ export class RegisterComponent implements OnInit, AfterViewInit {
     isAdmin: boolean;
 
     myActiveTeams: any;
+
+    allTeams = VIEW_TEAMS_ALL;
+    myTeams = VIEW_TEAMS_My;
+    teamsImMemberOf = VIEW_TEAMS_IM_MEMBER_OF;
+    browseMoreTeams = VIEW_TEAMS_BROWSE_MORE;
+
+    usersHeadedTeams = VIEW_TEAMS_USERS_HEADED;
+    usersMemberOf = VIEW_TEAMS_USERS_MEMBER_OF;
+    usersMemberOfMyTeams = VIEW_TEAMS_USERS_MEMBER_OF_MY;
 
     constructor(
         private loginModalService: LoginModalService,

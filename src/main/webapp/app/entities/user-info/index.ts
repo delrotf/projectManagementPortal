@@ -5,4 +5,5 @@ export * from './user-info-dialog.component';
 export * from './user-info-delete-dialog.component';
 export * from './user-info-detail.component';
 export * from './user-info.component';
+export * from './user-info-card.component';
 export * from './user-info.route';

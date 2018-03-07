@@ -36,6 +36,11 @@ import java.util.Optional;
 public class TeamMemberResource {
 
     private final Logger log = LoggerFactory.getLogger(TeamMemberResource.class);
+    
+    public static final String VIEW_TEAMS_JOIN = "joinTeam";
+    public static final String VIEW_TEAMS_ADD_USER = "addUsersToTeams";
+    public static final String PAGE_USERS_ADD_TEAMS = "addTeamsToUsers";
+
 
     private static final String ENTITY_NAME = "teamMember";
 
@@ -115,11 +120,12 @@ public class TeamMemberResource {
         Page<TeamMemberDTO> page = null;
         HttpHeaders headers = null;
         JSONObject json = null;
+        String viewId = null;
         String teamId = null;
         String teamName = null;
-		String userId = null;
 		String userInfoId = null;
 		String userLogin = null;
+		String teamHeadUserLogin = null;
         
         if (query != null) {
             try {
@@ -128,6 +134,16 @@ public class TeamMemberResource {
     			// do nothing.
     		}
             if (json != null) {
+                try {
+                	viewId = json.getString(VIEW_TEAMS_JOIN);
+        		} catch (JSONException e) {
+        			// do nothing.
+        		}
+                try {
+                	viewId = json.getString(VIEW_TEAMS_ADD_USER);
+        		} catch (JSONException e) {
+        			// do nothing.
+        		}
             	try {
     				teamId = json.getString("teamId");
     			} catch (JSONException e1) {
@@ -135,11 +151,6 @@ public class TeamMemberResource {
     			}
             	try {
     				teamName = json.getString("teamName");
-    			} catch (JSONException e) {
-                	// do nothing.
-    			}
-            	try {
-    				userId = json.getString("userId");
     			} catch (JSONException e) {
                 	// do nothing.
     			}
@@ -153,18 +164,28 @@ public class TeamMemberResource {
     			} catch (JSONException e) {
                 	// do nothing.
     			}
+            	try {
+    				teamHeadUserLogin = json.getString("teamHeadUserLogin");
+    			} catch (JSONException e) {
+                	// do nothing.
+    			}
             }
         }
         
         userLogin = userLogin != null ? userLogin : SecurityUtils.getCurrentUserLogin().get();
         
-        if(teamId != null) {
+        if(teamId != null) { // for adding users to my team.
         	page = teamMemberService.findByTeamId(Long.valueOf(teamId), pageable);
             headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/team-members?teamId=" + teamId + "&teamName=" + teamName);
         } else if(userInfoId != null) {
-        	page = teamMemberService.findByUserInfoId(Long.valueOf(userInfoId), pageable);
-            headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/team-members?userInfoId=" + userInfoId);
-        } else {
+        	if (teamHeadUserLogin == null) { // for adding my teams to this userinfo
+            	page = teamMemberService.findByUserInfoId(Long.valueOf(userInfoId), pageable);
+                headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/team-members?userInfoId=" + userInfoId);
+        	} else {
+            	page = teamMemberService.findByUserInfoIdAndTeamTeamHeadUserLogin(Long.valueOf(userInfoId), teamHeadUserLogin, pageable);
+                headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/team-members?userInfoId=" + userInfoId+ "&teamHeadUserLogin=" + teamHeadUserLogin);
+        	}
+        } else if(userLogin != null) {
         	page = teamMemberService.findByUserInfoUserLogin(userLogin, pageable);
             headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/team-members?userLogin=" + userLogin);
         }

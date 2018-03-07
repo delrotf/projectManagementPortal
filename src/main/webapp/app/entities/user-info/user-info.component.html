@@ -8,7 +8,7 @@
             </span>
         </button> -->
     </h2>
-    <jhi-alert></jhi-alert>
+    <jhi-alert *ngIf="isTabular"></jhi-alert>
     <div class="row">
     </div>
     <br/>
@@ -73,17 +73,17 @@
                     </td>
                     <!-- <td>{{userInfo.phone}}</td> -->
                     <td class="text-right">
-                        <button *ngIf="userInfo.userLogin !== currentAccount.login" type="submit" [routerLink]="['../team' ]" [queryParams]="{ active: true, headed: true, teamHeadUserLogin: userInfo.userLogin, userInfoId: userInfo.id }" class="btn btn-info btn-sm">
+                        <button *ngIf="userInfo.userLogin !== currentAccount.login" type="submit" [routerLink]="['../team' ]" [queryParams]="{ inactive: false, viewId: usersHeadedTeams, teamHeadUserLogin: userInfo.userLogin, userInfoId: userInfo.id }" class="btn btn-info btn-sm">
                             <span class="fa fa-users"></span>
                             <span class="d-none d-md-inline">Headed Teams</span>
                         </button>
-                        <button *ngIf="userInfo.userLogin !== currentAccount.login" type="submit" [routerLink]="['../team' ]" [queryParams]="{ active: true, userMemberOf: true, userLogin: userInfo.userLogin, userInfoId: userInfo.id }" class="btn btn-secondary btn-sm">
+                        <button *ngIf="userInfo.userLogin !== currentAccount.login" type="submit" [routerLink]="['../team' ]" [queryParams]="{ inactive: false, viewId: usersMemberOf, userLogin: userInfo.userLogin, userInfoId: userInfo.id }" class="btn btn-secondary btn-sm">
                             <span class="fa fa-eye"></span>
                     <span class="d-none d-md-inline">Member Of</span>
                     </button>
-                    <button type="submit" [routerLink]="['/', { outlets: { popup: ['team-member-new'] } }]" [queryParams]="{ userInfoId: userInfo.id, userId: userInfo.userId, userLogin: userInfo.userLogin }" class="btn btn-primary btn-sm">
+                        <button type="submit" [routerLink]="['/', { outlets: { popup: ['team-member-new'] } }]" [queryParams]="{ action: addTeamsToUser, userInfoId: userInfo.id, userId: userInfo.userId, userLogin: userInfo.userLogin }" class="btn btn-primary btn-sm">
                             <span class="fa fa-plus"></span>
-                            <span class="d-none d-md-inline">Add to a Team...</span>
+                            <span class="d-none d-md-inline">Add to Teams...</span>
                         </button>
                         <button *jhiHasAnyAuthority="'ROLE_ADMIN'" type="submit" [routerLink]="['/', { outlets: { popup: 'user-info/'+ userInfo.id + '/delete'} }]" replaceUrl="true" queryParamsHandling="merge" class="btn btn-danger btn-sm">
                             <span class="fa fa-remove"></span>
@@ -129,86 +129,7 @@
         <div class="container-fluid">
             <div class="row justify-content-around">
                 <div *ngFor="let userInfo of userInfos ;trackBy: trackId" class="col-md">
-                    <div class="card shadow m-4">
-                        <div class="media p-2">
-                            <div class="mr-3">
-                                <!-- <td><a [routerLink]="['../user-info', userInfo.id ]">{{userInfo.id}}</a></td> -->
-                                <div>
-                                    <!-- <a *ngIf="userInfo.image" (click)="openFile(userInfo.imageContentType, userInfo.image)">
-                                            <img [src]="'data:' + userInfo.imageContentType + ';base64,' + userInfo.image" style="max-height: 30px;" alt="userInfo image" />
-                                        </a>
-                                        <span *ngIf="userInfo.image">{{userInfo.imageContentType}}, {{byteSize(userInfo.image)}}</span> -->
-                                    <a [routerLink]="['../user-info', userInfo.id ]" [queryParams]="{ userId: userInfo.userId, userLogin: userInfo.userLogin }">
-                                        <img *ngIf="userInfo.image" [src]="'data:' + userInfo.imageContentType + ';base64,' + userInfo.image" alt="userInfo image" class="teamhead-image" />
-                                        <!-- <img *ngIf="userInfo.imageUrl" src={{userInfo.imageUrl}} style="max-width: 100px"> -->
-                                        <img *ngIf="!userInfo.image" src="../../../content/images/user_200.png" alt="userInfo image" class="teamhead-image" />
-                                    </a>
-                                </div>
-                                <!-- <div class="text-center">
-                                    <a [routerLink]="['../user-info', userInfo.id ]" [queryParams]="{ userId: userInfo.userId, userLogin: userInfo.userLogin }">
-                                        {{userInfo.userLogin}}
-                                    </a>
-                                </div> -->
-                            </div>
-                            <div class="media-body">
-                                <a [routerLink]="['../user-info', userInfo.id ]" [queryParams]="{ userId: userInfo.userId, userLogin: userInfo.userLogin }">
-                                    <h5>{{userInfo.callingName || userInfo.firstName}}</h5>
-                                </a>
-                                <h6>{{userInfo.userLastName}}, {{userInfo.userFirstName}}</h6>
-                                <div>{{userInfo.userEmail}}</div>
-                                <div>{{userInfo.phone}}</div>
-                                <div>
-                                    <!-- <div *ngIf="userInfo.designationId">
-                                            <a [routerLink]="['../designation', userInfo.designationId  ]">{{userInfo.designationDesignation}}</a>
-                                        </div> -->
-                                    {{userInfo.designationDesignation}}
-                                </div>
-                                <div *ngIf="userInfo.supervisorUserLogin">
-                                    <small>Supervisor: </small>
-                                    <div>
-                                        <a [routerLink]="['../user-info', userInfo.supervisorId  ]">{{userInfo.supervisorCallingName || userInfo.supervisorUserFirstName}}</a>
-                                        <div class="m-0 p-0">
-                                            <small>{{userInfo.supervisorUserLastName}}, {{userInfo.supervisorUserFirstName}}</small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-footer">
-                            <span class="btn-group flex-btn-group-container">
-                                <button *ngIf="userInfo.userLogin !== currentAccount.login" type="submit" [routerLink]="['../team' ]" [queryParams]="{ active: true, headed: true, teamHeadUserLogin: userInfo.userLogin, userInfoId: userInfo.id }" class="btn btn-info btn-sm">
-                                    <span class="fa fa-users"></span>
-                            <span class="d-none d-md-inline">Headed Teams</span>
-                            </button>
-                            <button *ngIf="userInfo.userLogin !== currentAccount.login" type="submit" [routerLink]="['../team' ]" [queryParams]="{ active: true, userMemberOf: true, userLogin: userInfo.userLogin, userInfoId: userInfo.id }" class="btn btn-secondary btn-sm">
-                                <span class="fa fa-eye"></span>
-                        <span class="d-none d-md-inline">Member Of</span>
-                        </button>
-                            <button type="submit" [routerLink]="['/', { outlets: { popup: ['team-member-new'] } }]" [queryParams]="{ userInfoId: userInfo.id, userId: userInfo.userId, userLogin: userInfo.userLogin }" class="btn btn-primary btn-sm">
-                                    <span class="fa fa-plus"></span>
-                                    <span class="d-none d-md-inline">Add to a Team...</span>
-                                </button>
-                            <button *jhiHasAnyAuthority="'ROLE_ADMIN'" type="submit" [routerLink]="['/', { outlets: { popup: 'user-info/'+ userInfo.id + '/delete'} }]" replaceUrl="true" queryParamsHandling="merge" class="btn btn-danger btn-sm">
-                                    <span class="fa fa-remove"></span>
-                                    <span class="d-none d-md-inline">Delete</span>
-                                </button>
-                            </span>
-                            <!-- <span *jhiHasAnyAuthority="'ROLE_ADMIN'" class="btn-group flex-btn-group-container">
-                                    <! <button type="submit" [routerLink]="['../user-info', userInfo.id ]" class="btn btn-info btn-sm">
-                                            <span class="fa fa-eye"></span>
-                                            <span class="d-none d-md-inline">View</span>
-                                        </button> -->
-                            <!-- <button type="submit" [routerLink]="['/', { outlets: { popup: 'user-info/'+ userInfo.id + '/edit'} }]" replaceUrl="true" queryParamsHandling="merge" class="btn btn-primary btn-sm">
-                                            <span class="fa fa-pencil"></span>
-                                            <span class="d-none d-md-inline">Edit</span>
-                                        </button> >
-                                        <button type="submit" [routerLink]="['/', { outlets: { popup: 'user-info/'+ userInfo.id + '/delete'} }]" replaceUrl="true" queryParamsHandling="merge" class="btn btn-danger btn-sm">
-                                            <span class="fa fa-remove"></span>
-                                            <span class="d-none d-md-inline">Delete</span>
-                                        </button>
-                                    </span> -->
-                        </div>
-                    </div>
+                    <jhi-user-info-card [userInfo]=userInfo [currentAccount]=currentAccount></jhi-user-info-card>
                 </div>
             </div>
         </div>

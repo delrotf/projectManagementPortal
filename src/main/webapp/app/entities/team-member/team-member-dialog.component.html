@@ -1,9 +1,9 @@
 <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
 
     <div class="modal-header">
-        <h4 *ngIf="params.userLogin && !params.teamName" class="modal-title" id="myTeamMemberLabel">Add <strong>{{params.userLogin}}</strong> to your teams</h4>
-        <h4 *ngIf="params.teamName && !params.userLogin" class="modal-title" id="myTeamMemberLabel">Add users to <strong>{{params.teamName}}</strong></h4>
-        <h4 *ngIf="params.teamName && params.userLogin" class="modal-title" id="myTeamMemberLabel">Add Yourself to <strong>{{params.teamName}}</strong></h4>
+        <h4 *ngIf="action === addTeamsToUser" class="modal-title" id="myTeamMemberLabel">Add <strong>{{params.userLogin}}</strong> to your teams</h4>
+        <h4 *ngIf="action === addUsersToTeam" class="modal-title" id="myTeamMemberLabel">Add users to <strong>{{params.teamName}}</strong></h4>
+        <h4 *ngIf="action === joinTeam" class="modal-title" id="myTeamMemberLabel">Add Yourself to <strong>{{params.teamName}}</strong></h4>
 
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="clear()">&times;</button>
     </div>
@@ -31,11 +31,11 @@
             </div>
         </div> -->
 
-        <div *ngIf="hasUserLogin && !hasUserInfo; else elseBlock">
+        <div *ngIf="action === joinTeam; else elseBlock">
             You are joining this team.
         </div>
         <ng-template #elseBlock>
-            <div *ngIf="hasTeam && userInfos && userInfos.length; else usersElseBlock" class="form-group">
+            <div *ngIf="action === addUsersToTeam && userInfos && userInfos.length; else usersElseBlock" class="form-group">
                 <label class="form-control-label" for="field_userInfo">Users</label>
                 <!-- <select class="form-control" id="field_userInfo" name="userInfo" [(ngModel)]="teamMember.userInfoId" required>
                     <option *ngIf="!editForm.value.userInfo" [ngValue]="null" selected></option>
@@ -66,11 +66,11 @@
             </small>
             </div>
             <ng-template #usersElseBlock>
-                <div *ngIf="params.teamName">
+                <div *ngIf="action === addUsersToTeam && userInfos && !userInfos.length">
                     <h2 class="form-control">No more Users to add to {{params.teamName}}.</h2>
                 </div>
             </ng-template>
-            <div *ngIf="hasUserInfo && teams && teams.length; else teamsElseBlock" class="form-group">
+            <div *ngIf="action === addTeamsToUser && teams && teams.length; else teamsElseBlock" class="form-group">
                 <label class="form-control-label" for="field_team">Teams</label>
                 <!-- <select class="form-control" id="field_team" name="team" [(ngModel)]="teamMember.teamId" required>
                     <option *ngIf="!editForm.value.team" [ngValue]="null" selected></option>
@@ -111,18 +111,18 @@
             </small>
             </div>
             <ng-template #teamsElseBlock>
-                <div *ngIf="params.userLogin">
+                <div *ngIf="action === addTeamsToUser && teams && !teams.length">
                     <h2 class="form-control">No more Teams to add {{params.userLogin}} to.</h2>
                 </div>
             </ng-template>
         </ng-template>
     </div>
-    <div *ngIf="hasUserLogin && !hasUserInfo; else okElseBlock" class="modal-footer">
+    <div *ngIf="action === joinTeam; else okElseBlock" class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
             <span class="fa fa-ban"></span>&nbsp;<span>Cancel</span>
         </button>
         <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
-            <span class="fa fa-save"></span>&nbsp;<span>Save</span>
+            <span class="fa fa-check"></span>&nbsp;<span>OK</span>
         </button>
     </div>
     <ng-template #okElseBlock>

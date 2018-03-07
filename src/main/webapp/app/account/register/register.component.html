@@ -19,7 +19,7 @@
                 </p>
                 <ul>
                     <li *ngIf="!isAdmin">
-                        <a class="" routerLink="team" routerLinkActive="active" [queryParams]="{ active: true, headed: true, teamHeadUserLogin: account.login}" [routerLinkActiveOptions]="{ exact: true }">
+                        <a class="" routerLink="team" routerLinkActive="active" [queryParams]="{ viewId: myTeams, inactive: false }" [routerLinkActiveOptions]="{ exact: true }">
                             <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
                             <span>My Teams</span>
                         </a>
@@ -30,16 +30,20 @@
                             <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
                             <span>Teams I'm A Member Of</span>
                         </a> -->
-                        <a class="" routerLink="team" routerLinkActive="active" [queryParams]="{ active: true, imMemberOf: true }" [routerLinkActiveOptions]="{ exact: true }">
+                        <a class="" routerLink="team" routerLinkActive="active" [queryParams]="{ viewId: teamsImMemberOf }" [routerLinkActiveOptions]="{ exact: true }">
                             <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
                             <span>Teams I'm A Member Of</span>
                         </a>
                         <span> - the teams created and managed by others but you belong in these teams.</span>
                     </li>
                     <li>
-                        <a class="" routerLink="team" routerLinkActive="active" [queryParams]="{ active: true, allOthers: true }" [routerLinkActiveOptions]="{ exact: true }">
+                        <a *ngIf="!isAdmin" class="" routerLink="team" routerLinkActive="active" [queryParams]="{ viewId: browseMoreTeams }" [routerLinkActiveOptions]="{ exact: true }">
                             <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                            <span><span *ngIf="!isAdmin">Browse More </span>Teams</span>
+                            <span>Browse More Teams</span>
+                        </a>
+                        <a *ngIf="isAdmin" class="" routerLink="team" routerLinkActive="active" [queryParams]="{ viewId: allTeams, inactive: false }" [routerLinkActiveOptions]="{ exact: true }">
+                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
+                            <span>Teams</span>
                         </a>
                         <span *ngIf="!isAdmin"> - Browse more teams you can join.</span>
                         <span *ngIf="isAdmin"> - Browse teams.</span>

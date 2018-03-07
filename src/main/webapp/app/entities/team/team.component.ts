@@ -1,8 +1,10 @@
+import { VIEW_TEAMS_My, VIEW_TEAMS_ALL, VIEW_TEAMS_IM_MEMBER_OF,
+    VIEW_TEAMS_BROWSE_MORE, VIEW_TEAMS_USERS_HEADED,
+    VIEW_TEAMS_USERS_MEMBER_OF, VIEW_TEAMS_USERS_MEMBER_OF_MY } from './../../shared/constants/page.constants';
 import { UserInfo } from './../user-info/user-info.model';
 import { UserInfoService } from './../user-info/user-info.service';
 import { TeamMember } from './../team-member/team-member.model';
 import { TeamMemberService } from './../team-member/team-member.service';
-// import { ADD_SELF_TO_TEAM, MANAGE_TEAM_MEMBERS, My_ACTIVE_TEAMS, My_INACTIVE_TEAMS, BROWSE_MORE_TEAMS } from './../../shared/constants/screen.constants';
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef, ViewContainerRef, TemplateRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
@@ -42,14 +44,22 @@ currentAccount: any;
     isAdmin: boolean;
 
     params: {[key: string]: any};
-    active: boolean;
-    headed: boolean;
-    imMemberOf: boolean;
-    userMemberOf: boolean;
+    viewId: string;
+
+    inactive: boolean;
     userLogin: string;
-    allOthers: boolean;
+    teamHeadUserLogin: string;
 
     isTabular: boolean;
+
+    myTeams = VIEW_TEAMS_My;
+    allTeams = VIEW_TEAMS_ALL;
+    teamsImMemberOf = VIEW_TEAMS_IM_MEMBER_OF;
+    browseMoreTeams = VIEW_TEAMS_BROWSE_MORE;
+
+    usersHeadedTeams = VIEW_TEAMS_USERS_HEADED;
+    usersMemberOf = VIEW_TEAMS_USERS_MEMBER_OF;
+    usersMemberOfMyTeams = VIEW_TEAMS_USERS_MEMBER_OF_MY;
 
     constructor(
         private teamService: TeamService,
@@ -79,12 +89,10 @@ currentAccount: any;
         // .filter((params) => params.team)
         .subscribe((params) => {
             this.params = params;
-            this.active = params.active;
-            this.headed = params.headed;
-            this.imMemberOf = params.imMemberOf;
-            this.userMemberOf = params.userMemberOf;
+            this.viewId = params.viewId;
+            this.inactive = params.inactive;
             this.userLogin = params.userLogin;
-            this.allOthers = params.allOthers;
+            this.teamHeadUserLogin = params.teamHeadUserLogin;
 
             if (this.params.userInfoId) {
                 this.userInfoService.find(this.params.userInfoId).subscribe((userInfo) => {
@@ -116,12 +124,9 @@ currentAccount: any;
     transition() {
         this.router.navigate(['/team'], {queryParams:
             {
-                active: this.params.active,
-                imMemberOf: this.params.imMemberOf,
-                userMemberOf: this.params.userMemberOf,
+                inactive: this.params.inactive,
+                viewId: this.params.viewId,
                 userLogin: this.params.userLogin,
-                allOthers: this.params.allOthers,
-                headed: this.params.headed,
                 teamHeadUserLogin: this.params.teamHeadUserLogin,
                 page: this.page,
                 size: this.itemsPerPage,

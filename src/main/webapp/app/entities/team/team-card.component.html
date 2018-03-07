@@ -60,44 +60,44 @@
                             <div *ngIf="isAdmin || teamMember.userInfoUserLogin === currentAccount.login || (teamMember.userInfoUserLogin !== currentAccount.login && team.teamHeadUserLogin === currentAccount.login)" class="card-footer">
                                 <div class="btn-group flex-btn-group-container">
                                     <!-- <button *ngIf="teamMember.userInfoUserLogin === currentAccount.login" type="submit" [routerLink]="['/', { outlets: { popup: 'team-member/'+ teamMember.id + '/delete'} }]" replaceUrl="true" queryParamsHandling="merge" class="btn btn-danger btn-sm"> -->
-                                    <button *ngIf="teamMember.userInfoUserLogin === currentAccount.login" type="button" (click)="confirmDelete(teamMember.id)" class="btn btn-danger btn-sm">
+                                    <button *ngIf="teamMember.userInfoUserLogin === currentAccount.login" type="button" (click)="confirmDelete(teamMember.id, teamMember)" class="btn btn-danger btn-sm">
                                         <span class="fa fa-remove"></span>
-                                    <span class="d-none d-md-inline">Remove Me</span>
-                                    </button>
-                                    <!-- <button *ngIf="isAdmin || (teamMember.userInfoUserLogin !== currentAccount.login && team.teamHeadUserLogin === currentAccount.login)" type="submit" [routerLink]="['/', { outlets: { popup: 'team-member/'+ teamMember.id + '/delete'} }]" replaceUrl="true" -->
-                                    <button *ngIf="isAdmin || (teamMember.userInfoUserLogin !== currentAccount.login && team.teamHeadUserLogin === currentAccount.login)" type="button" (click)="confirmDelete(teamMember.id)" class="btn btn-danger btn-sm">
+                <span class="d-none d-md-inline">Remove Me</span>
+                </button>
+                <!-- <button *ngIf="isAdmin || (teamMember.userInfoUserLogin !== currentAccount.login && team.teamHeadUserLogin === currentAccount.login)" type="submit" [routerLink]="['/', { outlets: { popup: 'team-member/'+ teamMember.id + '/delete'} }]" replaceUrl="true" -->
+                <button *ngIf="isAdmin || (teamMember.userInfoUserLogin !== currentAccount.login && team.teamHeadUserLogin === currentAccount.login)" type="button" (click)="confirmDelete(teamMember.id, teamMember)" class="btn btn-danger btn-sm">
                                         <span class="fa fa-remove"></span>
                                         <span class="d-none d-md-inline">Remove</span>
                                     </button>
-                                </div>
-                            </div>
-                        </div>
-                    </ng-template>
-                    <button type="button" (blur)="closePopover(pUser)" (click)="coordinates($event)" class="btn btn-outline-info m-0 p-1 rounded-circle" [ngbPopover]="popUserContent" popoverTitle="{{teamMember.userInfoCallingName || teamMember.userInfoUserFirstName}}" #pUser="ngbPopover"
-                        placement="{{popoverPlacement}}" container="body" *ngIf="teamMember.userInfoUserLogin === currentAccount.login">
+            </div>
+        </div>
+    </div>
+    </ng-template>
+    <button type="button" (blur)="closePopover(pUser)" (click)="coordinates($event)" class="btn btn-outline-info m-0 p-1 rounded-circle" [ngbPopover]="popUserContent" popoverTitle="{{teamMember.userInfoCallingName || teamMember.userInfoUserFirstName}}" #pUser="ngbPopover"
+        placement="{{popoverPlacement}}" container="body" *ngIf="teamMember.userInfoUserLogin === currentAccount.login">
                         <img *ngIf="teamMember.userInfoImage" [src]="'data:' + teamMember.userInfoImageContentType + ';base64,' + teamMember.userInfoImage" alt="userInfo image" class="teammember-image img-circle" />
                         <img *ngIf="!teamMember.userInfoImage" src="../../../content/images/user_200.png" alt="userInfo image" class="teammember-image img-circle" />
                     </button>
-                    <button type="button" (blur)="closePopover(pUser)" (click)="coordinates($event)" class="btn btn-primary m-0 p-0 rounded-circle" [ngbPopover]="popUserContent" popoverTitle="{{teamMember.userInfoCallingName || teamMember.userInfoUserFirstName}}" #pUser="ngbPopover"
-                        placement="{{popoverPlacement}}" container="body" *ngIf="teamMember.userInfoUserLogin !== currentAccount.login">
+    <button type="button" (blur)="closePopover(pUser)" (click)="coordinates($event)" class="btn btn-primary m-0 p-0 rounded-circle" [ngbPopover]="popUserContent" popoverTitle="{{teamMember.userInfoCallingName || teamMember.userInfoUserFirstName}}" #pUser="ngbPopover"
+        placement="{{popoverPlacement}}" container="body" *ngIf="teamMember.userInfoUserLogin !== currentAccount.login">
                         <img *ngIf="teamMember.userInfoImage" [src]="'data:' + teamMember.userInfoImageContentType + ';base64,' + teamMember.userInfoImage" alt="userInfo image" class="teammember-image img-circle" />
                         <img *ngIf="!teamMember.userInfoImage" src="../../../content/images/user_200.png" alt="userInfo image" class="teammember-image img-circle" />
                     </button>
-                </span>
-                <span *ngIf="isAdmin || team.teamHeadUserLogin === currentAccount.login" class="col m-0 p-0">
-                    <button class="btn btn-outline-primary rounded-circle m-0 p-1 teammember-image" [routerLink]="['/', { outlets: { popup: ['team-member-new'] } }]" [queryParams]="{ teamId: team.id, teamName: team.name }" replaceUrl="true" queryParamsHandling="merge">
+    </span>
+    <span *ngIf="isAdmin || team.teamHeadUserLogin === currentAccount.login" class="col m-0 p-0">
+                    <button class="btn btn-outline-primary rounded-circle m-0 p-1 teammember-image" [routerLink]="['/', { outlets: { popup: ['team-member-new'] } }]" [queryParams]="{ action: addUsersToTeam, teamId: team.id, teamName: team.name }" replaceUrl="true" queryParamsHandling="merge">
                         <span class="fa fa-plus"></span>
-                    </button>
-                </span>
-                <span class="col m-0 p-0">
+    </button>
+    </span>
+    <span class="col m-0 p-0">
                     <!-- <button *ngIf="!isMember && team.active && team.teamHeadUserLogin !== currentAccount.login && !isAdmin" type="submit" (click)="saved = null" [routerLink]="['/', { outlets: { popup: ['team-member-new'] } }]" [queryParams]="{ teamHeadUserLogin: team.teamHeadUserLogin, userLogin: currentAccount.login, teamId: team.id, teamName: team.name }" -->
                     <button *ngIf="!isMember && team.active && team.teamHeadUserLogin !== currentAccount.login && !isAdmin" type="button" (click)="join(currentAccount.login)"
                         class="btn btn-outline-info rounded-circle m-0 p-1 teammember-image" replaceUrl="true" queryParamsHandling="merge">
                         <span class="fa fa-plus"></span>
-                    <!-- <span class="d-none d-md-inline">Join Team</span> -->
-                    </button>
-                </span>
-            </div>
-        </div>
-    </div>
+    <!-- <span class="d-none d-md-inline">Join Team</span> -->
+    </button>
+    </span>
+</div>
+</div>
+</div>
 </div>

@@ -42,6 +42,20 @@ import java.util.Set;
 public class TeamResource {
 
     private final Logger log = LoggerFactory.getLogger(TeamResource.class);
+    
+    public static final String VIEW_ID = "viewId";
+    public static final String VIEW_TEAMS_My = "myTeams";
+    public static final String VIEW_TEAMS_ALL = "allTeams";
+    public static final String VIEW_TEAMS_IM_MEMBER_OF = "teamsImMemberOf";
+    public static final String VIEW_TEAMS_BROWSE_MORE = "browseMoreTeams";
+    public static final String VIEW_TEAMS_SELECT = "selectTeams";
+
+    public static final String VIEW_TEAMS_USERS_HEADED = "usersHeadedTeams";
+    public static final String VIEW_TEAMS_USERS_MEMBER_OF = "usersMemberOf";
+    public static final String VIEW_TEAMS_USERS_MEMBER_OF_MY = "usersMemberOfMyTeams";
+    
+    public static final String ACTION = "action";
+    public static final String ACTION_ADD_TEAMS_TO_USER = "addTeamsToUser";
 
     private static final String ENTITY_NAME = "team";
 
@@ -105,13 +119,13 @@ public class TeamResource {
         log.debug("REST request to get a page of Teams; query: {}", query);
     	Page<TeamDTO> page = null;
         JSONObject json = null;
+        
+        String viewId = null;
+        String action = null;
+        
         String userLogin = null;
         String teamHeadUserLogin = null;
-        String active = null;
-        String allOthers = null;
-        String imMemberOf = null;
-        String userMemberOf = null;
-        String headed = null;
+        String inactive = null;
         
         if (query != null) {
             try {
@@ -119,7 +133,18 @@ public class TeamResource {
     		} catch (JSONException e) {
     			// do nothing.
     		}
+
             if (json != null) {
+                try {
+                    viewId = json.getString(VIEW_ID);
+        		} catch (JSONException e) {
+        			// do nothing.
+        		}
+                try {
+                    action = json.getString(ACTION);
+        		} catch (JSONException e) {
+        			// do nothing.
+        		}
                 try {
                     userLogin = json.getString("userLogin");
         		} catch (JSONException e) {
@@ -131,64 +156,71 @@ public class TeamResource {
         			// do nothing.
         		}
                 try {
-                	active = json.getString("active");
-        		} catch (JSONException e) {
-        			// do nothing.
-        		}
-                try {
-                	imMemberOf = json.getString("imMemberOf");
-        		} catch (JSONException e) {
-        			// do nothing.
-        		}
-                try {
-                	userMemberOf = json.getString("userMemberOf");
-        		} catch (JSONException e) {
-        			// do nothing.
-        		}
-                try {
-                	allOthers = json.getString("allOthers");
-        		} catch (JSONException e) {
-        			// do nothing.
-        		}
-                try {
-                	headed = json.getString("headed");
+                	inactive = json.getString("inactive");
         		} catch (JSONException e) {
         			// do nothing.
         		}
             }
         }
-        boolean isActive = active != null ? Boolean.parseBoolean(active) : true;
-        boolean isAllOthers = allOthers != null ? Boolean.parseBoolean(allOthers) : false;
-        boolean isImMemberOf = imMemberOf != null ? Boolean.parseBoolean(imMemberOf) : false;
-        boolean isUserMemberOf = userMemberOf != null ? Boolean.parseBoolean(userMemberOf) : false;
-        boolean isHeaded = headed != null ? Boolean.parseBoolean(headed) : false;
+        boolean isInactive = inactive != null ? Boolean.parseBoolean(inactive) : false;
         
         HttpHeaders headers = null;
-        if (userLogin != null && !isAllOthers && !isHeaded && !isUserMemberOf) {
-        	// drop-down items.
-        	page = teamService.findByActiveAndIdNotInAndTeamHeadUserLogin(isActive, userLogin, pageable);
-//        	page = teamService.findByActiveAndIdNotIn(isActive, userLogin, pageable);
-        	headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/teams?active=" + isActive + "&headed=" + isHeaded + "&userLogin=" + userLogin);
-        } else if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ADMIN) && !isHeaded && !isUserMemberOf) {
-        	// all access for admin
-        	page = teamService.findAll(pageable);
-        	headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/teams");
-        } else if (isImMemberOf) {
-        	// teams Im member of.
-        	page = teamService.findByActiveAndIdInAndTeamHeadUserLoginNot(isActive, SecurityUtils.getCurrentUserLogin().get(), pageable);
-        	headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/teams?active=" + isActive + "&imMemberOf=" + isImMemberOf);
-        } else if (isUserMemberOf && userLogin != null) {
-        	// teams user is member of.
-        	page = teamService.findByActiveAndIdInAndTeamHeadUserLoginNot(isActive, userLogin, pageable);
-        	headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/teams?active=" + isActive + "&userMemberOf=" + isUserMemberOf + "&userLogin=" + userLogin);
-        } else if (isAllOthers) {
-        	// browse all other teams.
-        	page = teamService.findByActiveAndIdNotInAndTeamHeadUserLoginNot(isActive, SecurityUtils.getCurrentUserLogin().get(), pageable);
-        	headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/teams?active=" + isActive + "&allOthers=" + isAllOthers);
-        } else if (isHeaded) {
-        	// headed teams.
-        	page = teamService.findByActiveAndTeamHeadUserLogin(isActive, teamHeadUserLogin, pageable);
-        	headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/teams?active=" + isActive + "&headed=" + isHeaded + "&teamHeadUserLogin=" + teamHeadUserLogin);
+        if (action != null) {
+            if (action.equals(ACTION_ADD_TEAMS_TO_USER) && userLogin != null) {
+            	// drop-down items.
+            	if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ADMIN)) {
+            		page = teamService.findByActiveAndIdNotIn(true, userLogin, pageable);
+            	} else {
+            		page = teamService.findByActiveAndIdNotInAndTeamHeadUserLogin(true, userLogin, pageable);
+            	}
+//            	page = teamService.findByActiveAndIdNotIn(isActive, userLogin, pageable);
+            	headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/teams?action=" + ACTION_ADD_TEAMS_TO_USER + "&userLogin=" + userLogin);
+            }
+        }
+        if (viewId != null) {
+        	if (viewId.equals(VIEW_TEAMS_ALL) && SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ADMIN)) {
+            	// all access for admin
+            	page = teamService.findByActive(!isInactive, pageable);
+            	headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/teams");
+            } else if (viewId.equals(VIEW_TEAMS_IM_MEMBER_OF)) {
+            	// teams Im member of.
+            	page = teamService.findByActiveAndIdInAndTeamHeadUserLoginNot(true, SecurityUtils.getCurrentUserLogin().get(), pageable);
+            	headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/teams?viewId=" + VIEW_TEAMS_IM_MEMBER_OF);
+            } else if (viewId.equals(VIEW_TEAMS_USERS_MEMBER_OF) && userLogin != null) {
+            	// teams user is member of.
+            	if (!isInactive) {
+                	page = teamService.findByActiveAndIdInAndTeamHeadUserLoginNot(true, userLogin, pageable);
+                	headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/teams?viewId=" + VIEW_TEAMS_USERS_MEMBER_OF + "&userLogin=" + userLogin);
+            	} else {
+	            	page = teamService.findByActiveAndIdInAndTeamHeadUserLoginNot(false, userLogin, pageable);
+	            	headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/teams?viewId=" + VIEW_TEAMS_USERS_MEMBER_OF + "&isInactive=" + isInactive + "&userLogin=" + userLogin);
+            	}
+        	} else if (viewId.equals(VIEW_TEAMS_USERS_MEMBER_OF_MY) && userLogin != null) {
+            	// teams user is member of my teams.
+            	page = teamService.findByActiveAndIdInAndTeamHeadUserLogin(true, userLogin, SecurityUtils.getCurrentUserLogin().get(), pageable);
+            	headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/teams?viewId=" + VIEW_TEAMS_USERS_MEMBER_OF_MY + "&userLogin=" + userLogin);
+            } else if (viewId.equals(VIEW_TEAMS_BROWSE_MORE)) {
+            	// browse all other teams.
+            	page = teamService.findByActiveAndIdNotInAndTeamHeadUserLoginNot(true, SecurityUtils.getCurrentUserLogin().get(), pageable);
+            	headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/teams?viewId=" + VIEW_TEAMS_BROWSE_MORE);
+            } else if (viewId.equals(VIEW_TEAMS_My)) {
+            	// my headed teams.
+            	if (!isInactive) {
+                	page = teamService.findByActiveAndTeamHeadUserLogin(true, SecurityUtils.getCurrentUserLogin().get(), pageable);
+                	headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/teams?viewId=" + VIEW_TEAMS_My);
+            	} else {
+            		page = teamService.findByActiveAndTeamHeadUserLogin(false, SecurityUtils.getCurrentUserLogin().get(), pageable);
+            		headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/teams?viewId=" + VIEW_TEAMS_My + "&isInactive=" + isInactive);
+            	}
+            } else if (viewId.equals(VIEW_TEAMS_USERS_HEADED) && teamHeadUserLogin != null) {
+            	// user headed teams.
+            	page = teamService.findByActiveAndTeamHeadUserLogin(true, teamHeadUserLogin, pageable);
+            	headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/teams?viewId=" + VIEW_TEAMS_USERS_HEADED + "&teamHeadUserLogin=" + teamHeadUserLogin);
+            }
+        }
+        
+        if (action != null) {
+        	
         }
         
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);

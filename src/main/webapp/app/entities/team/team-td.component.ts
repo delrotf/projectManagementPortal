@@ -1,3 +1,6 @@
+import { VIEW_TEAMS_My, VIEW_TEAMS_ALL, VIEW_TEAMS_IM_MEMBER_OF, VIEW_TEAMS_BROWSE_MORE,
+    ACTION_JOIN_TEAM, ACTION_ADD_USERS_TO_TEAM, ACTION_TEAMS_TO_USER, VIEW_TEAMS_USERS_HEADED,
+    VIEW_TEAMS_USERS_MEMBER_OF, VIEW_TEAMS_USERS_MEMBER_OF_MY } from './../../shared/constants/page.constants';
 import { UserInfo } from './../user-info/user-info.model';
 import { UserInfoService } from './../user-info/user-info.service';
 import { TeamMember } from './../team-member/team-member.model';
@@ -44,9 +47,20 @@ export class TeamTdComponent implements OnInit {
     userInfoId: string;
 
     params: {[key: string]: any};
-    active: boolean;
-    imMemberOf: boolean;
-    allOthers: boolean;
+    inactive: boolean;
+
+    viewId: string;
+    myTeams = VIEW_TEAMS_My;
+    allTeams = VIEW_TEAMS_ALL;
+    teamsImMemberOf = VIEW_TEAMS_IM_MEMBER_OF;
+    browseMoreTeams = VIEW_TEAMS_BROWSE_MORE;
+    usersHeadedTeams = VIEW_TEAMS_USERS_HEADED;
+    usersMemberOf = VIEW_TEAMS_USERS_MEMBER_OF;
+    usersMemberOfMyTeams = VIEW_TEAMS_USERS_MEMBER_OF_MY;
+    action: string;
+    joinTeam = ACTION_JOIN_TEAM;
+    addUsersToTeam = ACTION_ADD_USERS_TO_TEAM;
+    addTeamsToUser = ACTION_TEAMS_TO_USER;
 
     isTabular: boolean;
 
@@ -111,9 +125,8 @@ export class TeamTdComponent implements OnInit {
         // .filter((params) => params.team)
         .subscribe((params) => {
             this.params = params;
-            this.active = params.active;
-            this.imMemberOf = params.imMemberOf;
-            this.allOthers = params.allOthers;
+            this.inactive = params.inactive;
+            this.viewId = params.viewId;
             if (this.team && params.saved && params.saved !== this.saved && this.team.id.toString() === params.teamId) {
                 this.saved = params.saved;
                 this.getMembers(this.team.id.toString());
@@ -154,11 +167,11 @@ export class TeamTdComponent implements OnInit {
                 content: 'Deleted an teamMember'
             });
 
-            if (this.params.imMemberOf) {
+            if (this.viewId === this.teamsImMemberOf || this.viewId === this.usersMemberOf) {
                 this.router.navigate(['/team'], {
                     queryParams: {
-                        active: this.params.active,
-                        imMemberOf: this.params.imMemberOf,
+                        inactive: this.params.inactive,
+                        viewId: this.params.viewId,
                         deleted: id,
                     }
                 });

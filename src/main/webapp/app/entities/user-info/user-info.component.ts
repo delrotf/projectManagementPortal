@@ -6,6 +6,10 @@ import { UserInfo } from './user-info.model';
 import { UserInfoService } from './user-info.service';
 import { ITEMS_PER_PAGE, Principal, ResponseWrapper } from '../../shared';
 import { ActivatedRoute, Router } from '@angular/router';
+import { VIEW_TEAMS_My, VIEW_TEAMS_ALL, VIEW_TEAMS_IM_MEMBER_OF,
+    VIEW_TEAMS_BROWSE_MORE, VIEW_TEAMS_USERS_HEADED,
+    VIEW_TEAMS_USERS_MEMBER_OF, VIEW_TEAMS_USERS_MEMBER_OF_MY,
+    ACTION_JOIN_TEAM, ACTION_ADD_USERS_TO_TEAM, ACTION_TEAMS_TO_USER } from './../../shared/constants/page.constants';
 
 @Component({
     selector: 'jhi-user-info',
@@ -31,6 +35,14 @@ export class UserInfoComponent implements OnInit, OnDestroy {
     previousPage: any;
     reverse: any;
     isTabular: boolean;
+
+    usersHeadedTeams = VIEW_TEAMS_USERS_HEADED;
+    usersMemberOf = VIEW_TEAMS_USERS_MEMBER_OF;
+    usersMemberOfMyTeams = VIEW_TEAMS_USERS_MEMBER_OF_MY;
+    action: string;
+    joinTeam = ACTION_JOIN_TEAM;
+    addUsersToTeam = ACTION_ADD_USERS_TO_TEAM;
+    addTeamsToUser = ACTION_TEAMS_TO_USER;
 
     constructor(
         private userInfoService: UserInfoService,

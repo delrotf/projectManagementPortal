@@ -1,3 +1,6 @@
+import { VIEW_TEAMS_My, VIEW_TEAMS_ALL, VIEW_TEAMS_IM_MEMBER_OF, VIEW_TEAMS_BROWSE_MORE,
+    VIEW_TEAMS_USERS_HEADED, VIEW_TEAMS_USERS_MEMBER_OF,
+    VIEW_TEAMS_USERS_MEMBER_OF_MY } from './../../shared/constants/page.constants';
 import { UserInfo } from './../../entities/user-info/user-info.model';
 import { UserInfoService } from './../../entities/user-info/user-info.service';
 import { Component, OnInit } from '@angular/core';
@@ -27,6 +30,15 @@ export class NavbarComponent implements OnInit {
     account: Account;
     isAdmin: boolean;
     userInfo: UserInfo;
+
+    allTeams = VIEW_TEAMS_ALL;
+    myTeams = VIEW_TEAMS_My;
+    teamsImMemberOf = VIEW_TEAMS_IM_MEMBER_OF;
+    browseMoreTeams = VIEW_TEAMS_BROWSE_MORE;
+
+    usersHeadedTeams = VIEW_TEAMS_USERS_HEADED;
+    usersMemberOf = VIEW_TEAMS_USERS_MEMBER_OF;
+    usersMemberOfMyTeams = VIEW_TEAMS_USERS_MEMBER_OF_MY;
 
     constructor(
         private loginService: LoginService,

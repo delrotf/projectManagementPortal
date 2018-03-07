@@ -37,7 +37,7 @@
                 </a>
                 <ul class="dropdown-menu" ngbDropdownMenu>
                     <li *ngIf="!isAdmin && account">
-                        <a class="dropdown-item" routerLink="team" [queryParams]="{ active: true, headed: true, teamHeadUserLogin: account.login }" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                        <a class="dropdown-item" routerLink="team" [queryParams]="{ viewId: myTeams, inActive: false }" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
                             <span>My Teams</span>
                         </a>
@@ -47,15 +47,21 @@
                                 <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
                                 <span>Teams I'm A Member Of</span>
                             </a> -->
-                        <a *ngIf="!isAdmin" class="dropdown-item" routerLink="team" [queryParams]="{ active: true, imMemberOf: true }" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                        <a *ngIf="!isAdmin" class="dropdown-item" routerLink="team" [queryParams]="{ viewId: teamsImMemberOf }" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
                             <span>Teams I'm A Member Of</span>
                         </a>
                     </li>
-                    <li>
-                        <a class="dropdown-item" routerLink="team" [queryParams]="{ active: true, allOthers: true }" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                    <li *ngIf="!isAdmin">
+                        <a class="dropdown-item" routerLink="team" [queryParams]="{ viewId: browseMoreTeams }" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                            <span><span *ngIf="!isAdmin">Browse More </span>Teams</span>
+                            <span>Browse More Teams</span>
+                        </a>
+                    </li>
+                    <li *ngIf="isAdmin">
+                        <a class="dropdown-item" routerLink="team" [queryParams]="{ viewId: allTeams, inactive: false }" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
+                            <span><span>Teams</span>
                         </a>
                     </li>
                     <li>

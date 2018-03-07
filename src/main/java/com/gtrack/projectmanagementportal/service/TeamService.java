@@ -51,4 +51,5 @@ public interface TeamService {
 	Page<TeamDTO> findByActiveAndIdNotInAndTeamHeadUserLogin(boolean isActive, String teamHeadLogin, Pageable pageable);
 	Page<TeamDTO> findByActiveAndIdNotIn(boolean isActive, String userLogin, Pageable pageable);
 	Page<TeamDTO> findByActive(boolean isActive, Pageable pageable);
+	Page<TeamDTO> findByActiveAndIdInAndTeamHeadUserLogin(boolean isActive, String userLogin, String teamHeadUserLogin, Pageable pageable);
 }

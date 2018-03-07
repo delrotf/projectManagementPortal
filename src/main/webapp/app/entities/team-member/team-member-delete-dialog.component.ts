@@ -1,3 +1,7 @@
+import { VIEW_TEAMS_My, VIEW_TEAMS_ALL, VIEW_TEAMS_IM_MEMBER_OF,
+    VIEW_TEAMS_BROWSE_MORE, VIEW_TEAMS_USERS_HEADED,
+    VIEW_TEAMS_USERS_MEMBER_OF, VIEW_TEAMS_USERS_MEMBER_OF_MY } from './../../shared/constants/page.constants';
+
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -15,7 +19,13 @@ import { TeamMemberService } from './team-member.service';
 export class TeamMemberDeleteDialogComponent {
 
     teamMember: TeamMember;
-    params: any
+    params: any;
+
+    viewId: string;
+    myTeams = VIEW_TEAMS_My;
+    allTeams = VIEW_TEAMS_ALL;
+    teamsImMemberOf = VIEW_TEAMS_IM_MEMBER_OF;
+    browseMoreTeams = VIEW_TEAMS_BROWSE_MORE;
 
     constructor(
         private teamMemberService: TeamMemberService,
@@ -41,11 +51,11 @@ export class TeamMemberDeleteDialogComponent {
                 content: 'Deleted an teamMember'
             });
 
-            if (this.params.imMemberOf) {
+            if (this.params.viewId === this.teamsImMemberOf) {
                 this.router.navigate(['/team'], {
                     queryParams: {
-                        active: this.params.active,
-                        imMemberOf: this.params.imMemberOf,
+                        inactive: this.params.inactive,
+                        viewId: this.params.viewId,
                         deleted: id,
                     }
                 });

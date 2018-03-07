@@ -7,6 +7,7 @@ import {
     UserInfoService,
     UserInfoPopupService,
     UserInfoComponent,
+    UserInfoCardComponent,
     UserInfoDetailComponent,
     UserInfoDialogComponent,
     UserInfoPopupComponent,
@@ -30,6 +31,7 @@ const ENTITY_STATES = [
     ],
     declarations: [
         UserInfoComponent,
+        UserInfoCardComponent,
         UserInfoDetailComponent,
         UserInfoDialogComponent,
         UserInfoDeleteDialogComponent,

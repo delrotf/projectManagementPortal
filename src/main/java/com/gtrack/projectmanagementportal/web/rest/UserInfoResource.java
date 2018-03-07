@@ -39,6 +39,9 @@ public class UserInfoResource {
 
     private static final String ENTITY_NAME = "userInfo";
 
+    public static final String PAGE_USERS_SELECT = "selectUsers";
+    public static final String PAGE_USERS = "users";
+
     private final UserInfoService userInfoService;
     private final DesignationService designationService;
 
@@ -180,7 +183,7 @@ public class UserInfoResource {
         }
         HttpHeaders headers = null;
         if (teamId != null) {
-        	// drop-down items.
+        	// users drop-down items.
 //            page = userInfoService.findByUserIdNotIn(Long.valueOf(teamId), pageable);
             page = userInfoService.findByIdNotIn(Long.valueOf(teamId), pageable);
             headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/user-infos?teamId=" + teamId + "&teamName=" + teamName);

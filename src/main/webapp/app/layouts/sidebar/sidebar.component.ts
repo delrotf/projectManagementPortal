@@ -1,3 +1,7 @@
+import { VIEW_TEAMS_My, VIEW_TEAMS_ALL, VIEW_TEAMS_IM_MEMBER_OF, VIEW_TEAMS_BROWSE_MORE,
+    VIEW_TEAMS_USERS_MEMBER_OF,
+    VIEW_TEAMS_USERS_MEMBER_OF_MY,
+    VIEW_TEAMS_USERS_HEADED} from './../../shared/constants/page.constants';
 import { UserInfo } from './../../entities/user-info/user-info.model';
 import { UserInfoService } from './../../entities/user-info/user-info.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
@@ -31,6 +35,17 @@ export class SidebarComponent implements OnInit, OnDestroy {
     isAdmin: boolean;
     eventSubscriber: Subscription;
 
+    userInfo: UserInfo;
+
+    allTeams = VIEW_TEAMS_ALL;
+    myTeams = VIEW_TEAMS_My;
+    teamsImMemberOf = VIEW_TEAMS_IM_MEMBER_OF;
+    browseMoreTeams = VIEW_TEAMS_BROWSE_MORE;
+
+    usersHeadedTeams = VIEW_TEAMS_USERS_HEADED;
+    usersMemberOf = VIEW_TEAMS_USERS_MEMBER_OF;
+    usersMemberOfMyTeams = VIEW_TEAMS_USERS_MEMBER_OF_MY;
+
     constructor(
         private loginService: LoginService,
         private principal: Principal,
@@ -47,6 +62,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
         this.isNavbarCollapsed = true;
         this.principal.identity().then((account) => {
             this.account = account;
+            this.userInfoService.query({
+                query: JSON.stringify({userLogin: account.login})
+            }).subscribe((res: ResponseWrapper) => {
+                this.userInfo = res.json[0];
+            });
         });
     }
 

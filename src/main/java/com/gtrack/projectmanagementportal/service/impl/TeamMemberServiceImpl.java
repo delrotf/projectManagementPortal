@@ -99,6 +99,20 @@ public class TeamMemberServiceImpl implements TeamMemberService{
      */
     @Override
     @Transactional(readOnly = true)
+    public Page<TeamMemberDTO> findByUserInfoIdAndTeamTeamHeadUserLogin(Long userInfoId, String teamHeadUserLogin, Pageable pageable) {
+        log.debug("Request to get all TeamMembers By UserInfo Id: " + userInfoId);
+        return teamMemberRepository.findByUserInfoIdAndTeamTeamHeadUserLogin(userInfoId, teamHeadUserLogin, pageable)
+            .map(teamMemberMapper::toDto);
+    }
+
+    /**
+     * Get all the teamMembers.
+     *
+     * @param pageable the pagination information
+     * @return the list of entities
+     */
+    @Override
+    @Transactional(readOnly = true)
     public Page<TeamMemberDTO> findByUserInfoUserLoginIsCurrentUser(Pageable pageable) {
         log.debug("Request to get all TeamMembers By Current User");
         return teamMemberRepository.findByUserInfoUserLoginIsCurrentUser(pageable)
@@ -155,7 +169,7 @@ public class TeamMemberServiceImpl implements TeamMemberService{
     @Transactional(readOnly = true)
     public Set<TeamMember> findByUserInfoId(Long userInfoId) {
         log.debug("Request to get all Teams By UserInfo Id: {}", userInfoId);
-        return teamMemberRepository.findByTeamId(userInfoId);
+        return teamMemberRepository.findByUserInfoId(userInfoId);
     }
 
     /**

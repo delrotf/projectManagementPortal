@@ -42,6 +42,13 @@ public class TeamMemberDTO implements Serializable {
     private Instant teamCreatedDate;
     private byte[] teamImage;
     private String teamImageContentType;
+    
+    private String teamTeamHeadUserLogin;
+    private String teamTeamHeadCallingName;
+    private String teamTeamHeadUserFirstName;
+    private String teamTeamHeadUserLastName;
+    private byte[] teamTeamHeadImage;
+    private String teamTeamHeadImageContentType;
 
     public Long getId() {
         return id;
@@ -262,5 +269,53 @@ public class TeamMemberDTO implements Serializable {
 
 	public void setUserInfoSupervisorImageContentType(String userInfoSupervisorImageContentType) {
 		this.userInfoSupervisorImageContentType = userInfoSupervisorImageContentType;
+	}
+
+	public String getTeamTeamHeadUserLogin() {
+		return teamTeamHeadUserLogin;
+	}
+
+	public void setTeamTeamHeadUserLogin(String teamTeamHeadUserLogin) {
+		this.teamTeamHeadUserLogin = teamTeamHeadUserLogin;
+	}
+
+	public String getTeamTeamHeadCallingName() {
+		return teamTeamHeadCallingName;
+	}
+
+	public void setTeamTeamHeadCallingName(String teamTeamHeadCallingName) {
+		this.teamTeamHeadCallingName = teamTeamHeadCallingName;
+	}
+
+	public String getTeamTeamHeadUserFirstName() {
+		return teamTeamHeadUserFirstName;
+	}
+
+	public void setTeamTeamHeadUserFirstName(String teamTeamHeadUserFirstName) {
+		this.teamTeamHeadUserFirstName = teamTeamHeadUserFirstName;
+	}
+
+	public String getTeamTeamHeadUserLastName() {
+		return teamTeamHeadUserLastName;
+	}
+
+	public void setTeamTeamHeadUserLastName(String teamTeamHeadUserLastName) {
+		this.teamTeamHeadUserLastName = teamTeamHeadUserLastName;
+	}
+
+	public byte[] getTeamTeamHeadImage() {
+		return teamTeamHeadImage;
+	}
+
+	public void setTeamTeamHeadImage(byte[] teamTeamHeadImage) {
+		this.teamTeamHeadImage = teamTeamHeadImage;
+	}
+
+	public String getTeamTeamHeadImageContentType() {
+		return teamTeamHeadImageContentType;
+	}
+
+	public void setTeamTeamHeadImageContentType(String teamTeamHeadImageContentType) {
+		this.teamTeamHeadImageContentType = teamTeamHeadImageContentType;
 	}
 }

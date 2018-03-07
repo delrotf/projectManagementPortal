@@ -52,4 +52,6 @@ public interface TeamMemberService {
 	Set<TeamMember> findByUserInfoUserLogin(String userLogin);
 	Set<TeamMember> findByUserInfoId(Long userInfoId);
 	Set<TeamMember> findByTeamId(Long teamId);
+
+	Page<TeamMemberDTO> findByUserInfoIdAndTeamTeamHeadUserLogin(Long userInfoId, String teamHeadUserLogin, Pageable pageable);
 }

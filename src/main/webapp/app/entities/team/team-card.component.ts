@@ -1,3 +1,6 @@
+import { VIEW_TEAMS_My, VIEW_TEAMS_ALL, VIEW_TEAMS_IM_MEMBER_OF,
+    VIEW_TEAMS_BROWSE_MORE, VIEW_TEAMS_USERS_HEADED,
+    VIEW_TEAMS_USERS_MEMBER_OF, VIEW_TEAMS_USERS_MEMBER_OF_MY, ACTION_JOIN_TEAM, ACTION_ADD_USERS_TO_TEAM, ACTION_TEAMS_TO_USER } from './../../shared/constants/page.constants';
 import { UserInfo } from './../user-info/user-info.model';
 import { UserInfoService } from './../user-info/user-info.service';
 import { TeamMember } from './../team-member/team-member.model';
@@ -44,16 +47,30 @@ export class TeamCardComponent implements OnInit {
     userInfoId: string;
 
     params: {[key: string]: any};
-    active: boolean;
-    allOthers: boolean;
+    inactive: boolean;
 
     isTabular: boolean;
+
+    viewId: string;
+    myTeams = VIEW_TEAMS_My;
+    allTeams = VIEW_TEAMS_ALL;
+    teamsImMemberOf = VIEW_TEAMS_IM_MEMBER_OF;
+    browseMoreTeams = VIEW_TEAMS_BROWSE_MORE;
+    usersHeadedTeams = VIEW_TEAMS_USERS_HEADED;
+    usersMemberOf = VIEW_TEAMS_USERS_MEMBER_OF;
+    usersMemberOfMyTeams = VIEW_TEAMS_USERS_MEMBER_OF_MY;
+    action: string;
+    joinTeam = ACTION_JOIN_TEAM;
+    addUsersToTeam = ACTION_ADD_USERS_TO_TEAM;
+    addTeamsToUser = ACTION_TEAMS_TO_USER;
 
     popoverPlacement = 'top';
 
     clientX = 0;
     clientY = 0;
     saved: string;
+    deleted: string;
+
     delete: boolean;
     isSaving: boolean;
 
@@ -112,9 +129,10 @@ export class TeamCardComponent implements OnInit {
         // .filter((params) => params.team)
         .subscribe((params) => {
             this.params = params;
-            this.active = params.active;
-            this.allOthers = params.allOthers;
-            if (this.team && params.saved && params.saved !== this.saved && this.team.id.toString() === params.teamId) {
+            this.inactive = params.inactive;
+            this.action = params.action;
+            this.viewId = params.viewId;
+            if (this.team && this.team.id.toString() === params.teamId) {
                 this.saved = params.saved;
                 this.getMembers(this.team.id.toString());
             }
@@ -149,7 +167,7 @@ export class TeamCardComponent implements OnInit {
 
     join(userLogin: string) {
         this.isSaving = true;
-        if (this.params.allOthers) {
+        if (this.params.viewId === this.browseMoreTeams) {
             this.delete = true;
         }
         const teamMember = new TeamMember();
@@ -173,13 +191,12 @@ export class TeamCardComponent implements OnInit {
     private onSaveSuccess(result: TeamMember) {
         this.eventManager.broadcast({ name: 'teamMemberListModification', content: 'OK'});
         this.isSaving = false;
-        if (this.params.allOthers) {
+        if (this.params.viewId === this.browseMoreTeams) {
             setTimeout(() => {
                 this.router.navigate(['/team'], {
                     queryParams: {
-                        active: this.params.active,
-                        allOthers: this.params.allOthers,
-                        headed: this.params.headed,
+                        inactive: this.params.inactive,
+                        viewId: this.params.viewId,
                         saved: result.id,
                         teamId: result.teamId,
                         teamName: this.params.teamName,
@@ -190,15 +207,17 @@ export class TeamCardComponent implements OnInit {
                     }
                 });
             }, 500);
-        }
+        } else {
+            this.getMembers(this.team.id.toString());
+}
     }
 
     private onSaveError() {
         this.isSaving = false;
     }
 
-    confirmDelete(id: number) {
-        if (this.params.imMemberOf) {
+    confirmDelete(id: number, teamMember?: TeamMember) {
+        if (this.params.viewId === this.teamsImMemberOf || (this.viewId === this.usersMemberOf && teamMember && teamMember.userInfoUserLogin === this.params.userLogin)) {
             this.delete = true;
         }
         this.teamMemberService.delete(id).subscribe((response) => {
@@ -206,13 +225,19 @@ export class TeamCardComponent implements OnInit {
                 name: 'teamMemberListModification',
                 content: 'Deleted an teamMember'
             });
-            if (this.params.imMemberOf) {
+            if (this.params.viewId === this.teamsImMemberOf || (this.viewId === this.usersMemberOf && teamMember && teamMember.userInfoUserLogin === this.params.userLogin)) {
                 setTimeout(() => {
                     this.router.navigate(['/team'], {
                         queryParams: {
-                            active: this.params.active,
-                            imMemberOf: this.params.imMemberOf,
-                            deleted: id,
+                            inactive: this.params.inactive,
+                            viewId: this.params.viewId,
+                            teamId: this.team.id,
+                            teamName: this.params.teamName,
+                            teamHeadUserLogin: this.params.teamHeadUserLogin,
+                            userInfoId: this.params.userInfoId,
+                            userId: this.params.userId,
+                            userLogin: this.params.userLogin,
+                            deleted: id
                         }
                     });
                 }, 500);

@@ -11,7 +11,12 @@ export class UserInfo implements BaseEntity {
         public image?: any,
         public phone?: string,
         public userId?: number,
+        public userLogin?: string,
+        public userFirstName?: string,
+        public userLastName?: string,
+        public userEmail?: string,
         public supervisorId?: number,
+        public supervisorUserLogin?: string,
         public designationId?: number,
         public designationDesignation?: string,
     ) {

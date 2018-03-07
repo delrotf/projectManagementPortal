@@ -28,6 +28,8 @@ public interface TeamMemberRepository extends JpaRepository<TeamMember, Long> {
 	Page<TeamMember> findByUserInfoId(Long userInfoId, Pageable pageable);
 	Set<TeamMember> findByUserInfoId(Long userInfoId);
 
+	Page<TeamMember> findByUserInfoIdAndTeamTeamHeadUserLogin(Long userInfoId, String teamHeadUserLogin, Pageable pageable);
+
 	Page<TeamMember> findByTeamId(Long teamId, Pageable pageable);
 	Set<TeamMember> findByTeamId(Long teamId);
 }
