@@ -6,7 +6,7 @@ import { UserInfo } from './../../entities/user-info/user-info.model';
 import { UserInfoService } from './../../entities/user-info/user-info.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef, NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs/Subscription';
 
 import { ProfileService } from '../profiles/profile.service';
@@ -15,14 +15,13 @@ import { Principal, LoginModalService, LoginService, ResponseWrapper } from '../
 import { VERSION } from '../../app.constants';
 import { JhiEventManager } from 'ng-jhipster';
 
-import {NgbAccordionConfig} from '@ng-bootstrap/ng-bootstrap';
 @Component({
     selector: 'jhi-sidebar',
     templateUrl: './sidebar.component.html',
     styleUrls: [
         'sidebar.css'
     ],
-    providers: [NgbAccordionConfig]
+    providers: [NgbDropdownConfig]
 })
 export class SidebarComponent implements OnInit, OnDestroy {
     inProduction: boolean;
@@ -34,6 +33,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     account: Account;
     isAdmin: boolean;
     eventSubscriber: Subscription;
+    logoutEventSubscriber: Subscription;
 
     userInfo: UserInfo;
 
@@ -46,6 +46,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
     usersMemberOf = VIEW_TEAMS_USERS_MEMBER_OF;
     usersMemberOfMyTeams = VIEW_TEAMS_USERS_MEMBER_OF_MY;
 
+    toggle = true;
+    isProfileMenuOpen = false;
+    isMyTeamsMenuOpen = false;
+    expandedNavItem = this.toggle;
+
     constructor(
         private loginService: LoginService,
         private principal: Principal,
@@ -54,12 +59,30 @@ export class SidebarComponent implements OnInit, OnDestroy {
         private userInfoService: UserInfoService,
         private eventManager: JhiEventManager,
         private router: Router,
-        private config: NgbAccordionConfig
+        private dropdownConfig: NgbDropdownConfig
     ) {
-        config.closeOthers = true;
-        config.type = 'info';
         this.version = VERSION ? 'v' + VERSION : '';
         this.isNavbarCollapsed = true;
+    }
+
+    registerAuthenticationSuccess() {
+        this.eventManager.subscribe('authenticationSuccess', (message) => {
+        });
+    }
+
+    ngOnInit() {
+        this.isProfileMenuOpen = false;
+        this.loadAll()
+        this.eventSubscriber = this.eventManager.subscribe('authenticationSuccess', (response) => {
+            this.loadAll()
+        });
+        this.profileService.getProfileInfo().then((profileInfo) => {
+            this.inProduction = profileInfo.inProduction;
+            this.swaggerEnabled = profileInfo.swaggerEnabled;
+        });
+    }
+
+    loadAll() {
         this.principal.identity().then((account) => {
             this.account = account;
             this.userInfoService.query({
@@ -68,24 +91,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
                 this.userInfo = res.json[0];
             });
         });
-    }
 
-    ngOnInit() {
-        this.eventSubscriber = this.eventManager.subscribe('authenticationSuccess', (response) => this.loadAll());
-        this.profileService.getProfileInfo().then((profileInfo) => {
-            this.inProduction = profileInfo.inProduction;
-            this.swaggerEnabled = profileInfo.swaggerEnabled;
-        });
-        this.principal.identity().then((account) => {
-            this.account = account;
-        });
-
-        this.principal.hasAuthority('ROLE_ADMIN').then((value) => {
-            this.isAdmin = value;
-        });
-    }
-
-    loadAll() {
         this.principal.identity().then((account) => {
             this.account = account;
         });
@@ -101,5 +107,82 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
     isAuthenticated() {
         return this.principal.isAuthenticated();
+    }
+
+    collapseNavbar() {
+        this.isNavbarCollapsed = true;
+    }
+
+    login() {
+        this.isProfileMenuOpen = false;
+        this.modalRef = this.loginModalService.open();
+    }
+
+    logout() {
+        this.collapseNavbar();
+        this.loginService.logout();
+        this.eventManager.broadcast({
+            name: 'logoutSuccess',
+            content: 'Sending Logout Success'
+        });
+
+        this.router.navigate(['']);
+    }
+    toggleSidebar() {
+        this.toggle = !this.toggle;
+        this.eventManager.broadcast({
+            name: 'toggleSidebar',
+            content: 'Sidebar is clicked'
+        });
+    }
+
+    toggleProfileMenu(event) {
+        this.isProfileMenuOpen = event;
+    }
+
+    toggleMyTeamsMenu(event) {
+        this.isMyTeamsMenuOpen = event;
+    }
+
+    getProfileMenuWidth() {
+        if (this.isProfileMenuOpen) {
+            return '218px';
+        } else {
+            return '54px';
+        }
+    }
+
+    getMyTeamsMenuWidth() {
+        if (this.isMyTeamsMenuOpen) {
+            return '218px';
+        } else {
+            return '54px';
+        }
+    }
+
+    getMenuAutoClose() {
+        if (this.toggle) {
+            return 'outside';
+        } else {
+            return true;
+        }
+    }
+
+    getBarsMargin() {
+        if (this.toggle) {
+            return '200px';
+        } else {
+            return '8px';
+        }
+    }
+    openDropdown(myDrop) {
+        if (!this.toggle) {
+            myDrop.open();
+        }
+    }
+    closeDropdown(myDrop) {
+        if (!this.toggle) {
+            myDrop.close();
+        }
     }
 }

@@ -25,7 +25,7 @@
                 </a>
             </li>
             <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
-            <li *ngSwitchCase="true" ngbDropdown class="nav-item dropdown pointer" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <li *ngSwitchCase="true" ngbDropdown class="nav-item dropdown pointer" placement="bottom-right" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                 <!-- <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu"> -->
                 <a class="nav-link" ngbDropdownToggle href="javascript:void(0);" id="entity-menu">
                     <span>
@@ -37,8 +37,8 @@
                 </a>
                 <ul class="dropdown-menu" ngbDropdownMenu>
                     <li *ngIf="!isAdmin && account">
-                        <a class="dropdown-item" routerLink="team" [queryParams]="{ viewId: myTeams, inActive: false }" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }" (click)="collapseNavbar()">
-                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
+                        <a class="dropdown-item" routerLink="team" [queryParams]="{ viewId: myTeams, inactive: false }" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }" (click)="collapseNavbar()">
+                            <i class="fa fa-fw fa-user" aria-hidden="true"></i>
                             <span>My Teams</span>
                         </a>
                     </li>
@@ -48,19 +48,19 @@
                                 <span>Teams I'm A Member Of</span>
                             </a> -->
                         <a *ngIf="!isAdmin" class="dropdown-item" routerLink="team" [queryParams]="{ viewId: teamsImMemberOf }" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
+                            <i class="fa fa-fw fa-user-circle" aria-hidden="true"></i>
                             <span>Teams I'm A Member Of</span>
                         </a>
                     </li>
                     <li *ngIf="!isAdmin">
                         <a class="dropdown-item" routerLink="team" [queryParams]="{ viewId: browseMoreTeams }" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
+                            <i class="fa fa-fw fa-users" aria-hidden="true"></i>
                             <span>Browse More Teams</span>
                         </a>
                     </li>
                     <li *ngIf="isAdmin">
                         <a class="dropdown-item" routerLink="team" [queryParams]="{ viewId: allTeams, inactive: false }" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
+                            <i class="fa fa-fw fa-users" aria-hidden="true"></i>
                             <span><span>Teams</span>
                         </a>
                     </li>
@@ -72,7 +72,7 @@
                     </li>
                     <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
                         <a class="dropdown-item" routerLink="designation" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
+                            <i class="fa fa-fw fa-user-md" aria-hidden="true"></i>
                             <span>Designations</span>
                         </a>
                     </li>
