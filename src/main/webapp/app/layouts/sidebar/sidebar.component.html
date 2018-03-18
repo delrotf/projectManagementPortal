@@ -71,7 +71,7 @@
                     </span>
                 </a>
             </li>
-            <li *ngSwitchCase="false" class="nav-item" [ngStyle]="{'width': !toggle ? '54px' : '250px'}" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <li *ngSwitchCase="false" class="nav-item" [ngStyle]="{'width': !toggle ? '54px' : '250px'}">
                 <a class="nav-link" (click)="login()" id="login">
                     <i class="fa fa-lg fa-fw fa-sign-in" aria-hidden="true"></i>
                     <span>Sign in</span>
